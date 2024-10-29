@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>登录</title>
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css"/>
+    <style>
+        * {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+            text-decoration: none;
+            outline: none;
+            font-family: '微软雅黑', sans-serif;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to right, #999999, #330867);
+        }
+
+        .login-wrapper {
+            background-color: bisque;
+            width: 210px;
+            height: 586px;
+            border-radius: 15px;
+            padding: 0 50px;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .form-wrapper-div {
+            margin-bottom: 15px;
+            margin-left: 2px;
+            width: 100%;
+        }
+        .form-wrapper select {
+            width: 97%;
+            height: 35px;
+            padding-left: 5px;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .form-wrapper input {
+            width: 94%;
+            height: 32px;
+            padding-left: 5px;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+
+        .form-wrapper label {
+            font-size: 15px;
+            font-weight: 330;
+            color: #868686;
+        }
+
+        .header {
+            font-size: 38px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 150px;
+        }
+
+        .btn {
+            text-align: center;
+            padding: 10px;
+            margin-top: 40px;
+            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            color: #fff;
+            border: 1px solid #b7b5b5;
+            width: 100%;
+            height: 40px;
+        }
+
+        .btn:hover {
+            background-color: #f5f5f5;
+            color: #333;
+            cursor: pointer; /* 鼠标悬停时改变鼠标样式为指针 */
+        }
+
+        .ent-dialog-item {
+            height: 36px;
+            border-bottom: 1px solid #dfdfdf;
+            line-height: 36px;
+            padding-left: 15px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 225px;
+            cursor: default;
+        }
+
+        .ent-dialog-item:hover {
+            background-color: #cce5ff;
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="login-wrapper">
+        <div class="header">欢迎登录</div>
+        <div class="form-wrapper">
+            <div class="form-wrapper-div">
+                <label for="userType">用户类型:</label>
+                <select id="userType" name="userType">
+                    <option value="ENT_USER">企业用户</option>
+                    <option value="ENTERPRISE">企业管理员</option>
+                    <option value="SUPPLIER">供应商管理员</option>
+                    <option value="PL_ADMIN">平台管理员</option>
+                </select>
+            </div>
+            <div class="form-wrapper-div">
+                <input type="hidden" id="enterpriseId">
+            </div>
+            <div class="form-wrapper-div">
+                <label for="account">账号:</label>
+                <input type="text" id="account" name="account" placeholder="请输入账号"/>
+            </div>
+            <div class="form-wrapper-div">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码"/>
+            </div>
+            <button class="btn" onclick="goLogin()">Login</button>
+            <div class="footer">
+                <span>没有账号？</span><a href="register.html">立即注册</a>
+            </div>
+        </div>
+    </div>
+    <!--  选择登录企业对话框  -->
+    <div id="choose-ent-dialog">
+        <ul>
+        </ul>
+    </div>
+</div>
+<!-- 引入 jQuery 库 -->
+<script src="js/jquery/jquery-3.7.1.min.js"></script>
+<script src="js/jquery-ui/jquery-ui.min.js"></script>
+<script src="js/jquery/jquery.cookie-1.4.1.min.js"></script>
+<script src="js/moment.js"></script>
+
+<script src="js/custom-log.js"></script>
+<script src="js/base.js"></script>
+<script src="js/login.js"></script>
+
+<!--手机端查看浏览器控制台-->
+<script src="js/jsdelivr-eruda.js"></script>
+<script>
+    eruda.init();
+    // if (env !== 'prod') {
+    //     eruda.init();
+    // }
+</script>
+</body>
+</html>
+

@@ -1,0 +1,221 @@
+server:
+  port: 8089
+  ssl:
+    #证书的路径
+    key-store: classpath:ssl/webrtc.keystore
+    #证书密码
+    key-store-password: 123456
+    #秘钥库类型
+    key-store-type: JKS
+spring:
+  application:
+    name: dot-chat-dev
+  servlet:
+    multipart:
+      max-file-size: 300MB #设置单个文件大小
+      max-request-size: 300MB #设置单次请求文件的总大小
+  #  数据库配置
+  datasource:
+    druid:
+      url: jdbc:mysql://47.98.210.198:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: shop_dev
+      password: wPMnH8cLPmZyBjRj
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      # 初始化时建立物理连接的个数
+      initial-size: 5
+      # 最小连接池数量
+      min-idle: 5
+      # 最大连接池数量
+      max-active: 100
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+      max-pool-prepared-statement-per-connection-size: 0
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      pool-prepared-statements: false
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-borrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-return: false
+      # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-while-idle: true
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+      # 用来检测连接是否有效的sql，要求是一个查询语句
+      validation-query: SELECT 1
+      # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
+      aop-patterns: 'com.dot.msg.*, com.dot.sys.*'
+      ########## 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ##########
+      stat-view-servlet: #监控页配置
+        # 启用StatViewServlet
+        enabled: true
+        # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
+        url-pattern: /druid/*
+        # 配置监控页面访问密码
+        login-username: juru
+        login-password: juru2013
+        # 不允许清空统计数据,重新计算
+        reset-enable: false
+        # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        #allow:
+        # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
+        #deny:
+      ########## 配置WebStatFilter，用于采集web关联监控的数据 ##########
+      web-stat-filter: # web监控
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.html,*.js,*.map,*.ts,*.css,*.mp3,*.gif,*.jpg,*.png,*.ico,*.svg,*.woff2,/druid/*'
+        # 开启session统计功能
+        session-stat-enable: true
+        # session的最大个数,默认100
+        session-stat-max-count: 1000
+      ########### 启用内置过滤器（第一个 stat必须，否则监控不到SQL）##########
+      filters: stat,wall,log4j2
+      filter:
+        stat: # sql监控统计
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 10000
+          merge-sql: true
+  # redis配置
+  redis:
+    password: 3L6EBJreJshLe3jW
+    host: 47.98.210.198
+    port: 6379
+    timeout: 30000 # 读取超时时间（毫秒）
+    connect-timeout: 30000 #连接超时时间（毫秒）
+    database: 15
+    jedis:
+      pool:
+        enabled: true
+        max-active: 30 # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: 20000 # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10 # 连接池中的最大空闲连接
+        min-idle: 5 # 连接池中的最小空闲连接
+        time-between-eviction-runs: -1 #逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1
+
+logging:
+  level:
+    com.dot: debug
+    com.dot.msg.chat.tio: info
+    org.tio.core.ssl: error
+  config: classpath:logback-spring.xml
+  file:
+    path: ./logs
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    show-extensions: true
+  api-docs:
+    path: /v3/api-docs
+  default-flat-param-object: true
+  group-configs:
+    - group: 'default'
+      display-name: '消息中心'
+      packages-to-scan:
+        - com.dot.sys.user.controller
+        - com.dot.msg.chat.controller
+        - com.dot.msg.notify.controller
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enable-swagger-models: true
+    enable-document-manage: true
+    swagger-model-name: 实体类列表
+    enable-version: true
+    enable-reload-cache-parameter: true
+    enable-after-script: true
+    # enable-filter-multipart-api-method-type: POST,GET,PUT,DELETE
+    # enable-filter-multipart-apis: true
+    enable-request-cache: true
+    enable-host: false
+    # enable-host-text: 192.168.0.193:8000
+    #enable-home-custom: true
+    # home-custom-path: classpath:markdown/home.md
+    enable-search: true
+    enable-footer: true
+    enable-footer-custom: true
+    footer-custom-content: Apache License 2.0 | Copyright  2019-[浙江聚如信息技术有限公司](https://www.dot.cn)
+    enable-dynamic-parameter: true
+    enable-debug: true
+    enable-open-api: true
+    enable-group: true
+  cors: false
+  production: false
+  basic:
+    enable: true
+    username: juru
+    password: juru2013
+
+
+swagger:
+  home:
+    title: '点点星星接口文档'
+    description: '主要功能：聊天、消息推送、消息通知'
+    version: '1.0.0'
+    terms-of-service: 'https://www.dot.cn'
+    license-name: 'Apache License 2.0'
+    license-url: 'https://www.dot.cn'
+
+# tio配置
+tio:
+  server:
+    port: 9326
+    protocol-name: dot
+    charset: UTF-8
+    heartbeat-timeout: 60000
+    #如果你希望通过wss来访问(不通过nginx转发),到配置中开启,不过首先你得有SSL证书（证书必须和域名相匹配，否则可能访问不了ssl）
+    ssl:
+      enable: true
+      keystore: classpath:ssl/webrtc.keystore
+      # file of truststore，如果以classpath:开头，则从classpath中查找，否则从文件路径中查找
+      truststore: classpath:ssl/webrtc.keystore
+      # password for keystore
+      pwd: 123456
+
+aliyun:
+  oss:
+    domain: https://oss.pinmallzj.com
+    access-key: LTAI5tBkRJoLnEmcJFzsHKUq
+    secret-key: 7wTu4dd9KmbRWrVLtQlMneZoG2Wpl1
+    bucket-name: pinmaioss
+    region: oss-cn-hangzhou.aliyuncs.com
+
+mat:
+  upload:
+    image:
+      root-path: /Users/daoyang/Desktop/
+      type: image
+      ext-str: jpg,jpeg,gif,png,bmp,tif,ico,PNG,JPG,GIF
+      size: 10
+      compress: false
+    video:
+      root-path: /Users/daoyang/Desktop/
+      type: video
+      ext-str: mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm
+      size: 50
+      compress: false
+    file:
+      root-path: /Users/daoyang/Desktop/
+      type: file
+      ext-str: zip,gzip,rar,tar,7z,gz,war,ios,doc,docx,xls,xlsx,ppt,pptx,pdf,xml,html,htm,txt,md,log,css,mp3,wma,wav,amr,mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm,pem,p12,jpg,jpeg,gif,png,bmp,tif,ico
+      size: 50
+      compress: false
+
+# 聊天配置
+chat:
+  icon: static/ico/ju.png
+  group:
+    max-member-num: 500
+    qrcode-url: http://172.16.85.134:8088/qrcode/index.html?groupId={groupId}&inviteUserId={inviteUserId}
