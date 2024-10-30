@@ -52,10 +52,19 @@ public class OSSUtil {
     private OSSUtil(RedisUtil redisUtil, OSSConfig ossConfig) {
         this.redisUtil = redisUtil;
         this.ossConfig = ossConfig;
+        checkOSSConfig();
     }
 
     private OSSUtil(OSSConfig ossConfig) {
         this.ossConfig = ossConfig;
+        checkOSSConfig();
+    }
+
+    private void checkOSSConfig() {
+        if (StringUtils.isAllBlank(ossConfig.getAccessKey(), ossConfig.getSecretKey())) {
+            log.error("oss配置信息未定义,ossConfig:{}", ossConfig);
+            throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "oss配置信息未定义...");
+        }
     }
 
     private OSS getOSSClient() {
@@ -68,9 +77,6 @@ public class OSSUtil {
         return oss;
     }
 
-    /**
-     * 通过后端存到静态存储服务器OSS/COS等
-     */
     public void upload(MultipartFile multipartFile, Integer userId, String type) {
         try {
             // 存储地址
@@ -86,8 +92,7 @@ public class OSSUtil {
         try {
             // 初始化OSS
             OSS oss = getOSSClient();
-            PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(ossConfig.getBucketName(), webFilePath, inputStream)
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), webFilePath, inputStream)
                             .withProgressListener(new PutObjectProgressListener(redisUtil, type, fileName));
             // 设置限速5MB/s。10个文件平分5Mb上传限速 512KB
             setTrafficLimit(putObjectRequest);
@@ -103,8 +108,7 @@ public class OSSUtil {
         try {
             // 初始化OSS
             OSS oss = getOSSClient();
-            PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(ossConfig.getBucketName(), webFilePath, inputStream);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), webFilePath, inputStream);
             // 设置限速5MB/s。10个文件平分5Mb上传限速 512KB
             setTrafficLimit(putObjectRequest);
             // 上传文件

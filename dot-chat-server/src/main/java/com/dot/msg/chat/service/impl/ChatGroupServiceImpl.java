@@ -31,6 +31,7 @@ import com.dot.msg.chat.response.ChatUserFriendResponse;
 import com.dot.msg.chat.response.ChatUserResponse;
 import com.dot.msg.chat.service.*;
 import com.dot.msg.chat.tio.util.TioUtil;
+import com.dot.sys.upload.config.UploadFileConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -79,6 +80,9 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
 
     @Resource
     private ChatConfig chatConfig;
+
+    @Resource(name = "videoConfig")
+    private UploadFileConfig videoConfig;
 
     @Resource(name = "redisUtil")
     private RedisUtil redisUtil;
@@ -202,7 +206,14 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         String type = "chatgroup";
         String filename = CommUtil.getUlid() + ".png";
         String uploadPath = "image/" + type + "/" + chatUserId + "/" + filename;
-        OSSUtil.getInstance(ossConfig).upload(headIs, uploadPath);
+        if (ossConfig.isLocal()){
+            String targetPath = videoConfig.getRootPath() + "/" + uploadPath;
+            log.info("文件流保存到本地,targetPath:{}", targetPath);
+            FileUtil.saveToFile(headIs, targetPath);
+        } else {
+            // 上传图片到oss
+            OSSUtil.getInstance(ossConfig).upload(headIs, uploadPath);
+        }
         return ossConfig.getDomain() + "/" + uploadPath;
     }
 

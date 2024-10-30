@@ -1,6 +1,9 @@
 package com.dot.comm.utils;
 
 
+import com.dot.comm.em.ExceptionCodeEm;
+import com.dot.comm.exception.ApiException;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -140,7 +143,7 @@ public class MakeGroupHeadPicUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "生成群头像异常,pics:" + pics);
     }
 
 

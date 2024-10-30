@@ -1,0 +1,48 @@
+<div id="chat-msg-history">
+    <div class="chat-msg-history-title">
+        <div class="user-search">
+            <div class="search-content">
+                <input id="search-msg-input" class="search-input" type="text" placeholder="输入聊天内容"/>
+            </div>
+            <button class="primarybtn" onclick="searchMsgHistoryClick()">查找</button>
+        </div>
+    </div>
+    <div class="search-msg-type">
+        <ul id="msg-types">
+            <li class="msg-type-item active" msg-type="ALL" onclick="searchMsgTypeClick(this)">全部</li>
+            <li class="msg-type-item" msg-type="FILE" onclick="searchMsgTypeClick(this)">文件</li>
+            <li class="msg-type-item" msg-type="IMAGE" onclick="searchMsgTypeClick(this)">图片</li>
+            <li class="msg-type-item" msg-type="VIDEO" onclick="searchMsgTypeClick(this)">视频</li>
+            <li class="msg-type-item" msg-type="ALL" name="date" onclick="searchDateClick(this)">
+                <input type="hidden" id="msg-datepicker">
+                <label class="msg-datepicker-label">日期</label>
+            </li>
+            <li class="msg-type-item" msg-type="ALL" name="member">
+                <select id="msg-group-member-select">
+                    <option value="0" data-class="avatar">选择群成员</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <div class="search-msg-list">
+        <ul id="search-msg-list" onscroll="searchMsgHistoryListScroll(this)">
+            <!-- 历史信息列表 -->
+            <!--<li class="search-msg-item">
+                <div class="search-msg-item-left">
+                    <div class="search-msg-item-avatar">
+                        <img class="avatar" src="../ico/user_header_head.png"/>
+                    </div>
+                </div>
+                <div class="search-msg-item-right">
+                    <div class="search-msg-item-nickname">
+                        <span class="nickname">琉璃</span>
+                        <span class="date">2024-01-01</span>
+                    </div>
+                    <div class="search-msg-item-msg">
+                        <span class="msg">天气好啊</span>
+                    </div>
+                </div>
+            </li>-->
+        </ul>
+    </div>
+</div>

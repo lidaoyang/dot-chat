@@ -17,10 +17,10 @@ spring:
   #  数据库配置
   datasource:
     druid:
-      url: jdbc:mysql://47.98.210.198:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      url: jdbc:mysql://${DB_HOST}:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: shop_dev
-      password: wPMnH8cLPmZyBjRj
+      username: ${MYSQL_USERNAME}
+      password: ${MYSQL_PASSWORD}
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
       # 初始化时建立物理连接的个数
@@ -85,8 +85,8 @@ spring:
           merge-sql: true
   # redis配置
   redis:
-    password: 3L6EBJreJshLe3jW
-    host: 47.98.210.198
+    password: ${REDIS_PASSWORD}
+    host: ${DB_HOST}
     port: 6379
     timeout: 30000 # 读取超时时间（毫秒）
     connect-timeout: 30000 #连接超时时间（毫秒）
@@ -121,7 +121,7 @@ springdoc:
   default-flat-param-object: true
   group-configs:
     - group: 'default'
-      display-name: '消息中心'
+      display-name: '点点星星聊天室'
       packages-to-scan:
         - com.dot.sys.user.controller
         - com.dot.msg.chat.controller
@@ -186,28 +186,28 @@ tio:
 
 aliyun:
   oss:
-    domain: https://oss.pinmallzj.com
-    access-key: LTAI5tBkRJoLnEmcJFzsHKUq
-    secret-key: 7wTu4dd9KmbRWrVLtQlMneZoG2Wpl1
-    bucket-name: pinmaioss
-    region: oss-cn-hangzhou.aliyuncs.com
+    local: true
+    domain: https://172.16.85.134:8443
 
 mat:
   upload:
     image:
-      root-path: /Users/daoyang/Desktop/
+      root-context: media
+      root-path: /Users/daoyang/Desktop/${mat.upload.file.root-context}/
       type: image
       ext-str: jpg,jpeg,gif,png,bmp,tif,ico,PNG,JPG,GIF
       size: 10
       compress: false
     video:
-      root-path: /Users/daoyang/Desktop/
+      root-context: media
+      root-path: /Users/daoyang/Desktop/${mat.upload.file.root-context}/
       type: video
       ext-str: mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm
       size: 50
       compress: false
     file:
-      root-path: /Users/daoyang/Desktop/
+      root-context: media
+      root-path: /Users/daoyang/Desktop/${mat.upload.file.root-context}/
       type: file
       ext-str: zip,gzip,rar,tar,7z,gz,war,ios,doc,docx,xls,xlsx,ppt,pptx,pdf,xml,html,htm,txt,md,log,css,mp3,wma,wav,amr,mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm,pem,p12,jpg,jpeg,gif,png,bmp,tif,ico
       size: 50
@@ -218,4 +218,4 @@ chat:
   icon: static/ico/ju.png
   group:
     max-member-num: 500
-    qrcode-url: http://172.16.85.134:8088/qrcode/index.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://172.16.85.134:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}

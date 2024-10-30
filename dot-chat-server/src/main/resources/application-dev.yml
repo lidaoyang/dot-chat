@@ -10,11 +10,10 @@ spring:
   #  数据库配置
   datasource:
     druid:
-#      url: jdbc:mysql://47.98.210.198:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
-      url: jdbc:mysql://172.18.86.56:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      url: jdbc:mysql://${DB_HOST}:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: shop_dev
-      password: wPMnH8cLPmZyBjRj
+      username: ${MYSQL_USERNAME}
+      password: ${MYSQL_PASSWORD}
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
       # 初始化时建立物理连接的个数
@@ -80,8 +79,8 @@ spring:
 
   # redis配置
   redis:
-    password: 3L6EBJreJshLe3jW
-    host: 47.98.210.198
+    password: ${REDIS_PASSWORD}
+    host: ${DB_HOST}
     port: 6379
     timeout: 30000 # 读取超时时间（毫秒）
     connect-timeout: 30000 #连接超时时间（毫秒）
@@ -115,7 +114,7 @@ springdoc:
   default-flat-param-object: true
   group-configs:
     - group: 'default'
-      display-name: '消息中心'
+      display-name: '点点星星聊天室'
       packages-to-scan:
         - com.dot.sys.user.controller
         - com.dot.msg.chat.controller
@@ -179,28 +178,28 @@ tio:
 
 aliyun:
   oss:
-    domain: https://oss.pinmallzj.com
-    access-key: LTAI5tBkRJoLnEmcJFzsHKUq
-    secret-key: 7wTu4dd9KmbRWrVLtQlMneZoG2Wpl1
-    bucket-name: pinmaioss
-    region: oss-cn-hangzhou.aliyuncs.com
+    local: true
+    domain: https://juru.file.jrmall.cn
 
 mat:
   upload:
     image:
-      root-path: /www/wwwroot/juru.file.dot.cn/pinmai/
+      root-context: media
+      root-path: /www/wwwroot/juru.file.jrmall.cn/pinmai/${mat.upload.file.root-context}/
       type: image
       ext-str: jpg,jpeg,gif,png,bmp,tif,ico
       size: 10
       compress: false
     video:
-      root-path: /www/wwwroot/juru.file.dot.cn/pinmai/
+      root-context: media
+      root-path: /www/wwwroot/juru.file.jrmall.cn/pinmai/${mat.upload.file.root-context}/
       type: video
       ext-str: mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm
       size: 50
       compress: false
     file:
-      root-path: /www/wwwroot/juru.file.dot.cn/pinmai/
+      root-context: media
+      root-path: /www/wwwroot/juru.file.jrmall.cn/pinmai/${mat.upload.file.root-context}/
       type: file
       ext-str: zip,gzip,rar,tar,7z,gz,war,ios,doc,docx,xls,xlsx,ppt,pptx,pdf,xml,html,htm,txt,md,log,css,mp3,wma,wav,amr,mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm,pem,p12,jpg,jpeg,gif,png,bmp,tif,ico
       size: 50
@@ -211,4 +210,4 @@ chat:
   icon: static/ico/ju.png
   group:
     max-member-num: 500
-    qrcode-url: https://test-chat.im.dot.cn/qrcode/index.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://test-dot.chat.jrmall.cn/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}

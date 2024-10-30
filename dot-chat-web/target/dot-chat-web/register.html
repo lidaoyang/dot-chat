@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>注册</title>
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css"/>
+    <style>
+        * {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+            text-decoration: none;
+            outline: none;
+            font-family: '微软雅黑', sans-serif;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to right, #999999, #330867);
+        }
+
+        .login-wrapper {
+            background-color: bisque;
+            width: 210px;
+            height: 586px;
+            border-radius: 15px;
+            padding: 0 50px;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .form-wrapper-div {
+            margin-bottom: 15px;
+            margin-left: 2px;
+            width: 100%;
+        }
+
+        .form-wrapper input {
+            width: 94%;
+            height: 32px;
+            padding-left: 5px;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+
+        .form-wrapper label {
+            font-size: 15px;
+            font-weight: 330;
+            color: #868686;
+        }
+
+        .header {
+            font-size: 38px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 150px;
+        }
+
+        .btn {
+            text-align: center;
+            padding: 10px;
+            margin-top: 40px;
+            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            color: #fff;
+            border: 1px solid #b7b5b5;
+            width: 100%;
+            height: 40px;
+        }
+
+        .btn:hover {
+            background-color: #f5f5f5;
+            color: #333;
+            cursor: pointer; /* 鼠标悬停时改变鼠标样式为指针 */
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="login-wrapper">
+        <div class="header">注册并登录</div>
+        <div class="form-wrapper">
+            <div class="form-wrapper-div">
+                <label for="account">手机号:</label>
+                <input type="text" id="account" name="account" placeholder="请输手机号"/>
+            </div>
+            <div class="form-wrapper-div">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码"/>
+            </div>
+            <div class="form-wrapper-div">
+                <label for="repassword">确认密码:</label>
+                <input type="password" id="repassword" name="repassword" placeholder="请输入确认密码"/>
+            </div>
+            <div class="form-wrapper-div">
+                <label for="nickname">昵称:</label>
+                <input type="text" id="nickname" name="nickname" placeholder="请输入昵称"/>
+            </div>
+            <button class="btn" onclick="registerAndLogin()">Register And Login</button>
+            <div class="footer">
+                <span>已有账号？</span><a href="login.html">去登录</a>
+            </div>
+        </div>
+    </div>
+    <!--  选择登录企业对话框  -->
+    <div id="choose-ent-dialog">
+        <ul>
+        </ul>
+    </div>
+</div>
+<!-- 引入 jQuery 库 -->
+<script src="js/jquery/jquery-3.7.1.min.js"></script>
+<script src="js/jquery-ui/jquery-ui.min.js"></script>
+<script src="js/jquery/jquery.cookie-1.4.1.min.js"></script>
+
+<script src="js/base.js"></script>
+<script>
+
+    function registerAndLogin() {
+        let account = $("#account").val();
+        let password = $("#password").val();
+        let repassword = $("#repassword").val();
+
+        if (account === "" || password === "") {
+            myAlert("", "请输入账号和密码", 'warn');
+            return;
+        }
+        let regExp = /^1[3-9]\d{9}$/;
+        if (!regExp.test(account)) {
+            myAlert("", "手机格式不正确", 'warn');
+            return;
+        }
+        if (password.length < 6 || password.length > 20) {
+            myAlert("", "密码长度不能小于6位或大于20位", 'warn');
+            return;
+        }
+        if (repassword === "") {
+            myAlert("", "请输入确认密码", 'warn');
+            return;
+        }
+        if (password !== repassword) {
+            myAlert("", "两次密码不一致", 'warn');
+            return;
+        }
+        let url = `${SYS_URL_PREFIX}/user/registerAndLogin`;
+        let data = {
+            account: account,
+            password: password,
+            nickname: $("#nickname").val()
+        };
+        ajaxSyncRequest(url, 'post', data, null, function (res) {
+            if (res.code !== 200) {
+                myAlert("注册登录失败", res.message, 'err');
+                return;
+            }
+            let userType = USER_TYPE_O.ENT_USER.val;
+            setCookie(TOKEN_KEY, res.data.token, res.data.expiresIn);
+            setCookie(LAST_ACCESS_TIME_KEY, res.data.lastAccessedTime, res.data.expiresIn);
+            setCookie(USER_TYPE_KEY, userType, res.data.expiresIn);
+            USER_TYPE = userType;
+            //获取聊天用户信息
+            getChatUser();
+        });
+    }
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>聚如IM</title>
+    <link rel="stylesheet" href="css/chat-index.css"/>
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css"/>
+    <link href="css/toastr.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="main">
+    <div class="top">
+        <div class="top-left">
+            <div class="header">
+                <img id="curr-chat-head" src="ico/user_header_head.png" alt="当前用户头像"/>
+            </div>
+            <div class="my hide">
+                <div class="my-info">
+                    <div class="my-head">
+                        <div class="my-head-avatar">
+                            <img class="my-avatar" src="ico/user_header_head.png" alt="头像"/>
+                            <span class="hover-bg-black" onclick="modifyAvatarOpen()"></span>
+                            <img src="./ico/相机-白.png" class="hover-icon" alt="背景" onclick="modifyAvatarOpen()"/>
+                        </div>
+                        <div class="my-name-info">
+                            <span class="my-name">小名</span>
+                            <span class="my-id">ID: <span class="my-id-v">2</span></span>
+                            <span class="my-label">企业用户</span>
+                        </div>
+                    </div>
+                    <div class="my-more">
+                        <div class="my-more-info">
+                            <label>账号</label><span class="my-phone">1111</span>
+                        </div>
+                        <div class="my-more-info">
+                            <label>公司</label><span class="my-enterprise">wwwwsss</span>
+                        </div>
+                    </div>
+                    <div class="my-bottom">
+                        <button class="logout" onclick="modifyMyInfoOpen()">修改信息</button>
+                    </div>
+                </div>
+            </div>
+            <div class="search">
+                <i class="icon-sear"></i>
+                <input id="top-search-input" class="search-input" name="top-search" placeholder="搜索(昵称和聊天室)" autocomplete="off" type="text" />
+                <i class="clean-search" onclick="clearSearchInput()"></i>
+                <i id="add-operation" class="add-operation"></i>
+            </div>
+            <ul id="more-operation" class="more-operation hide">
+                <span class="popper_arrow"></span>
+                <li class="more-item" onclick="openCreateGroupDialog()">
+                    <i class="create-group"></i>
+                    <span>创建群聊</span></li>
+                <li class="more-item" onclick="addFriendClick()">
+                    <i class="add-friend"></i>
+                    <span>添加好友</span></li>
+            </ul>
+        </div>
+        <div class="top-type">
+            <a id="chat" href="#" class="chat icon-site" onclick="loadChatRoom()"></a>
+            <span id="top-chat-unread" unread-count="0" class="top-unread top-chat-unread hide">0</span>
+            <a id="friend" href="#" class="friend icon-site" onclick="loadChatFriend()"></a>
+            <span id="top-friend-unread" unread-count="0" class="top-unread top-friend-unread hide">0</span>
+        </div>
+        <div class="top-right">
+            <i class="ic-menu ic-same"></i>
+        </div>
+    </div>
+    <div id="chat-box" class="box">
+        <!--  聊天列表HTML-->
+    </div>
+    <!--  聊天表情对话框  -->
+    <div class="emoji-box-outer" style="display: none;">
+        <div class="emoji-box">
+            <div id="emoji-box" class="emoji-box-inner">
+                <ul id="emoji-ul">
+                </ul>
+            </div>
+            <div class="emoji-box-bottom">
+                <img src="ico/im-face.png" onclick="selectEmojis(this,'SmileysEmotion')" alt=""/>
+                <img src="ico/presion.png" onclick="selectEmojis(this,'PeopleBody')" alt=""/>
+                <img src="ico/动物.png" onclick="selectEmojis(this,'AnimalsNature')" alt=""/>
+                <img src="ico/汉堡.png" onclick="selectEmojis(this,'FoodDrink')" alt=""/>
+                <img src="ico/旅行-74.png" onclick="selectEmojis(this,'TravelPlaces')" alt=""/>
+                <img src="ico/足球.png" onclick="selectEmojis(this,'Activities')" alt=""/>
+                <img src="ico/衣服.png" onclick="selectEmojis(this,'Objects')" alt=""/>
+                <img src="ico/卫生间.png" onclick="selectEmojis(this,'Symbols')" alt=""/>
+                <img src="ico/旗帜.png" onclick="selectEmojis(this,'Flags')" alt=""/>
+            </div>
+        </div>
+    </div>
+    <!-- 创建群聊对话框 -->
+    <div id="create-group-dialog" style="display: none">
+        <div class="create-group">
+            <div class="user-search">
+                <div class="search-content">
+                    <input id="search-friend-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
+                </div>
+                <button class="primarybtn" onclick="searchFriendClick()">查找</button>
+            </div>
+            <div class="search-user-list">
+                <ul id="search-friend-list">
+                    <!-- 搜索用户列表 -->
+                </ul>
+            </div>
+            <div class="create-group-bottom">
+                <button class="create-group-btn" disabled onclick="createGroup()">完成</button>
+            </div>
+        </div>
+    </div>
+    <!-- 添加好友对话框 -->
+    <div id="add-friend-dialog" style="display: none">
+        <div class="addfriend">
+            <div class="user-search">
+                <div class="search-content">
+                    <input id="search-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
+                </div>
+                <button class="primarybtn" onclick="addFriendSearchClick()">查找</button>
+            </div>
+            <div class="search-user-list">
+                <ul id="search-user-list">
+                    <!-- 搜索用户列表 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 添加好友申请对话框 -->
+    <div id="add-friend-apply-dialog" class="addbody" style="display: none">
+        <div class="add-content">
+            <div class="add-info">
+                <div class="el-image add-avatar">
+                    <img id="add-avatar" src="https://res.tiocloud.com/avatar/tio/20200708/7.jpg" class="el-image-inner"
+                         alt="头像">
+                </div>
+                <div class="add-name">
+                    <p id="add-nick" class="add-nick">LLLQQQ</p>
+                    <p id="add-area" class="add-area">浙江省 温州市</p>
+                </div>
+            </div>
+            <div class="add-greet">
+                <div class="greet-content">
+                    <input id="friend-id" type="hidden"/>
+                    <input id="source" type="hidden"/>
+                    <label for="applyReason">申请描述</label>
+                    <textarea id="applyReason" cols="50" rows="3" maxlength="30"></textarea>
+                    <label for="remark">设置备注</label>
+                    <input id="remark" type="text" placeholder="备注" onfocus="remarkFocus(this)"/>
+                    <label for="label">标签</label>
+                    <input id="label" type="text" placeholder="添加标签"/>
+                </div>
+                <div style="text-align: right">
+                    <button class="primarybtn" onclick="sendAddFriendApplyClick()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改我的信息对话框 -->
+    <div id="modify-myinfo-dialog" class="modify-body" style="display: none">
+        <div class="modify-content">
+            <div class="modify-info">
+                <div class="el-image modify-avatar">
+                    <img id="modify-avatar" src="https://res.tiocloud.com/avatar/tio/20200708/7.jpg"
+                         class="el-image-inner" alt="头像">
+                </div>
+                <div class="modify-name">
+                    <p id="modify-nick" class="modify-nick">LLLQQQ</p>
+                    <p id="modify-area" class="modify-area">浙江省 温州市</p>
+                </div>
+            </div>
+            <div class="modify-greet">
+                <div class="greet-content">
+                    <label for="nickname">昵称</label>
+                    <input id="nickname" type="text" placeholder="昵称"/>
+                    <label for="gender">性别</label>
+                    <select id="gender">
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                        <option value="0" selected>保密</option>
+                    </select>
+                </div>
+                <div style="text-align: right">
+                    <button class="primarybtn" onclick="saveMyInfoClick()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改头像对话框 -->
+    <div id="modify-avatar-dialog" style="display: none">
+        <div class="model-body tailoring-container">
+            <div class="tailoring-container-preview">
+                <div class="tailoring-box-parcel">
+                    <img id="tailoringImg">
+                </div>
+                <div class="preview-box-parcel">
+                    <div class="img-preview preview-square"></div>
+                    <div class="img-preview preview-square-m"></div>
+                    <div class="img-preview preview-circle-m"></div>
+                    <div class="img-preview preview-square-s"></div>
+                    <div class="img-preview preview-circle-s"></div>
+                    <div class="preview-label">
+                        <label>宽: </label><span id="dataWidth">0</span>
+                        <label>高: </label><span id="dataHeight">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tailoring-bottom-btn">
+                <div class="btn-group-left">
+                    <div class="btn-group">
+                        <button title="向左旋转45度" class="commonbtn cropper-rotate-left-btn" data-method="rotate"
+                                data-option="-45" onclick="cropperOper(this)"></button>
+                        <button title="向右旋转45度" class="commonbtn cropper-rotate-right-btn" data-method="rotate"
+                                data-option="45" onclick="cropperOper(this)"></button>
+                    </div>
+                    <div class="btn-group">
+                        <button title="左右翻转" class="commonbtn cropper-scaleX-btn" data-method="scaleX"
+                                data-option="-1" onclick="cropperOper(this)"></button>
+                        <button title="上下翻转" class="commonbtn cropper-scaleY-btn" data-method="scaleY"
+                                data-option="-1" onclick="cropperOper(this)"></button>
+                    </div>
+                    <div class="btn-group">
+                        <button title="重置" class="commonbtn cropper-reset-btn" data-method="reset"
+                                onclick="cropperOper(this)"></button>
+                    </div>
+                </div>
+                <div class="btn-group-right">
+                    <button title="选择图片" class="primarybtn" onclick="modifyAvatarClick()">选择图片</button>
+                    <input type="file" accept="image/*" name="file" id="chooseImg" class="hide"
+                           onchange="modifyAvatarFileChange(this)">
+                    <button title="确 定" class="primarybtn" onclick="cropImageConfirmClick()">确 定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改密码对话框 -->
+    <div id="modify-pwd-dialog" class="modify-body" style="display: none">
+        <div class="modify-content">
+            <div class="modify-greet">
+                <div class="greet-content">
+                    <label for="oldPwd">原密码</label>
+                    <input id="oldPwd" type="password" placeholder="请输入原密码" autocomplete="new-password"/>
+                    <label for="newPwd">新密码</label>
+                    <input id="newPwd" type="password" placeholder="请输入新密码" autocomplete="new-password"/>
+                    <label for="validNewPwd">确认新密码</label>
+                    <input id="validNewPwd" type="password" placeholder="请确认新密码" autocomplete="new-password"/>
+                </div>
+                <div style="text-align: right">
+                    <button class="primarybtn" onclick="modifyPwdClick()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--视频通话对话框-->
+    <div id="call-video-dialog" class="call-container call-container-video hide">
+        <div class="call-frosted-glass"></div>
+        <div class="call-video-body" onmouseover="showHideAcceptCallBtnByMouse('over')"
+             onmouseleave="showHideAcceptCallBtnByMouse('out')" onclick="showHideAcceptCallBtn(this)">
+            <div class="call-avatar-bg">
+                <img class="avatar-a" src="https://res.tiocloud.com/avatar/tio/20200708/9.jpg" alt="头像"/>
+                <div class="nickname">张三</div>
+            </div>
+            <video id="remoteVideo" class="call-remote-video hide" playsinline autoplay
+                   onclick="switchVideo(this)"></video>
+            <video id="localVideo" class="call-local-video call-local-video-mirror hide" playsinline autoplay muted
+                   onclick="switchVideo(this)"></video>
+            <div class="call-local hide">
+                <label class="call-waiting-label">等待对方接受视频邀请</label>
+                <div class="call-btns">
+                    <div class="call-btn ">
+                        <button class="call-cancel call-opr" onclick="hangup('cancel','VIDEO_CALL')"></button>
+                        <div>取消</div>
+                    </div>
+                </div>
+            </div>
+            <div class="call-remote hide">
+                <label class="call-waiting-label">邀请你视频通话</label>
+                <div class="call-btns">
+                    <div class="call-btn call-btn-left">
+                        <button class="call-refuse call-opr" onclick="hangup('refuse','VIDEO_CALL')"></button>
+                        <div>拒绝</div>
+                    </div>
+                    <div class="call-btn call-btn-right">
+                        <button class="call-accept call-opr" onclick="acceptCall('VIDEO_CALL')"></button>
+                        <div>接听</div>
+                    </div>
+                </div>
+            </div>
+            <div class="call-remote-accept hide">
+                <label class="call-timing-label">00:00</label>
+                <div class="call-btns">
+                    <div class="call-btn-top">
+                        <div class="call-btn call-btn-left">
+                            <button class="call-microphone-on call-opr" onclick="microphoneTurnedOnOff(this)"></button>
+                            <div>麦克风已开</div>
+                        </div>
+                        <div class="call-btn call-btn-right">
+                            <button class="call-camera-on call-opr" onclick="cameraTurnedOnOff(this)"></button>
+                            <div>摄像头已开</div>
+                        </div>
+                    </div>
+                    <div class="call-btn-bottom">
+                        <div class="call-btn">
+                            <button class="call-hangup call-opr" onclick="hangup('hangup','VIDEO_CALL')"></button>
+                            <div>挂断</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--语音通话对话框-->
+    <div id="call-audio-dialog" class="call-container call-container-audio hide">
+        <div class="call-frosted-glass"></div>
+        <div class="call-avatar-bg">
+            <img class="avatar-a"
+                 src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                 alt="头像"/>
+            <div class="nickname">张三</div>
+        </div>
+        <video id="remoteAudio" class="call-remote-audio hide" playsinline autoplay></video>
+        <video id="localAudio" class="call-local-audio hide" playsinline autoplay muted></video>
+        <div class="call-local hide">
+            <label class="call-waiting-label">等待对方接受语音邀请</label>
+            <div class="call-btns">
+                <div class="call-btn ">
+                    <button class="call-cancel call-opr" onclick="hangup('cancel','AUDIO_CALL')"></button>
+                    <div>取消</div>
+                </div>
+            </div>
+        </div>
+        <div class="call-remote hide">
+            <label class="call-waiting-label">邀请你语音通话</label>
+            <div class="call-btns">
+                <div class="call-btn call-btn-left">
+                    <button class="call-refuse call-opr" onclick="hangup('refuse','AUDIO_CALL')"></button>
+                    <div>拒绝</div>
+                </div>
+                <div class="call-btn call-btn-right">
+                    <button class="call-accept call-opr" onclick="acceptCall('AUDIO_CALL')"></button>
+                    <div>接听</div>
+                </div>
+            </div>
+        </div>
+        <div class="call-remote-accept hide">
+            <label class="call-timing-label">00:00</label>
+            <div class="call-btns">
+                <div class="call-btn">
+                    <button class="call-hangup call-opr" onclick="hangup('hangup','AUDIO_CALL')"></button>
+                    <div>挂断</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="top-search-dialog" class="top-search-dialog hide">
+        <div class="search-friend-tit">好友</div>
+        <ul class="search-friend-list">
+            <!--<li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">张三</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">丽水</div>
+                </div>
+            </li>-->
+        </ul>
+        <div class="search-chat-room-tit">聊天室</div>
+        <ul class="search-chat-room-list">
+            <!--<li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王五</div>
+                </div>
+            </li>
+            <li class="search-item">
+                <div class="item-avatar">
+                    <img class="avatar-a"
+                         src="https://oss.pinmallzj.com/image/chat-msg/2024-07-04/%E8%BD%AE%E6%92%AD%E5%9B%BE2-PNR08Vd0ZNdN.jpg"
+                         alt=""/>
+                </div>
+                <div class="item-nickname">
+                    <div class="nickname">王二</div>
+                </div>
+            </li>-->
+        </ul>
+    </div>
+</div>
+
+<!-- 引入 jQuery 库 -->
+<script src="js/jquery/jquery-3.7.1.min.js"></script>
+<script src="js/jquery-ui/jquery-ui.min.js"></script>
+<script src="js/jquery/jquery.cookie-1.4.1.min.js"></script>
+<script src="js/jquery/jquery-insert-at.js"></script>
+<script src="js/toastr.min.js"></script>
+<script src="js/jquery-ui/resources/datepicker/i18n/datepicker-zh-CH.js"></script>
+<! -- 引入 contextmenu 库 -->
+<script src="js/contextmenu/jquery.contextMenu.min.js"></script>
+<script src="js/contextmenu/jquery.ui.position.js"></script>
+<link rel="stylesheet" href="js/contextmenu/jquery.contextMenu.min.css">
+<!--图片裁切插件-->
+<script src="js/cropper/cropper.min.js"></script>
+<link rel="stylesheet" href="js/cropper/cropper.min.css"/>
+<script src="js/cropper/jquery-cropper.min.js"></script>
+<!--富文本编辑器-->
+<script type='text/javascript' src='textboxio/textboxio.js'></script>
+<link rel="stylesheet" type="text/css" href="textboxio/example.css"/>
+<!--截屏插件-->
+<script src="./js/js-screen-shot/screenShotPlugin.umd.js"></script>
+
+<script src="js/moment.js"></script>
+<script src="js/custom-log.js"></script>
+<script src="js/base.js"></script>
+<script src="js/upload.js"></script>
+<script src="js/emoji.js"></script>
+<script src="js/chat-index.js"></script>
+
+<script src="js/im/tio/tiows.js"></script>
+<script src="js/im/imHandler.js"></script>
+<script src="js/im/im.js"></script>
+<script src="js/im/webrtc-util.js"></script>
+</body>
+</html>

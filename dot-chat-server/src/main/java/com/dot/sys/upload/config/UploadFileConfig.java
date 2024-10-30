@@ -9,6 +9,12 @@ import lombok.Data;
  */
 @Data
 public class UploadFileConfig {
+
+    /**
+     * 根路径
+     */
+    private String rootContext;
+
     /**
      * 服务器存储地址
      */
@@ -32,5 +38,6 @@ public class UploadFileConfig {
     /**
      * 是否压缩
      */
-    private boolean compress = false;
+    private boolean compress;
+
 }

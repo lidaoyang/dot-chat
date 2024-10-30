@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-    <property name="APP_NAME" value="JURU" />
+    <property name="APP_NAME" value="DOT" />
     <property name="log.path" value="./logs" />
     
     <!-- 控制台输出 -->

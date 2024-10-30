@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery - Custom Label</title>
+    <link rel="stylesheet" href="js/cropper/cropper.min.css"/>
+    <style>
+
+        .model-body {
+            min-width: 290px;
+            background: #fff;
+            box-shadow: 0 0 9px 0 rgba(0, 0, 0, .2);
+            border-radius: 4px;
+            z-index: 1000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding-bottom: 30px;
+        }
+
+        .tailoring-container {
+            width: 736px;
+            height: 550px;
+            padding: 5px;
+            overflow: hidden;
+        }
+
+        .tailoring-container .tailoring-container-preview {
+            height: 500px;
+            position: relative;
+        }
+
+        .tailoring-container .tailoring-box-parcel {
+            width: 520px;
+            height: 495px;
+            position: absolute;
+            left: 0;
+            border: 1px solid #ddd;
+        }
+
+        .tailoring-container .preview-box-parcel {
+            display: inline-block;
+            width: 202px;
+            height: 450px;
+            position: absolute;
+            right: 0;
+            text-align: center;
+        }
+
+        .img-preview {
+            overflow: hidden;
+        }
+
+        .preview-square {
+            width: 200px;
+            height: 200px;
+        }
+
+        .preview-square-m {
+            margin-top: 5px;
+            width: 98px;
+            height: 98px;
+            display: inline-block;
+        }
+
+        .preview-circle-m {
+            margin-top: 5px;
+            width: 98px;
+            height: 98px;
+            border-radius: 100%;
+            display: inline-block;
+        }
+
+        .preview-square-s {
+            margin-top: 5px;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+        }
+
+        .preview-circle-s {
+            margin-top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+            display: inline-block;
+        }
+
+        .preview-label {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        .tailoring-bottom-btn {
+            width: 100%;
+            border-top: 1px solid #ddd;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-group {
+            display: inline-block;
+            margin-left: 3px;
+            margin-right: 3px;
+            background: linear-gradient(134deg, #44baf8, #3596fc);
+            box-shadow: 0 2px 6px #8dbff8;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .tailoring-container .tailoring-bottom-btn .commonbtn {
+            background-position: center;
+            background-size: 70%;
+            background-repeat: no-repeat;
+            background-color: transparent;
+
+            width: 35px;
+            height: 35px;
+            border: 0;
+            cursor: pointer;
+            float: left;
+        }
+
+        .tailoring-container .tailoring-bottom-btn .commonbtn:hover {
+            background-color: #8dbff8;
+            border-radius: 4px;
+        }
+
+        .cropper-rotate-left-btn {
+            background-image: url("./ico/rotate-left.png");
+        }
+
+        .cropper-rotate-right-btn {
+            background-image: url("./ico/rotate-right.png");
+        }
+
+        .cropper-scaleX-btn {
+            background-image: url("./ico/scaleX.png");
+        }
+
+        .cropper-scaleY-btn {
+            background-image: url("./ico/scaleY.png");
+        }
+
+        .cropper-reset-btn {
+            background-image: url("./ico/reset.png");
+        }
+
+        .tailoring-container .primarybtn + .primarybtn {
+            margin-left: 14px;
+        }
+
+        .tailoring-container .primarybtn {
+            position: relative;
+        }
+
+        .primarybtn {
+            width: 90px;
+            height: 30px;
+            border-radius: 4px;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: linear-gradient(134deg, #44baf8, #3596fc);
+            box-shadow: 0 2px 6px #8dbff8;
+            color: #fff;
+            border: 0;
+        }
+
+        .tailoring-container .hide {
+            display: none;
+        }
+    </style>
+
+    <script src="js/jquery/jquery-3.7.1.min.js"></script>
+    <script src="js/cropper/cropper.min.js"></script>
+    <script src="js/cropper/jquery-cropper.min.js"></script>
+    <script>
+        function cropperImg() {
+            $('#tailoringImg').cropper({
+                aspectRatio: 1,
+                viewMode: 2,
+                preview: '.img-preview',
+                // data: {
+                //     width: 300,
+                //     height: 300
+                // },
+                crop: function (e) {
+                    $("#dataWidth").text(Math.round(e.detail.width) + "px");
+                    $("#dataHeight").text(Math.round(e.detail.height) + "px");
+                }
+            });
+        }
+
+        function modifyAvatarClick() {
+            $("#chooseImg").click();
+        }
+
+        let uploadedImageName = 'cropped.jpg';
+        let uploadedImageType = 'image/jpeg';
+        let uploadedImageURL;
+
+        function modifyAvatarFileChange(_this) {
+            let files = _this.files;
+            if (files && files.length) {
+                let file = files[0];
+                if (/^image\/\w+$/.test(file.type)) {
+                    uploadedImageName = file.name;
+                    uploadedImageType = file.type;
+
+                    if (uploadedImageURL) {
+                        URL.revokeObjectURL(uploadedImageURL);
+                    }
+
+                    uploadedImageURL = URL.createObjectURL(file);
+                    $('#tailoringImg').cropper('destroy').attr('src', uploadedImageURL);
+                    cropperImg();
+                } else {
+                    alert('Please choose an image file.');
+                }
+            }
+        }
+
+        function cropperOper(_this) {
+            let $this = $(_this);
+            let data = $this.data();
+            switch (data.method) {
+                case 'rotate':
+                    break;
+                case 'scaleX':
+                case 'scaleY':
+                    $this.data('option', -data.option);
+                    break;
+            }
+            $('#tailoringImg').cropper(data.method, data.option);
+        }
+    </script>
+</head>
+<body>
+<div class="model-body tailoring-container">
+    <div class="tailoring-container-preview">
+        <div class="tailoring-box-parcel">
+            <img id="tailoringImg">
+        </div>
+        <div class="preview-box-parcel">
+            <div class="img-preview preview-square"></div>
+            <div class="img-preview preview-square-m"></div>
+            <div class="img-preview preview-circle-m"></div>
+            <div class="img-preview preview-square-s"></div>
+            <div class="img-preview preview-circle-s"></div>
+            <div class="preview-label">
+                <label>宽: </label><span id="dataWidth">0</span>
+                <label>高: </label><span id="dataHeight">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="tailoring-bottom-btn">
+        <div class="btn-group-left">
+            <div class="btn-group">
+                <button title="向左旋转45度" class="commonbtn cropper-rotate-left-btn" data-method="rotate"
+                        data-option="-45" onclick="cropperOper(this)"></button>
+                <button title="向右旋转45度" class="commonbtn cropper-rotate-right-btn" data-method="rotate"
+                        data-option="45" onclick="cropperOper(this)"></button>
+            </div>
+            <div class="btn-group">
+                <button title="左右翻转" class="commonbtn cropper-scaleX-btn" data-method="scaleX"
+                        data-option="-1" onclick="cropperOper(this)"></button>
+                <button title="上下翻转" class="commonbtn cropper-scaleY-btn" data-method="scaleY"
+                        data-option="-1" onclick="cropperOper(this)"></button>
+            </div>
+            <div class="btn-group">
+                <button title="重置" class="commonbtn cropper-reset-btn" data-method="reset"
+                        onclick="cropperOper(this)"></button>
+            </div>
+        </div>
+        <div class="btn-group-right">
+            <button title="选择图片" class="primarybtn" onclick="modifyAvatarClick()">选择图片</button>
+            <input type="file" accept="image/*" name="file" id="chooseImg" class="hide"
+                   onchange="modifyAvatarFileChange(this)">
+            <button title="提 交" class="primarybtn">提 交</button>
+            <button title="关 闭" class="primarybtn">关 闭</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

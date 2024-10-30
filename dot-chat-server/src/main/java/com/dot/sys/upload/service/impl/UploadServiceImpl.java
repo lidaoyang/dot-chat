@@ -5,10 +5,7 @@ import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.OSSConfig;
 import com.dot.comm.exception.ApiException;
-import com.dot.comm.utils.OSSUtil;
-import com.dot.comm.utils.RedisUtil;
-import com.dot.comm.utils.UploadUtil;
-import com.dot.comm.utils.VideoUtil;
+import com.dot.comm.utils.*;
 import com.dot.sys.upload.config.UploadFileConfig;
 import com.dot.sys.upload.response.UploadProgressBarResponse;
 import com.dot.sys.upload.response.UploadResponse;
@@ -99,9 +96,16 @@ public class UploadServiceImpl implements UploadService {
     private void uploadVideoCoverImg(MultipartFile multipart, String model, UploadResponse uploadResponse) {
         InputStream imageInputStream = VideoUtil.coverImageInputStream(1, multipart);
         String newFileName = uploadResponse.getNewFileName().substring(0, uploadResponse.getNewFileName().lastIndexOf(".")) + ".jpg";
-        String uploadPath = UploadUtil.getUploadPath(videoConfig.getType(), model) + newFileName;
-        // 上传图片到oss
-        OSSUtil.getInstance(redisUtil, ossConfig).upload(imageInputStream, uploadPath, newFileName, uploadType);
+        String uploadPath = UploadUtil.getUploadPath(videoConfig.getRootContext(),videoConfig.getType(), model) + newFileName;
+        if (ossConfig.isLocal()){
+            uploadResponse.setStatus(1);
+            String targetPath = videoConfig.getRootPath() + "/" + uploadPath;
+            log.info("文件流保存到本地,targetPath:{}", targetPath);
+            FileUtil.saveToFile(imageInputStream, targetPath);
+        } else {
+            // 上传图片到oss
+            OSSUtil.getInstance(redisUtil, ossConfig).upload(imageInputStream, uploadPath, newFileName, uploadType);
+        }
         String coverUrl = ossConfig.getDomain() + "/" + uploadPath;
         uploadResponse.setCoverUrl(coverUrl);
     }
@@ -121,11 +125,17 @@ public class UploadServiceImpl implements UploadService {
             File file = UploadUtil.createFile(response.getServerPath());
             // 保存文件到本地
             multipart.transferTo(file);
+            // 本地不上传OSS
+            if (ossConfig.isLocal()){
+                response.setStatus(1);
+                return;
+            }
             // 上传文件到oss
             if (isAsync) {// 异步上传带进度条
                 OSSUtil.getInstance(redisUtil, ossConfig).upload(file, response.getUploadPath(), uploadType);
             } else {// 同步上传
                 OSSUtil.getInstance(ossConfig).upload(file, response.getUploadPath());
+                response.setStatus(1);
             }
         } catch (IOException e) {
             log.error("上传文件失败", e);
@@ -155,8 +165,8 @@ public class UploadServiceImpl implements UploadService {
         // 新文件名
         String newFileName = UploadUtil.fileName(shortName, extName);
 
-        String localFilePath = UploadUtil.getFullPath(uploadConfig.getRootPath(), uploadConfig.getType(), model) + newFileName;
-        String uploadPath = UploadUtil.getUploadPath(uploadConfig.getType(), model) + newFileName;
+        String localFilePath = UploadUtil.getFullPath(uploadConfig.getRootPath(), uploadConfig.getType(), model)+ newFileName;
+        String uploadPath = UploadUtil.getUploadPath(uploadConfig.getType(), model, uploadConfig.getRootContext()) + newFileName;
         return getUploadResponse(multipart, fileName, newFileName, extName, localFilePath, uploadPath);
     }
 
@@ -174,7 +184,6 @@ public class UploadServiceImpl implements UploadService {
         result.setType(multipart.getContentType());
         return result;
     }
-
 
     @Override
     public UploadProgressBarResponse getUploadProgressBar(String fileName) {

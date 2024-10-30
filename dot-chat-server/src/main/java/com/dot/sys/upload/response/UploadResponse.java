@@ -62,4 +62,10 @@ public class UploadResponse {
      */
     @Schema(description = "文件类型")
     private String type;
+
+    /**
+     * 文件上传状态(1:上传完成;0:上传中)
+     */
+    @Schema(description = "文件上传状态(1:上传完成;0:上传中)")
+    private int status = 0;
 }
