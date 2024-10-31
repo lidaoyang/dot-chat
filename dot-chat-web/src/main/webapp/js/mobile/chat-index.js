@@ -104,7 +104,7 @@ function bottomMsgBtnClick() {
     $("#bottom-msg-btn").addClass("bottom-btn-click").addClass("bottom-msg-btn-click");
     $("#bottom-friend-btn").removeClass("bottom-friend-btn-click").removeClass("bottom-btn-click");
     $("#bottom-my-btn").removeClass("bottom-my-btn-click").removeClass("bottom-btn-click");
-    $(".header .nickname").text("简讯");
+    $(".header .nickname").text("消息");
     $("#add-operation").removeClass("hide").addClass("show");
     loadChatRoom();
 }
@@ -913,7 +913,7 @@ function getMsgDom(chatMsg) {
  */
 function getImgMsgDom(chatMsg) {
     let msgObj = JSON.parse(chatMsg.msg);
-    let msgDom = `<img class="msg-img" src="${msgObj.fileUrl}" alt="" onclick="chatMsgImgZoomDom(this)">`;
+    let msgDom = `<img class="msg-img" src="${msgObj.fileUrl}" alt="" onclick="chatMsgImgZoomDom(this)" onerror="this.src='../../ico/pic_error.png'">`;
     if (msgObj.status === 0) {
         msgDom = `<img class="msg-img-loading" src="../../ico/loading.gif" alt="">`;
         let progressBarDom = `<div class="progress-bar" msg-id="${chatMsg.id}" file-url="${msgObj.fileUrl}"></div>`;
@@ -931,7 +931,7 @@ function getImgMsgDom(chatMsg) {
 function getVideoMsgDom(chatMsg) {
     let msgObj = JSON.parse(chatMsg.msg);
     let msgDom = `<div class="msg-video-outer">
-                               <img class="msg-video-cover" src="${msgObj.coverUrl}" alt="">
+                               <img class="msg-video-cover" src="${msgObj.coverUrl}" alt="" onerror="this.src='../../ico/pic_error.png'">
                                 <i class="msg-video-play-icon" data-url="${msgObj.fileUrl}" onclick="playVideo(this)" ></i>
                          </div>`;
     if (msgObj.status === 0) {
