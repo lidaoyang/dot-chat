@@ -1,7 +1,6 @@
 package com.dot.msg.notify.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.ResultBean;
 import com.dot.msg.notify.request.EntNotifyMsgSendRequest;
 import com.dot.msg.notify.response.EntNotifyMsgResponse;
@@ -38,11 +37,9 @@ public class NotifyMsgController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "通知信息列表", description = "获取当前登录用户的通知信息列表(企业或供应商通知信息)")
     @GetMapping(value = "/notifylist")
-    @Parameters({@Parameter(name = "userType", description = "用户类型", required = true),
-            @Parameter(name = "limit", description = "一次最多加载条数,默认50")})
-    public ResultBean<List<EntNotifyMsgResponse>> getNotifyMsgNotifyList(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType,
-                                                                         @RequestParam(required = false, defaultValue = "50") Integer limit) {
-        return ResultBean.success(notifyMsgService.getNotifyMsgNotifyList(userType, limit));
+    @Parameter(name = "limit", description = "一次最多加载条数,默认50")
+    public ResultBean<List<EntNotifyMsgResponse>> getNotifyMsgNotifyList(@RequestParam(required = false, defaultValue = "50") Integer limit) {
+        return ResultBean.success(notifyMsgService.getNotifyMsgNotifyList(limit));
     }
 
     /**
@@ -61,11 +58,9 @@ public class NotifyMsgController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "更新已读")
     @PostMapping(value = "/updateToRead")
-    @Parameters({@Parameter(name = "userType", description = "用户类型", required = true),
-            @Parameter(name = "id", description = "通知信息ID", required = true)})
-    public ResultBean<Boolean> updateIsRead(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType,
-                                            @RequestParam @NotNull(message = "通知信息ID不能为空") Integer id) {
-        return ResultBean.success(notifyMsgService.updateIsRead(userType, id));
+    @Parameter(name = "id", description = "通知信息ID", required = true)
+    public ResultBean<Boolean> updateIsRead(@RequestParam @NotNull(message = "通知信息ID不能为空") Integer id) {
+        return ResultBean.success(notifyMsgService.updateIsRead(id));
     }
 
 
@@ -75,8 +70,7 @@ public class NotifyMsgController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "全部已读")
     @PostMapping(value = "/allRead")
-    @Parameter(name = "userType", description = "用户类型", required = true)
-    public ResultBean<Boolean> allRead(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType) {
-        return ResultBean.success(notifyMsgService.allRead(userType));
+    public ResultBean<Boolean> allRead() {
+        return ResultBean.success(notifyMsgService.allRead());
     }
 }

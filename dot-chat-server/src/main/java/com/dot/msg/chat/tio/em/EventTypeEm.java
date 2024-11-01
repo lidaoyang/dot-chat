@@ -20,8 +20,7 @@ public enum EventTypeEm {
     GROUP_DISMISS("群解散"),
     GROUP_BAN("群禁言"),
     REVOKE_MSG("撤销消息"),
-    BIZ_ENT_ORDER("企业订单通知"),
-    BIZ_SUPP_ORDER("供应商订单通知"),
+    BIZ_ORDER("订单通知"),
     ;
 
 

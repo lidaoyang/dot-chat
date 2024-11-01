@@ -1,7 +1,6 @@
 package com.dot.msg.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.model.ChatFriend;
 import com.dot.msg.chat.request.ChatFriendAddRequest;
 import com.dot.msg.chat.response.ChatUserFriendInfoResponse;
@@ -20,10 +19,9 @@ public interface ChatFriendService extends IService<ChatFriend> {
     /**
      * 获取当前登录用户的好友列表
      *
-     * @param userType 用户类型
      * @return 好友列表
      */
-    List<ChatUserFriendResponse> getChatUserFriendList(UserTypeEm userType, String keywords);
+    List<ChatUserFriendResponse> getChatUserFriendList(String keywords);
 
     /**
      * 获取当前登录用户的好友列表,查询好友ID列表中的好友或过滤掉群成员
@@ -37,12 +35,11 @@ public interface ChatFriendService extends IService<ChatFriend> {
     /**
      * 获取当前登录用户的好友列表,并过滤掉群成员
      *
-     * @param userType      用户类型
      * @param filterGroupId 过滤群组ID
      * @param keywords      搜索关键词(id,nickname)
      * @return 好友列表
      */
-    List<ChatUserFriendResponse> getChatUserFriendList(UserTypeEm userType, Integer filterGroupId, String keywords);
+    List<ChatUserFriendResponse> getChatUserFriendList(Integer filterGroupId, String keywords);
 
     /**
      * 获取当前登录用户的好友列表,并过滤掉群成员
@@ -68,11 +65,10 @@ public interface ChatFriendService extends IService<ChatFriend> {
     /**
      * 获取当前登录用户的好友详情
      *
-     * @param userType 用户类型
      * @param friendId 好友id
      * @return 好友详情
      */
-    ChatUserFriendInfoResponse getChatUserFriendInfo(UserTypeEm userType, Integer friendId);
+    ChatUserFriendInfoResponse getChatUserFriendInfo(Integer friendId);
 
     boolean addChatFriend(ChatFriendAddRequest request);
 
@@ -87,11 +83,10 @@ public interface ChatFriendService extends IService<ChatFriend> {
     /**
      * 修改好友备注
      *
-     * @param userType 用户类型
      * @param friendId 好友id
      * @param remark   好友备注
      * @return nickname
      */
-    String modifyFriendRemark(UserTypeEm userType, Integer friendId, String remark);
+    String modifyFriendRemark(Integer friendId, String remark);
 
 }

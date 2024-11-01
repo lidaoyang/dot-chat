@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
@@ -82,14 +81,10 @@ public class JRWsMsgHandler implements IWsMsgHandler {
     @Override
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) {
         String token = httpRequest.getParam("token");
-        String userType = httpRequest.getParam("userType");
-        UserTypeEm userTypeEm = UserTypeEm.getByCode(userType);
-        // 检查token
-        check(token, userTypeEm, userType);
         // 获取登录用户
         LoginUsername loginUser;
         try {
-            loginUser = tokenManager.getLoginUser(userTypeEm, token);
+            loginUser = tokenManager.getLoginUser(token);
         } catch (Exception e) {
             log.error("token错误", e);
             sendUnAuthSystemMsg(channelContext, channelContext.userid);
@@ -105,7 +100,7 @@ public class JRWsMsgHandler implements IWsMsgHandler {
         bindGroup(channelContext, chatUser);
 
         // 绑定到业务ID
-        bindBizId(channelContext, chatUser);
+        // bindBizId(channelContext, chatUser);
 
         // 发送离线消息
         sendOfflineMsg(channelContext, chatUser);
@@ -122,20 +117,10 @@ public class JRWsMsgHandler implements IWsMsgHandler {
      * @return 聊天用户
      */
     private ChatUser getChatUser(LoginUsername loginUser) {
-        ChatUser chatUser = chatUserService.getChatUser(loginUser.getUserId(), loginUser.getType());
-        if (chatUser == null) {
-            chatUser = chatUserService.addChatUser(loginUser);
-        } else {
-            // 如果用户不在线，则更新在线状态
-            if (!chatUser.getIsOnline()) {
-                chatUserService.updateOnlineStatus(chatUser.getId(), true);
-            }
-            // 登录的账号信息有变更时更新手机号和企业id
-            if (!loginUser.getEnterpriseId().equals(chatUser.getEnterpriseId()) || !loginUser.getAccount().equals(chatUser.getPhone())) {
-                chatUser.setEnterpriseId(loginUser.getEnterpriseId());
-                chatUser.setPhone(loginUser.getAccount());
-                chatUserService.updatePhoneAndEnterpriseId(chatUser.getId(), loginUser.getType(), loginUser.getEnterpriseId(), loginUser.getAccount());
-            }
+        ChatUser chatUser = chatUserService.getChatUser(loginUser.getUid());
+        // 如果用户不在线，则更新在线状态
+        if (!chatUser.getIsOnline()) {
+            chatUserService.updateOnlineStatus(chatUser.getId(), true);
         }
         log.info("用户{}已上线,ID:{}", chatUser.getNickname(), chatUser.getId());
         return chatUser;
@@ -162,10 +147,8 @@ public class JRWsMsgHandler implements IWsMsgHandler {
      * @param chatUser       聊天用户
      */
     private void bindBizId(ChannelContext channelContext, ChatUser chatUser) {
-        if (UserTypeEm.ENTERPRISE.getCode().equals(chatUser.getUserType()) || UserTypeEm.SUPPLIER.getCode().equals(chatUser.getUserType())) {
-            String bizid = UserTypeEm.ENTERPRISE.getCode().equals(chatUser.getUserType()) ? NotifyBizEm.BIZ_ENT_ORDER.getBizId(chatUser.getEnterpriseId()) : NotifyBizEm.BIZ_SUPP_ORDER.getBizId(chatUser.getEnterpriseId());
+            String bizid =  NotifyBizEm.BIZ_ORDER.getBizId(chatUser.getId());
             Tio.bindBsId(channelContext, bizid);
-        }
     }
 
 
@@ -257,14 +240,10 @@ public class JRWsMsgHandler implements IWsMsgHandler {
         chatMsgSendService.sendToUser(channelContext.tioConfig, message);
     }
 
-    private void check(String token, UserTypeEm adminType, String type) {
+    private void check(String token) {
         if (StringUtils.isBlank(token)) {
             log.error("token为空");
             throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "token为空");
-        }
-        if (adminType == null) {
-            log.error("用户类型错误,type:{}", type);
-            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "用户类型错误");
         }
     }
 

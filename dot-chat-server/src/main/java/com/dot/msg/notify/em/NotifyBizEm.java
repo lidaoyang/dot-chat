@@ -7,8 +7,7 @@ package com.dot.msg.notify.em;
  * @date: Created in 2024/1/18 10:43
  */
 public enum NotifyBizEm {
-    BIZ_ENT_ORDER(9000001, "企业订单业务"),// 企业订单业务
-    BIZ_SUPP_ORDER(9000002, "供应商订单业务") // 供应商订单业务
+    BIZ_ORDER(9000001, "订单业务"),// 企业订单业务
     ;
 
 

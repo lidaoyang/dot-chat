@@ -9,11 +9,6 @@ package com.dot.comm.constants;
 public interface TokenConstant {
 
     /**
-     * 管理员角色 redis key
-     */
-    String ROLE_ADMIN_REDIS = "ROLE:ADMIN:";
-
-    /**
      * 管理员token redis key
      */
     String TOKEN_ADMIN_REDIS = "TOKEN:ADMIN:";

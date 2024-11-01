@@ -3,7 +3,6 @@ package com.dot.msg.chat.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.PageFlippingTypeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.tio.em.MsgTypeEm;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -30,13 +29,6 @@ public class ChatMsgSearchRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1725781086462862292L;
-
-    /**
-     * 用户类型
-     */
-    @Schema(description = "用户类型", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "用户类型不能为空")
-    private UserTypeEm userType;
 
     /**
      * 会话id

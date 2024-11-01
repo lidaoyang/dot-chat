@@ -2,7 +2,6 @@ package com.dot.msg.chat.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.dot.comm.em.UserTypeEm;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,13 +26,6 @@ public class ChatFriendApplyAgreeRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 260395165663474068L;
-
-    /**
-     * 用户类型
-     */
-    @Schema(description = "用户类型", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "用户类型不能为空")
-    private UserTypeEm userType;
 
     /**
      * 申请ID

@@ -1,7 +1,6 @@
 package com.dot.sys.user.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.ResultBean;
 import com.dot.sys.user.request.LoginRequest;
 import com.dot.sys.user.response.LoginResponse;
@@ -50,9 +49,8 @@ public class UserController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "刷新token")
     @PostMapping(value = "/refreshToken")
-    @Parameter(name = "userType", description = "用户类型", required = true)
-    public ResultBean<LoginResponse> refreshToken(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType) {
-        return ResultBean.success(userService.refreshToken(userType));
+    public ResultBean<LoginResponse> refreshToken() {
+        return ResultBean.success(userService.refreshToken());
     }
 
     /**
@@ -61,9 +59,7 @@ public class UserController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "退出登录")
     @PostMapping(value = "/logout")
-    @Parameter(name = "userType", description = "用户类型", required = true)
-    public ResultBean<Boolean> login(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType) {
-        userService.logout(userType);
+    public ResultBean<Boolean> login() {
         return ResultBean.success();
     }
 
@@ -71,14 +67,13 @@ public class UserController {
     @Operation(summary = "更新密码")
     @PostMapping("/updatePassword")
     @Parameters({
-            @Parameter(name = "userType", description = "用户类型", required = true),
             @Parameter(name = "oldPwd", description = "原密码", required = true),
             @Parameter(name = "newPwd", description = "新密码(长度为6-20)", required = true)
     })
-    public ResultBean<Boolean> updatePassword(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType,
+    public ResultBean<Boolean> updatePassword(
                                               @RequestParam @NotBlank(message = "原密码不能为空") String oldPwd,
                                               @RequestParam @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 20, message = "新密码长度为6-20位") String newPwd) {
-        return ResultBean.result(userService.updatePassword(userType, oldPwd, newPwd));
+        return ResultBean.result(userService.updatePassword(oldPwd, newPwd));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")

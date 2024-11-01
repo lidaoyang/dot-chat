@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.dao.ChatGroupMemberDao;
 import com.dot.msg.chat.dto.ChatGroupInfoDto;
 import com.dot.msg.chat.dto.ChatGroupMemberSimDto;
@@ -70,8 +69,8 @@ public class ChatGroupMemberServiceImpl extends ServiceImpl<ChatGroupMemberDao, 
     }
 
     @Override
-    public List<ChatGroupMemberSimDto> getChatGroupMemberSimList(UserTypeEm userType, Integer groupId, String keywords) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public List<ChatGroupMemberSimDto> getChatGroupMemberSimList(Integer groupId, String keywords) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         List<ChatGroupMemberSimDto> groupMemberList = getChatGroupMemberList(chatUserId, groupId, keywords);
         setSourceDesc(groupMemberList);
         return groupMemberList;

@@ -17,7 +17,7 @@ spring:
   #  数据库配置
   datasource:
     druid:
-      url: jdbc:mysql://${DB_HOST}:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      url: jdbc:mysql://${DB_HOST}:3306/${MYSQL_DB_NAME}?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: ${MYSQL_USERNAME}
       password: ${MYSQL_PASSWORD}

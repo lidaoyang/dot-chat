@@ -1,7 +1,6 @@
 package com.dot.msg.notify.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.notify.em.NotifyBizEm;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -27,14 +26,6 @@ public class EntNotifyMsgSendRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4993582823092430571L;
-
-
-    /**
-     * 用户类型
-     */
-    @Schema(description = "用户类型", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "用户类型不能为空")
-    private UserTypeEm userType;
 
     /**
      * 通知业务(BIZ_ENT_ORDER:企业订单业务;BIZ_SUPP_ORDER:供应商订单业务)

@@ -42,9 +42,10 @@ public class ChatUserSearchResponse implements Serializable {
 	private String avatar;
 
 	/**
-	 * 企业名称
+	 * 性别(0:保密,1:男,2:女)
 	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
+	@Schema(description = "性别(0:保密,1:男,2:女)")
+	private Integer sex;
+
 
 }

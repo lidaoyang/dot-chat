@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.OSSConfig;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.utils.*;
@@ -101,15 +100,15 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public List<ChatGroupMemberSimResponse> getChatGroupMemberSimList(UserTypeEm userType, Integer groupId, String keywords) {
-        List<ChatGroupMemberSimDto> groupMemberSimList = chatGroupMemberService.getChatGroupMemberSimList(userType, groupId, keywords);
+    public List<ChatGroupMemberSimResponse> getChatGroupMemberSimList(Integer groupId, String keywords) {
+        List<ChatGroupMemberSimDto> groupMemberSimList = chatGroupMemberService.getChatGroupMemberSimList(groupId, keywords);
         return BeanUtil.copyToList(groupMemberSimList, ChatGroupMemberSimResponse.class);
     }
 
     @Override
-    public String createGroup(UserTypeEm userType, List<Integer> members) {
+    public String createGroup(List<Integer> members) {
         checkMembers(members);
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         List<ChatUserFriendResponse> userFriendList = getChatUserFriendList(members, chatUser);
         String nicknameStr = getNicknameStr(userFriendList, chatUser);
         ChatGroup chatGroup = getNewChatGroup(userFriendList, chatUser, nicknameStr);
@@ -218,8 +217,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean updateGroupNickname(UserTypeEm userType, Integer groupId, String nickname) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public Boolean updateGroupNickname(Integer groupId, String nickname) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         LambdaUpdateWrapper<ChatGroupMember> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroupMember::getGroupId, groupId)
                 .eq(ChatGroupMember::getUserId, chatUserId)
@@ -228,11 +227,11 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean updateGroupName(UserTypeEm userType, Integer groupId, String groupName) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean updateGroupName(Integer groupId, String groupName) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = getChatGroupInfoDto(groupId, chatUser);
         return transactionTemplate.execute(t -> {
-            boolean ret = updateGroupName(groupId, groupName);
+            boolean ret = updateGroupName2(groupId, groupName);
             if (!ret) {
                 log.error("修改群名称失败,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
                 throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "修改群名称失败");
@@ -243,7 +242,7 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         });
     }
 
-    private boolean updateGroupName(Integer groupId, String groupName) {
+    private boolean updateGroupName2(Integer groupId, String groupName) {
         LambdaUpdateWrapper<ChatGroup> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroup::getId, groupId)
                 .set(ChatGroup::getName, groupName);
@@ -251,8 +250,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean updateGroupNotice(UserTypeEm userType, Integer groupId, String notice) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean updateGroupNotice(Integer groupId, String notice) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = getChatGroupInfoDto(groupId, chatUser);
         return transactionTemplate.execute(t -> {
             boolean ret = updateGroupNotice(groupId, chatUser.getId(), notice);
@@ -284,8 +283,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean removeGroupMember(UserTypeEm userType, Integer groupId, List<Integer> userIds) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean removeGroupMember(Integer groupId, List<Integer> userIds) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = getChatGroupInfoDto(groupId, chatUser);
         List<Integer> memberIds = chatGroupMemberService.getChatGroupMemberIdListByGroupId(groupId, userIds);
         if (memberIds.size() < userIds.size()) {
@@ -294,7 +293,7 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
             throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "移除群成员失败,部分用户不属于该群");
         }
         return transactionTemplate.execute(t -> {
-            boolean ret = removeGroupMember(groupId, userIds);
+            boolean ret = removeGroupMember2(groupId, userIds);
             if (!ret) {
                 log.error("移除群成员失败,chatUserId:{},groupId:{},userIds:{}", chatUser.getId(), groupId, userIds);
                 throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "移除群成员失败");
@@ -341,7 +340,7 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         }
     }
 
-    private boolean removeGroupMember(Integer groupId, List<Integer> userIds) {
+    private boolean removeGroupMember2(Integer groupId, List<Integer> userIds) {
         LambdaQueryWrapper<ChatGroupMember> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(ChatGroupMember::getGroupId, groupId);
         queryWrapper.in(ChatGroupMember::getUserId, userIds);
@@ -349,8 +348,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean logoutGroup(UserTypeEm userType, Integer groupId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean logoutGroup(Integer groupId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = chatGroupMemberService.getChatGroupInfo(groupId, chatUser.getId());
         if (chatGroupInfo == null) {
             log.error("群信息不存在,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
@@ -372,8 +371,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean addGroupMember(UserTypeEm userType, Integer groupId, List<Integer> userIds, GroupSourceEm source) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean addGroupMember(Integer groupId, List<Integer> userIds, GroupSourceEm source) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = chatGroupMemberService.getChatGroupInfo(groupId, chatUser.getId());
         if (ObjectUtil.isNull(chatGroupInfo)) {
             log.error("非本群用户,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
@@ -433,8 +432,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean applyGroup(UserTypeEm userType, Integer groupId, GroupSourceEm source) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean applyGroup(Integer groupId, GroupSourceEm source) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroup chatGroup = this.getById(groupId);
         if (ObjectUtil.isNull(chatGroup)) {
             log.error("群信息不存在,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
@@ -543,8 +542,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean agreeGroupApply(UserTypeEm userType, Integer applyId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean agreeGroupApply(Integer applyId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupApply groupApply = chatGroupApplyService.getById(applyId);
         if (ObjectUtil.isNull(groupApply)) {
             log.error("入群申请信息不存在,chatUserId:{},groupId:{}", chatUser.getId(), groupApply.getGroupId());
@@ -573,8 +572,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public String getGroupQrcode(UserTypeEm userType, Integer groupId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public String getGroupQrcode(Integer groupId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         try {
             ClassPathResource resource = new ClassPathResource(chatConfig.getIcon());
             String url = chatConfig.getGroup().getQrcodeUrl().replace("{groupId}", groupId.toString()).replace("{inviteUserId}", chatUser.getId().toString());
@@ -591,8 +590,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean updateInviteCfm(UserTypeEm userType, Integer groupId, Boolean flag) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean updateInviteCfm(Integer groupId, Boolean flag) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroupInfoDto chatGroupInfo = getChatGroupInfoDto(groupId, chatUser);
         if (chatGroupInfo.getInviteCfm().equals(flag)) {
             log.error("邀请进群确认状态未改变,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
@@ -618,8 +617,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean groupLeaderTransfer(UserTypeEm userType, Integer groupId, Integer userId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean groupLeaderTransfer(Integer groupId, Integer userId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         if (chatUser.getId().equals(userId)) {
             log.error("不能转让给自己,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
             throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "不能转让给自己");
@@ -668,8 +667,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean dissolveGroup(UserTypeEm userType, Integer groupId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean dissolveGroup(Integer groupId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         checkGroupInfo(groupId, chatUser);
         LambdaUpdateWrapper<ChatGroup> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroup::getId, groupId);
@@ -679,8 +678,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean removeGroupManager(UserTypeEm userType, Integer groupId, Integer userId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean removeGroupManager(Integer groupId, Integer userId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         checkGroupInfo(groupId, chatUser);
         return transactionTemplate.execute(t -> {
             ChatGroup chatGroup = this.getById(groupId);
@@ -718,8 +717,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
     }
 
     @Override
-    public Boolean addGroupManager(UserTypeEm userType, Integer groupId, Integer userId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public Boolean addGroupManager(Integer groupId, Integer userId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         ChatGroup chatGroup = checkGroupInfo(groupId, chatUser);
         if (!existsGroupMember(groupId, CollUtil.newArrayList(userId))) {
             log.error("群成员不存在,chatUserId:{},groupId:{},userId:{}", chatUser.getId(), groupId, userId);

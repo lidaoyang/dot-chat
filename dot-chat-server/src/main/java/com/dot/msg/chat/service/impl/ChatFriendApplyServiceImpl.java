@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.msg.chat.dao.ChatFriendApplyDao;
 import com.dot.msg.chat.dto.ChatFriendApplyDto;
@@ -85,8 +84,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     private TransactionTemplate transactionTemplate;
 
     @Override
-    public List<ChatFriendApplyResponse> getChatFriendApplyList(UserTypeEm userType) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public List<ChatFriendApplyResponse> getChatFriendApplyList() {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         List<ChatFriendApplyDto> friendApplyList = baseMapper.selectChatFriendApplyList(chatUserId);
         if (CollUtil.isEmpty(friendApplyList)) {
             return Collections.emptyList();
@@ -122,8 +121,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     }
 
     @Override
-    public ChatFriendApplyInfoResponse getChatFriendApplyInfo(UserTypeEm userType, Integer applyId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public ChatFriendApplyInfoResponse getChatFriendApplyInfo(Integer applyId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatFriendApplyDto friendApply = baseMapper.selectChatFriendApplyInfo(applyId, chatUserId);
         if (ObjectUtil.isNull(friendApply)) {
             log.error("好友申请详情不存在,applyId:{},chatUserId:{}", applyId, chatUserId);
@@ -171,7 +170,7 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     }
 
     private ChatFriendApply getAddChatFriendApply(ChatFriendApplyAddRequest request) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(request.getUserType());
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatFriendApply chatFriendApply = new ChatFriendApply();
         chatFriendApply.setApplyUserId(chatUserId);
         chatFriendApply.setFriendId(request.getFriendId());
@@ -283,7 +282,7 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
 
     @Override
     public boolean replayFriendApply(ChatFriendApplyReplayRequest request) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(request.getUserType());
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatFriendApply friendApply = this.getById(request.getApplyId());
         checkUserAuth(request.getApplyId(), friendApply, chatUserId);
 
@@ -367,7 +366,7 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
 
     @Override
     public String agreeFriendApply(ChatFriendApplyAgreeRequest request) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(request.getUserType());
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         Integer chatUserId = chatUser.getId();
         ChatFriendApply friendApply = this.getById(request.getApplyId());
         if (!chatUserId.equals(friendApply.getFriendId())) {
@@ -454,8 +453,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     }
 
     @Override
-    public boolean deleteFriendApply(UserTypeEm userType, Integer applyId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean deleteFriendApply(Integer applyId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         LambdaQueryWrapper<ChatFriendApplyUserRel> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(ChatFriendApplyUserRel::getApplyId, applyId);
         queryWrapper.eq(ChatFriendApplyUserRel::getUserId, chatUserId);
@@ -463,8 +462,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     }
 
     @Override
-    public boolean clearUnreadCount(UserTypeEm userType, Integer applyId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean clearUnreadCount(Integer applyId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return clearUnreadCount(applyId, chatUserId);
     }
 

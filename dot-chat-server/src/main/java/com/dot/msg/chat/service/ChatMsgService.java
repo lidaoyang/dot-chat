@@ -1,7 +1,6 @@
 package com.dot.msg.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.dto.ChatUserMsgDto;
 import com.dot.msg.chat.model.ChatMsg;
 import com.dot.msg.chat.request.ChatMsgAddRequest;
@@ -47,7 +46,7 @@ public interface ChatMsgService extends IService<ChatMsg> {
      *
      * @return 最近一条通话消息
      */
-    ChatUserMsgResponse getLastCallMsg(UserTypeEm userType);
+    ChatUserMsgResponse getLastCallMsg();
 
     boolean updateOfflineMsg(Integer userId, Integer msgId);
 
@@ -69,31 +68,28 @@ public interface ChatMsgService extends IService<ChatMsg> {
     /**
      * 消息转发
      *
-     * @param userType  用户类型
      * @param msgIds    消息ID
      * @param chatIds   转发聊天室ID
      * @param toUserIds 转发用户ID
      * @return bool
      */
-    boolean relayMsg(UserTypeEm userType, List<Integer> msgIds, List<String> chatIds, List<Integer> toUserIds);
+    boolean relayMsg(List<Integer> msgIds, List<String> chatIds, List<Integer> toUserIds);
 
     /**
      * 删除消息(只删除当前用户的消息记录)
      *
-     * @param userType 用户类型
      * @param msgId    消息ID
      * @return bool
      */
-    boolean deleteUserMsg(UserTypeEm userType, Integer msgId);
+    boolean deleteUserMsg(Integer msgId);
 
     /**
      * 撤回消息(删除所有用户的消息记录)
      *
-     * @param userType 用户类型
      * @param msgId    消息ID
      * @return bool
      */
-    boolean revokeMsg(UserTypeEm userType, Integer msgId);
+    boolean revokeMsg(Integer msgId);
 
     boolean updateFileMsgStatus(Integer msgId);
 

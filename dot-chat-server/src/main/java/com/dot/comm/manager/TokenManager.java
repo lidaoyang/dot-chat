@@ -2,7 +2,6 @@ package com.dot.comm.manager;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.dot.comm.constants.TokenConstant;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.TokenModel;
@@ -29,8 +28,8 @@ public class TokenManager {
     protected RedisUtil redisUtil;
 
 
-    public TokenModel createToken(LoginUsername loginUsername, String modelName) {
-        return createToken(loginUsername.getAccount(), loginUsername.mergeUsername(), modelName);
+    public TokenModel createToken(LoginUsername loginUsername) {
+        return createToken(loginUsername.getAccount(), loginUsername.mergeUsername());
     }
 
     /**
@@ -38,12 +37,11 @@ public class TokenManager {
      *
      * @param account   String 账号
      * @param value     String 存储value
-     * @param modelName String 模块
      * @author Mr.Zhang
      * @since 2020-04-29
      */
 
-    public TokenModel createToken(String account, String value, String modelName) {
+    public TokenModel createToken(String account, String value) {
         // 获取一个随机UUID+3位随机串，定义为_token
         String _token = UUID.randomUUID().toString().replace("-", "") + RandomStringUtils.randomAlphabetic(3).toLowerCase();
         // 定义新TokenModel类，构造函数中分别填入用户账号account和那个随机UUID _token
@@ -60,20 +58,17 @@ public class TokenManager {
         // 值: value (用户uid)
         // 过期时间: TokenConstant.TOKEN_EXPRESS_MINUTES(3小时)
         // 时间格式: TimeUnit.MINUTES
-        redisUtil.set(modelName + _token, value, TokenConstant.TOKEN_EXPRESS_MINUTES, TimeUnit.MINUTES);
+        redisUtil.set(TokenConstant.TOKEN_USER_REDIS + _token, value, TokenConstant.TOKEN_EXPRESS_MINUTES, TimeUnit.MINUTES);
         return token;
     }
-    public TokenModel refreshToken(UserTypeEm userType) {
+
+    public TokenModel refreshToken() {
         HttpServletRequest req = RequestUtil.getRequest();
         if (ObjectUtil.isNull(req)) {
             throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "非法访问");
         }
         String token = req.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
-        if (userType == UserTypeEm.ENT_USER) {
-           return refreshToken(token, TokenConstant.TOKEN_USER_REDIS);
-        } else {
-            return refreshToken(token, TokenConstant.TOKEN_ADMIN_REDIS);
-        }
+        return refreshToken(token, TokenConstant.TOKEN_USER_REDIS);
     }
 
     public TokenModel refreshToken(String token, String modelName) {
@@ -103,7 +98,7 @@ public class TokenManager {
 
     public Integer getUserIdByToken(String token) {
         LoginUsername tokenModel = getLoginUser(token, TokenConstant.TOKEN_USER_REDIS);
-        return tokenModel.getUserId();
+        return tokenModel.getUid();
     }
 
 
@@ -112,42 +107,13 @@ public class TokenManager {
         return getUserIdByToken(token);
     }
 
-    public LoginUsername getLoginUser(UserTypeEm userType) {
-        if (ObjectUtil.isNull(userType)) {
-            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "用户类型不能为空");
-        }
-        LoginUsername loginUser;
-        if (userType == UserTypeEm.ENT_USER) {
-            loginUser = getLoginUserFront();
-        } else {
-            loginUser = getLoginUserAdmin();
-        }
-        return loginUser;
-    }
 
-    public LoginUsername getLoginUser(UserTypeEm userType, String token) {
-        if (ObjectUtil.isNull(userType)) {
-            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "用户类型不能为空");
-        }
-        LoginUsername loginUser;
-        if (userType == UserTypeEm.ENT_USER) {
-            loginUser = getLoginUserFront(token);
-        } else {
-            loginUser = getLoginUserAdmin(token);
-        }
-        return loginUser;
-    }
-
-    public LoginUsername getLoginUserFront() {
+    public LoginUsername getLoginUser() {
         HttpServletRequest req = RequestUtil.getRequest();
         if (ObjectUtil.isNull(req)) {
             throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "非法访问");
         }
         String token = req.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
-        return getLoginUserFront(token);
-    }
-
-    public LoginUsername getLoginUserFront(String token) {
         boolean tokenExist = checkToken(token, TokenConstant.TOKEN_USER_REDIS);
         if (!tokenExist) {
             throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "当前token无效");
@@ -155,30 +121,19 @@ public class TokenManager {
         return getLoginUser(token, TokenConstant.TOKEN_USER_REDIS);
     }
 
-
-    public Integer getAdminId() {
-        return getLoginUserAdmin().getUserId();
+    public LoginUsername getLoginUser(String token) {
+        return getLoginUser(token, TokenConstant.TOKEN_USER_REDIS);
     }
 
-
-    public LoginUsername getLoginUserAdmin() {
-        HttpServletRequest req = RequestUtil.getRequest();
-        if (ObjectUtil.isNull(req)) {
-            throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "非法访问");
-        }
-        String token = req.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
+    public LoginUsername getLoginUser(String token, String modelName) {
         if (StringUtils.isBlank(token)) {
-            token = req.getHeader(TokenConstant.HEADER_TOKEN_KEY);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "token不能为空");
         }
-        return getLoginUserAdmin(token);
-    }
-
-    public LoginUsername getLoginUserAdmin(String token) {
-        boolean tokenExist = checkToken(token, TokenConstant.TOKEN_ADMIN_REDIS);
-        if (!tokenExist) {
+        String strVal = redisUtil.get(modelName + token);
+        if (StringUtils.isBlank(strVal)) {
             throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "当前token无效");
         }
-        return getLoginUser(token, TokenConstant.TOKEN_ADMIN_REDIS);
+        return LoginUsername.splitUsername(strVal);
     }
 
     /**
@@ -210,21 +165,13 @@ public class TokenManager {
         return request.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
     }
 
-    public void deleteToken(UserTypeEm userType) {
+    public void deleteToken() {
         HttpServletRequest req = RequestUtil.getRequest();
         if (ObjectUtil.isNull(req)) {
             throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "非法访问");
         }
         String token = req.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
-        deleteToken(userType, token);
-    }
-
-    public void deleteToken(UserTypeEm userType, String token) {
-        if (userType == UserTypeEm.ENT_USER) {
-            deleteToken(token, TokenConstant.TOKEN_USER_REDIS);
-        } else {
-            deleteToken(token, TokenConstant.TOKEN_ADMIN_REDIS);
-        }
+        deleteToken(token, TokenConstant.TOKEN_USER_REDIS);
     }
 
     /**
@@ -244,14 +191,5 @@ public class TokenManager {
         redisUtil.remove(modelName + token);
     }
 
-
-    public LoginUsername getLoginUser(String token, String modelName) {
-        String strVal = redisUtil.get(modelName + token);
-        if (StringUtils.isBlank(strVal)) {
-            throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "当前token无效");
-        }
-        strVal = strVal.replace("\"", "");
-        return LoginUsername.splitUsername(strVal);
-    }
 
 }

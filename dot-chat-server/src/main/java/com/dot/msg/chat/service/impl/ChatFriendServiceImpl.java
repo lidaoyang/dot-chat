@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.utils.PinYinUtil;
 import com.dot.comm.utils.StrUtils;
@@ -52,8 +51,8 @@ public class ChatFriendServiceImpl extends ServiceImpl<ChatFriendDao, ChatFriend
 
 
     @Override
-    public List<ChatUserFriendResponse> getChatUserFriendList(UserTypeEm userType, String keywords) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public List<ChatUserFriendResponse> getChatUserFriendList( String keywords) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return getChatUserFriendList(chatUserId, null, keywords);
     }
 
@@ -63,8 +62,8 @@ public class ChatFriendServiceImpl extends ServiceImpl<ChatFriendDao, ChatFriend
     }
 
     @Override
-    public List<ChatUserFriendResponse> getChatUserFriendList(UserTypeEm userType, Integer filterGroupId, String keywords) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public List<ChatUserFriendResponse> getChatUserFriendList( Integer filterGroupId, String keywords) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return getChatUserFriendList(chatUserId, filterGroupId, keywords);
     }
 
@@ -107,8 +106,8 @@ public class ChatFriendServiceImpl extends ServiceImpl<ChatFriendDao, ChatFriend
     }
 
     @Override
-    public ChatUserFriendInfoResponse getChatUserFriendInfo(UserTypeEm userType, Integer friendId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public ChatUserFriendInfoResponse getChatUserFriendInfo( Integer friendId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatUserFriendDto chatUserFriendDto = baseMapper.selectChatUserFriendInfo(chatUserId, friendId);
         if (ObjectUtil.isNull(chatUserFriendDto)) {
             log.error("好友不存在,chatUserId:{},friendId:{}", chatUserId, friendId);
@@ -165,8 +164,8 @@ public class ChatFriendServiceImpl extends ServiceImpl<ChatFriendDao, ChatFriend
     }
 
     @Override
-    public String modifyFriendRemark(UserTypeEm userType, Integer friendId, String remark) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public String modifyFriendRemark( Integer friendId, String remark) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         String friendNickname = chatUserService.getNicknameById(friendId);
         if (StringUtils.isBlank(friendNickname)) {
             log.error("好友信息不存在,chatUserId:{},friendId:{},remark:{}", chatUserId, friendId, remark);

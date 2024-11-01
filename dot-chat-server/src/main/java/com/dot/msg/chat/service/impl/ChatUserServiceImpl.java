@@ -2,6 +2,7 @@ package com.dot.msg.chat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,10 +11,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
+import com.dot.comm.utils.AESUtil;
+import com.dot.comm.utils.CommUtil;
 import com.dot.msg.chat.dao.ChatFriendDao;
 import com.dot.msg.chat.dao.ChatUserDao;
 import com.dot.msg.chat.dto.ChatUserFriendDto;
@@ -27,12 +29,6 @@ import com.dot.msg.chat.response.ChatUserSearchResponse;
 import com.dot.msg.chat.service.ChatUserService;
 import com.dot.sys.upload.response.UploadResponse;
 import com.dot.sys.upload.service.UploadService;
-import com.dot.sys.user.model.SystemAdmin;
-import com.dot.sys.user.model.User;
-import com.dot.sys.user.service.EnterpriseService;
-import com.dot.sys.user.service.SupplierService;
-import com.dot.sys.user.service.SystemAdminService;
-import com.dot.sys.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -54,18 +50,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> implements ChatUserService {
-
-    @Resource
-    private UserService userService;
-
-    @Resource
-    private SystemAdminService systemAdminService;
-
-    @Resource
-    private EnterpriseService enterpriseService;
-
-    @Resource
-    private SupplierService supplierService;
 
     @Resource
     private ChatFriendDao chatFriendDao;
@@ -115,43 +99,38 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public ChatUser getChatUser(Integer userId, String userType) {
+    public ChatUser getByPhone(String phone) {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(ChatUser::getUserId, userId).eq(ChatUser::getUserType, userType);
+        queryWrapper.eq(ChatUser::getPhone, phone);
         return this.getOne(queryWrapper);
     }
 
     @Override
-    public Integer getChatUserId(Integer userId, String userType) {
+    public ChatUser getChatUser(Integer userId) {
+        LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(ChatUser::getId, userId);
+        return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public Integer getChatUserId(Integer userId) {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(ChatUser::getId);
-        queryWrapper.eq(ChatUser::getUserId, userId).eq(ChatUser::getUserType, userType);
+        queryWrapper.eq(ChatUser::getId, userId);
         ChatUser one = this.getOne(queryWrapper);
         return ObjectUtil.isNotNull(one) ? one.getId() : null;
     }
 
     @Override
-    public ChatUserResponse getCurrentChatUser(UserTypeEm userType) {
-        LoginUsername loginUser = tokenManager.getLoginUser(userType);
-        ChatUser user = this.getChatUser(loginUser.getUserId(), loginUser.getType());
-        if (ObjectUtil.isNull(user)) {
-            user = this.addChatUser(loginUser);
-        }
-        if (!user.getIsOnline()) {
-            updateOnlineStatus(user.getId(), true);
-            user.setIsOnline(true);
-        }
+    public ChatUserResponse getCurrentChatUser() {
+        LoginUsername loginUser = tokenManager.getLoginUser();
+        ChatUser user = this.getChatUser(loginUser.getUid());
         return BeanUtil.copyProperties(user, ChatUserResponse.class);
     }
 
     @Override
-    public Integer getCurrentChatUserId(UserTypeEm userType) {
-        LoginUsername loginUser = tokenManager.getLoginUser(userType);
-        Integer userId = this.getChatUserId(loginUser.getUserId(), loginUser.getType());
-        if (ObjectUtil.isNull(userId)) {
-            userId = this.addChatUser(loginUser).getId();
-        }
-        return userId;
+    public Integer getCurrentChatUserId() {
+        return tokenManager.getLoginUser().getUid();
     }
 
     @Override
@@ -167,84 +146,6 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public ChatUser addChatUser(LoginUsername loginUser) {
-        lock.lock();
-        try {
-            log.info("聊天室用户添加[上锁],loginUser:{}", loginUser.mergeUsername());
-            ChatUser chatUser1 = this.getChatUser(loginUser.getUserId(), loginUser.getType());
-            if (ObjectUtil.isNotNull(chatUser1)) {
-                log.info("聊天室用户添加[已存在]");
-                return chatUser1;
-            }
-            ChatUser chatUser = getNewChatUser(loginUser);
-            boolean saved = this.save(chatUser);
-            if (saved) {
-                log.info("聊天室用户添加成功,loginUser:{}", loginUser.mergeUsername());
-                return chatUser;
-            }
-            log.error("聊天室用户添加失败,chatUser:{}", JSON.toJSONString(chatUser));
-            throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "聊天室用户添加失败");
-        }finally {
-            lock.unlock();
-            log.info("聊天室用户添加[解锁],loginUser:{}", loginUser.mergeUsername());
-        }
-    }
-
-    private ChatUser getNewChatUser(LoginUsername loginUser) {
-        ChatUser chatUser = new ChatUser();
-        chatUser.setIsOnline(true);
-        chatUser.setUserId(loginUser.getUserId());
-        chatUser.setUserType(loginUser.getType());
-        chatUser.setEnterpriseId(loginUser.getEnterpriseId());
-        chatUser.setPhone(loginUser.getAccount());
-        User user = getUser(loginUser);
-        String nickname = StringUtils.isBlank(user.getNickname()) ? user.getRealName() : user.getNickname();
-        nickname = StringUtils.isBlank(nickname) ? loginUser.getAccount() : nickname;
-        chatUser.setNickname(nickname);
-        chatUser.setAvatar(user.getAvatar());
-        if (StringUtils.isBlank(chatUser.getAvatar())) {
-            chatUser.setAvatar(CommConstant.DEFAULT_AVATAR);
-        }
-        chatUser.setEnterpriseName(getEnterpriseName(loginUser.getType(), loginUser.getEnterpriseId()));
-        return chatUser;
-    }
-
-    private User getUser(LoginUsername loginUser) {
-        User user = null;
-        if (loginUser.isEntUser()) {
-            LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
-            queryWrapper.select(User::getNickname, User::getRealName, User::getAvatar);
-            queryWrapper.eq(User::getUid, loginUser.getUserId());
-            user = userService.getOne(queryWrapper);
-        } else {
-            LambdaQueryWrapper<SystemAdmin> queryWrapper = Wrappers.lambdaQuery();
-            queryWrapper.select(SystemAdmin::getRealName, SystemAdmin::getAvatar);
-            queryWrapper.eq(SystemAdmin::getId, loginUser.getUserId());
-            SystemAdmin systemAdmin = systemAdminService.getOne(queryWrapper);
-            if (ObjectUtil.isNotNull(systemAdmin)) {
-                user = new User();
-                user.setRealName(systemAdmin.getRealName());
-                user.setAvatar(systemAdmin.getAvatar());
-            }
-        }
-        if (ObjectUtil.isNull(user)) {
-            log.error("用户不存在,userId:{}", loginUser.getUserId());
-            throw new ApiException(ExceptionCodeEm.NOT_FOUND, "用户不存在");
-        }
-        return user;
-    }
-
-    private String getEnterpriseName(String userType, Integer enterpriseId) {
-        String enterpriseName = "";
-        if (UserTypeEm.SUPPLIER.getCode().equals(userType)) {
-            enterpriseName = supplierService.getNameById(enterpriseId);
-        } else {
-            enterpriseName = enterpriseService.getNameById(enterpriseId);
-        }
-        return enterpriseName;
-    }
-
-    @Override
     public boolean updateOnlineStatus(Integer chatUserId, boolean isOnline) {
         LambdaUpdateWrapper<ChatUser> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatUser::getId, chatUserId)
@@ -254,31 +155,25 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public List<ChatUserSearchResponse> getSearchChatUserList(UserTypeEm userType, String keyword) {
+    public List<ChatUserSearchResponse> getSearchChatUserList(String keyword) {
         if (StringUtils.isBlank(keyword)) {
             return new ArrayList<>(0);
         }
-        List<Integer> friendIds = getFriendIds(userType);
+        List<Integer> friendIds = getFriendIds();
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.select(ChatUser::getId, ChatUser::getNickname, ChatUser::getAvatar, ChatUser::getEnterpriseName);
-        if (userType == UserTypeEm.ENT_USER) {
-            queryWrapper.eq(ChatUser::getUserType, UserTypeEm.ENT_USER.getCode());
-        } else {
-            queryWrapper.ne(ChatUser::getUserType, UserTypeEm.ENT_USER.getCode());
-        }
+        queryWrapper.select(ChatUser::getId, ChatUser::getNickname, ChatUser::getAvatar,ChatUser::getSex);
         queryWrapper.notIn(ChatUser::getId, friendIds);
         queryWrapper.and(wrapper -> {
             wrapper.like(ChatUser::getNickname, keyword);
             wrapper.or().like(StringUtils.isNumeric(keyword), ChatUser::getPhone, keyword);
-            wrapper.or().like(ChatUser::getEnterpriseName, keyword);
         });
         queryWrapper.last("limit 10");
         List<ChatUser> chatUserList = this.list(queryWrapper);
         return BeanUtil.copyToList(chatUserList, ChatUserSearchResponse.class);
     }
 
-    private List<Integer> getFriendIds(UserTypeEm userType) {
-        Integer chatUserId = this.getCurrentChatUserId(userType);
+    private List<Integer> getFriendIds() {
+        Integer chatUserId = this.getCurrentChatUserId();
         List<Integer> friendIds = getFriendIds(chatUserId);
         friendIds.add(chatUserId);
         return friendIds;
@@ -291,8 +186,8 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public ChatUserInfoResponse getChatUserInfo(UserTypeEm userType, Integer userId) {
-        ChatUserResponse chatUser = this.getCurrentChatUser(userType);
+    public ChatUserInfoResponse getChatUserInfo(Integer userId) {
+        ChatUserResponse chatUser = this.getCurrentChatUser();
         ChatUserInfoResponse response = new ChatUserInfoResponse();
         if (chatUser.getId().equals(userId)) {
             response.setIsFriend(true);
@@ -321,38 +216,20 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public List<Integer> getChatUserIds(UserTypeEm userType, Integer enterpriseId) {
+    public List<Integer> getAllUserIds() {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(ChatUser::getId);
-        queryWrapper.eq(ChatUser::getUserType, userType.getCode());
-        queryWrapper.eq(ChatUser::getEnterpriseId, enterpriseId);
         List<ChatUser> chatUserList = this.list(queryWrapper);
         return chatUserList.stream().map(ChatUser::getId).collect(Collectors.toList());
     }
 
     @Override
-    public boolean updatePhoneAndEnterpriseId(Integer id, String userType, Integer enterpriseId, String account) {
-        if (StringUtils.isBlank(account) && ObjectUtil.isNull(enterpriseId)) {
-            return false;
-        }
-        LambdaUpdateWrapper<ChatUser> updateWrapper = Wrappers.lambdaUpdate();
-        updateWrapper.eq(ChatUser::getId, id);
-        updateWrapper.set(StringUtils.isNotBlank(account), ChatUser::getPhone, account);
-        if (ObjectUtil.isNotNull(enterpriseId)) {
-            updateWrapper.set(ChatUser::getEnterpriseId, enterpriseId);
-            String enterpriseName = getEnterpriseName(userType, enterpriseId);
-            updateWrapper.set(ChatUser::getEnterpriseName, enterpriseName);
-        }
-        return this.update(updateWrapper);
-    }
-
-    @Override
-    public String updateAvatar(MultipartFile imgFile, UserTypeEm userType) {
+    public String updateAvatar(MultipartFile imgFile) {
         if (ObjectUtil.isNull(imgFile)) {
             log.error("上传头像失败,imgFile为空");
             throw new ApiException(ExceptionCodeEm.PRAM_NOT_MATCH, "请选择头像文件");
         }
-        Integer chatUserId = getCurrentChatUserId(userType);
+        Integer chatUserId = getCurrentChatUserId();
         UploadResponse uploadResponse = uploadService.uploadImage(imgFile, "chat-msg");
 
         LambdaUpdateWrapper<ChatUser> updateWrapper = Wrappers.lambdaUpdate();
@@ -366,12 +243,71 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     @Override
-    public Boolean updateNickname(UserTypeEm userType, String nickname, Integer sex) {
-        Integer chatUserId = getCurrentChatUserId(userType);
+    public Boolean updateNickname(String nickname, Integer sex,String signature) {
+        Integer chatUserId = getCurrentChatUserId();
         LambdaUpdateWrapper<ChatUser> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatUser::getId, chatUserId);
         updateWrapper.set(ChatUser::getNickname, nickname);
         updateWrapper.set(ChatUser::getSex, sex);
+        updateWrapper.set(ChatUser::getSignature, signature);
         return this.update(updateWrapper);
+    }
+
+    @Override
+    public void updateLastLoginIpTime(Integer uid) {
+        LambdaUpdateWrapper<ChatUser> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(ChatUser::getId, uid);
+        updateWrapper.set(ChatUser::getLastLoginTime, DateUtil.now());
+        updateWrapper.set(ChatUser::getLastIp, CommUtil.getClientIp());
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public Boolean updatePassword(Integer uid, String oldPwd, String newPwd) {
+        ChatUser user = getById(uid);
+        checkPwd(user.getPwd(), oldPwd, newPwd, user.getPhone());
+        LambdaUpdateWrapper<ChatUser> lqw = Wrappers.lambdaUpdate();
+        lqw.eq(ChatUser::getId, uid);
+        lqw.set(ChatUser::getPwd, AESUtil.encryptCBC(user.getPhone(), newPwd));
+        return this.update(lqw);
+    }
+
+    private void checkPwd(String pwd, String oldPwd, String newPwd, String account) {
+        if (!pwd.equals(CommUtil.encryptPassword(oldPwd, account))) {
+            log.error("原密码错误,account:{}", account);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "原密码错误");
+        }
+        if (pwd.equals(CommUtil.encryptPassword(newPwd, account))) {
+            log.error("新密码不能与原密码相同,account:{}", account);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "新密码不能与原密码相同");
+        }
+    }
+
+    @Override
+    public boolean isExist(String phone) {
+        LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.select(ChatUser::getId);
+        queryWrapper.eq(ChatUser::getPhone, phone);
+        queryWrapper.last("limit 1");
+        return ObjectUtil.isNotNull(this.getOne(queryWrapper));
+    }
+
+    @Override
+    public ChatUser addNewUser(String phone, String password, String nickname) {
+        if (isExist(phone)) {
+            log.error("账号已存在,phone:{}", phone);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "账号已存在");
+        }
+        ChatUser newUser = new ChatUser();
+        newUser.setNickname(StringUtils.isBlank(nickname) ? phone : nickname);
+        newUser.setPhone(phone);
+        newUser.setPwd(AESUtil.encryptCBC(phone, password));
+        newUser.setAvatar(CommConstant.DEFAULT_AVATAR);
+        boolean saved = this.save(newUser);
+        if (!saved) {
+            log.error("注册失败,newUser:{}", newUser);
+            throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "注册失败");
+        }
+        return newUser;
     }
 }

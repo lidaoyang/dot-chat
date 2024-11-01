@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.constants.TioConstant;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
@@ -100,26 +99,15 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
     }
 
     @Override
-    public List<EntNotifyMsgResponse> getNotifyMsgNotifyList(UserTypeEm userType, Integer limit) {
-        LoginUsername loginUser = tokenManager.getLoginUser(userType);
-        String linkid;
-        EventTypeEm eventType;
-        if (loginUser.isEnterprise()) {
-            linkid = NotifyBizEm.BIZ_ENT_ORDER.getBizId(loginUser.getEnterpriseId());
-            eventType = EventTypeEm.BIZ_ENT_ORDER;
-        } else if (loginUser.isSupplier()) {
-            linkid = NotifyBizEm.BIZ_SUPP_ORDER.getBizId(loginUser.getEnterpriseId());
-            eventType = EventTypeEm.BIZ_SUPP_ORDER;
-        } else {
-            throw new ApiException(ExceptionCodeEm.FORBIDDEN, "暂不支持");
-        }
-        ChatUser chatUser = chatUserService.getChatUser(loginUser.getUserId(), loginUser.getType());
+    public List<EntNotifyMsgResponse> getNotifyMsgNotifyList(Integer limit) {
+        LoginUsername loginUser = tokenManager.getLoginUser();
+        ChatUser chatUser = chatUserService.getChatUser(loginUser.getUid());
         if (ObjectUtil.isNull(chatUser)) {
             log.warn("用户没有存在聊天用户里,account:{}", loginUser.getAccount());
             return new ArrayList<>(0);
         }
         List<EntNotifyMsgResponse> responseList = new ArrayList<>();
-        List<NotifyMsgDto> notifyMsgList = baseMapper.selectUnReadNotifyMsgList(linkid, chatUser.getId(), MsgTypeEm.NOTICE.name(), eventType.name(), limit);
+        List<NotifyMsgDto> notifyMsgList = baseMapper.selectUnReadNotifyMsgList(NotifyBizEm.BIZ_ORDER.getBizId(chatUser.getId()), chatUser.getId(), MsgTypeEm.NOTICE.name(), EventTypeEm.BIZ_ORDER.name(), limit);
         notifyMsgList.forEach(notifyMsgDto -> {
             EntNotifyMsgResponse response = BeanUtil.copyProperties(notifyMsgDto, EntNotifyMsgResponse.class, "msgContent");
             response.setMsgContent(JSON.parseObject(notifyMsgDto.getMsgContent(), NotifyMsgContentResponse.class));
@@ -135,7 +123,7 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
 
     @Override
     public boolean sendEntNotifyMsg(EntNotifyMsgSendRequest sendRequest) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(sendRequest.getUserType());
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         NotifyMsgSendRequest msgSendRequest = new NotifyMsgSendRequest();
         msgSendRequest.setLinkid(sendRequest.getNotifyBiz().getBizId(sendRequest.getEnterpriseId()));
         msgSendRequest.setSendUserId(chatUserId);
@@ -213,8 +201,7 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
 
     private List<NotifyMsgUserRel> getNotifyMsgUserRelList(NotifyMsgSendRequest request, NotifyMsg notifyMsg) {
         List<NotifyMsgUserRel> notifyMsgUserRelList = new ArrayList<>();
-        UserTypeEm userType = request.getNotifyBiz() == NotifyBizEm.BIZ_ENT_ORDER ? UserTypeEm.ENTERPRISE : UserTypeEm.SUPPLIER;
-        List<Integer> chatUserIds = chatUserService.getChatUserIds(userType, NotifyBizEm.getEntId(request.getLinkid()));
+        List<Integer> chatUserIds = chatUserService.getAllUserIds();
         if (CollectionUtil.isEmpty(chatUserIds)) {
             log.error("没有找到聊天用户,request:{}", JSON.toJSONString(request));
             throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "没有找到聊天用户");
@@ -293,8 +280,8 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
     }
 
     @Override
-    public boolean updateIsRead(UserTypeEm userType, Integer id) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean updateIsRead(Integer id) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return updateIsRead(chatUserId, id);
     }
 
@@ -309,8 +296,8 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
     }
 
     @Override
-    public boolean allRead(UserTypeEm userType) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean allRead() {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         LambdaUpdateWrapper<NotifyMsgUserRel> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(NotifyMsgUserRel::getUserId, chatUserId)
                 .eq(NotifyMsgUserRel::getIsRead, false)

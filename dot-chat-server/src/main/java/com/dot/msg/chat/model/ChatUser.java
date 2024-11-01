@@ -40,10 +40,16 @@ public class ChatUser implements Serializable {
 	private String nickname;
 
 	/**
-	 * 用户电话
+	 * 用户电话(登录唯一账号)
 	 */
-	@Schema(description = "用户电话")
+	@Schema(description = "用户电话(登录唯一账号)")
 	private String phone;
+
+	/**
+	 * 登录密码
+	 */
+	@Schema(description = "登录密码")
+	private String pwd;
 
 	/**
 	 * 头像
@@ -64,6 +70,12 @@ public class ChatUser implements Serializable {
 	private Integer sex;
 
 	/**
+	 * 用户状态(1:正常,0:禁用)
+	 */
+	@Schema(description = "用户状态(1:正常,0:禁用)")
+	private Boolean status;
+
+	/**
 	 * 删除标志
 	 */
 	@Schema(description = "删除标志")
@@ -76,28 +88,22 @@ public class ChatUser implements Serializable {
 	private Boolean isOnline;
 
 	/**
-	 * 关联用户id(前端用户表/后端管理员表)
+	 * 个性签名
 	 */
-	@Schema(description = "关联用户id(前端用户表/后端管理员表)")
-	private Integer userId;
+	@Schema(description = "个性签名")
+	private String signature;
 
 	/**
-	 * 用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)
+	 * 最后登录时间
 	 */
-	@Schema(description = "用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)")
-	private String userType;
+	@Schema(description = "最后登录时间")
+	private String lastLoginTime;
 
 	/**
-	 * 是否在线(true:在线;false:离线)
+	 * 最后登录IP
 	 */
-	@Schema(description = "是否在线(true:在线;false:离线)")
-	private Integer enterpriseId;
-
-	/**
-	 * 企业名称
-	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
+	@Schema(description = "最后登录IP")
+	private String lastIp;
 
 	/**
 	 * 创建时间

@@ -66,12 +66,6 @@ public class ChatUserFriendDto implements Serializable {
 	private String remark;
 
 	/**
-	 * 企业名称
-	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
-
-	/**
 	 * 标签(多个标签用英文逗号分割)
 	 */
 	@Schema(description = "标签(多个标签用英文逗号分割)")
@@ -82,4 +76,10 @@ public class ChatUserFriendDto implements Serializable {
 	 */
 	@Schema(description = "来源")
 	private String source;
+
+	/**
+	 * 个性签名
+	 */
+	@Schema(description = "个性签名")
+	private String signature;
 }

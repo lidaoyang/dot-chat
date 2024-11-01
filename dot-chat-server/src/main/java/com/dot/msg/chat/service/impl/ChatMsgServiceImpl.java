@@ -15,7 +15,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.em.PageFlippingTypeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.msg.chat.dao.ChatMsgDao;
 import com.dot.msg.chat.dto.ChatGroupMemberSimDto;
@@ -101,7 +100,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
 
     @Override
     public List<ChatUserMsgResponse> getUserMsgList(ChatMsgSearchRequest request) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(request.getUserType());
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         if (request.getPageFlippingType() != PageFlippingTypeEm.FIRST
                 && request.getPageFlippingType() != PageFlippingTypeEm.HIS_PULL_UP
                 && ObjectUtil.isNull(request.getMsgId())) {
@@ -197,8 +196,8 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
     }
 
     @Override
-    public ChatUserMsgResponse getLastCallMsg(UserTypeEm userType) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public ChatUserMsgResponse getLastCallMsg() {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         LambdaQueryWrapper<ChatMsg> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.in(ChatMsg::getMsgType, MsgTypeEm.AUDIO_CALL.name(), MsgTypeEm.VIDEO_CALL.name());
         queryWrapper.and(wrapper ->{
@@ -376,12 +375,12 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
     }
 
     @Override
-    public boolean relayMsg(UserTypeEm userType, List<Integer> msgIds, List<String> chatIds, List<Integer> toUserIds) {
+    public boolean relayMsg(List<Integer> msgIds, List<String> chatIds, List<Integer> toUserIds) {
         if (CollUtil.isEmpty(chatIds) && CollUtil.isEmpty(toUserIds)) {
             log.error("聊天室ID和转发用户ID不能同时为空");
             throw new ApiException(ExceptionCodeEm.PRAM_NOT_MATCH, "聊天室ID和转发用户ID不能同时为空");
         }
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         List<ChatMsg> chatMsgList = getChatMsgList(msgIds);
         if (chatMsgList.size() != msgIds.size()) {
             log.warn("聊天消息id存在错误,chatUserId:{},msgIds:{}", chatUser.getId(), msgIds);
@@ -453,8 +452,8 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
     }
 
     @Override
-    public boolean deleteUserMsg(UserTypeEm userType, Integer msgId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean deleteUserMsg(Integer msgId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatMsgUserRel chatMsgUserRel = chatMsgUserRelService.getChatMsgUserRel(chatUserId, msgId);
         if (ObjectUtil.isNull(chatMsgUserRel)) {
             log.error("未查询到聊天消息,chatUserId:{},msgId:{}", chatUserId, msgId);
@@ -468,8 +467,8 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
     }
 
     @Override
-    public boolean revokeMsg(UserTypeEm userType, Integer msgId) {
-        ChatUserResponse chatUser = chatUserService.getCurrentChatUser(userType);
+    public boolean revokeMsg(Integer msgId) {
+        ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
         Integer chatUserId = chatUser.getId();
         ChatMsg chatMsg = this.get(msgId);
         if (ObjectUtil.isNull(chatMsg)) {

@@ -1,7 +1,6 @@
 package com.dot.msg.chat.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.entity.ResultBean;
 import com.dot.msg.chat.request.ChatFriendApplyAddRequest;
 import com.dot.msg.chat.request.ChatFriendApplyAgreeRequest;
@@ -11,7 +10,6 @@ import com.dot.msg.chat.response.ChatFriendApplyResponse;
 import com.dot.msg.chat.service.ChatFriendApplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +40,8 @@ public class ChatFriendApplyController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "获取好友申请列表")
     @GetMapping(value = "/list")
-    @Parameter(name = "userType", description = "用户类型", required = true)
-    public ResultBean<List<ChatFriendApplyResponse>> getChatFriendApplyList(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType) {
-        return ResultBean.success(chatFriendApplyService.getChatFriendApplyList(userType));
+    public ResultBean<List<ChatFriendApplyResponse>> getChatFriendApplyList() {
+        return ResultBean.success(chatFriendApplyService.getChatFriendApplyList());
     }
 
     /**
@@ -53,13 +50,9 @@ public class ChatFriendApplyController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "获取好友申请详情")
     @GetMapping(value = "/info")
-    @Parameters({
-            @Parameter(name = "userType", description = "用户类型", required = true),
-            @Parameter(name = "applyId", description = "申请ID", required = true)
-    })
-    public ResultBean<ChatFriendApplyInfoResponse> getChatFriendApplyInfo(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType,
-                                                                          @RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
-        return ResultBean.success(chatFriendApplyService.getChatFriendApplyInfo(userType, applyId));
+    @Parameter(name = "applyId", description = "申请ID", required = true)
+    public ResultBean<ChatFriendApplyInfoResponse> getChatFriendApplyInfo(@RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
+        return ResultBean.success(chatFriendApplyService.getChatFriendApplyInfo(applyId));
     }
 
     /**
@@ -98,13 +91,9 @@ public class ChatFriendApplyController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "删除好友申请")
     @PostMapping(value = "/delete")
-    @Parameters({
-            @Parameter(name = "userType", description = "用户类型", required = true),
-            @Parameter(name = "applyId", description = "申请ID", required = true),
-    })
-    public ResultBean<Boolean> deleteFriendApply(@RequestParam @NotNull(message = "用户类型不能为空") UserTypeEm userType,
-                                                 @RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
-        return ResultBean.success(chatFriendApplyService.deleteFriendApply(userType, applyId));
+    @Parameter(name = "applyId", description = "申请ID", required = true)
+    public ResultBean<Boolean> deleteFriendApply(@RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
+        return ResultBean.success(chatFriendApplyService.deleteFriendApply(applyId));
     }
 
 }

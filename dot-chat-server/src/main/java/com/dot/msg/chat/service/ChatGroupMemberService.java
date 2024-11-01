@@ -1,7 +1,6 @@
 package com.dot.msg.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.dto.ChatGroupInfoDto;
 import com.dot.msg.chat.dto.ChatGroupMemberSimDto;
 import com.dot.msg.chat.model.ChatGroupMember;
@@ -52,11 +51,10 @@ public interface ChatGroupMemberService extends IService<ChatGroupMember> {
      * 获取群组成员精简列表
      *
      * @param groupId  群组ID
-     * @param userType 用户类型
      * @param keywords 关键字
      * @return 群组成员列表
      */
-    List<ChatGroupMemberSimDto> getChatGroupMemberSimList(UserTypeEm userType, Integer groupId, String keywords);
+    List<ChatGroupMemberSimDto> getChatGroupMemberSimList(Integer groupId, String keywords);
 
     /**
      * 获取群组成员精简列表

@@ -35,9 +35,9 @@ public class ChatUserResponse implements Serializable {
 	private String nickname;
 
 	/**
-	 * 用户电话
+	 * 用户电话(登录唯一账号)
 	 */
-	@Schema(description = "用户电话")
+	@Schema(description = "用户电话(登录唯一账号)")
 	private String phone;
 
 	/**
@@ -59,33 +59,21 @@ public class ChatUserResponse implements Serializable {
 	private Integer sex;
 
 	/**
+	 * 用户状态(1:正常,0:禁用)
+	 */
+	@Schema(description = "用户状态(1:正常,0:禁用)")
+	private Boolean status;
+
+	/**
 	 * 是否在线
 	 */
 	@Schema(description = "是否在线")
 	private Boolean isOnline;
 
 	/**
-	 * 关联用户id(前端用户表/后端管理员表)
+	 * 个性签名
 	 */
-	@Schema(description = "关联用户id(前端用户表/后端管理员表)")
-	private Integer userId;
-
-	/**
-	 * 用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)
-	 */
-	@Schema(description = "用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)")
-	private String userType;
-
-	/**
-	 * 是否在线(true:在线;false:离线)
-	 */
-	@Schema(description = "是否在线(true:在线;false:离线)")
-	private Integer enterpriseId;
-
-	/**
-	 * 企业名称
-	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
+	@Schema(description = "个性签名")
+	private String signature;
 
 }

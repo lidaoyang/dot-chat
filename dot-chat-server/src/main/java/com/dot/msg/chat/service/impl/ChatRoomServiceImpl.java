@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
 import com.dot.msg.chat.dao.ChatRoomDao;
@@ -151,8 +150,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public boolean clearUnreadMsgCount(UserTypeEm userType, String chatId) {
-        Integer chatUserId = getChatUserId(userType);
+    public boolean clearUnreadMsgCount(String chatId) {
+        Integer chatUserId = getChatUserId();
         return clearUnreadMsgCount(chatId, chatUserId);
     }
 
@@ -204,6 +203,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
         return chatRoomUserRelService.update(updateWrapper);
     }
 
+    @Override
     public boolean clearLastMsgByMsgId(Integer msgId) {
         LambdaUpdateWrapper<ChatRoomUserRel> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatRoomUserRel::getLastMsgId, msgId);
@@ -299,17 +299,17 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public List<ChatRoomUserResponse> getChatRoomUserList(UserTypeEm userType) {
-        Integer chatUserId = getChatUserId(userType);
+    public List<ChatRoomUserResponse> getChatRoomUserList() {
+        Integer chatUserId = getChatUserId();
         // 清除当前聊天id
         TioUtil.removeCurrFriendApplyId(jrTioConfig.getTioConfig(), chatUserId.toString());
         TioUtil.removeCurrChatId(jrTioConfig.getTioConfig(), chatUserId.toString());
-        return getChatRoomUserRefreshList(userType);
+        return getChatRoomUserRefreshList();
     }
 
     @Override
-    public List<ChatRoomUserResponse> getChatRoomUserRefreshList(UserTypeEm userType) {
-        Integer chatUserId = getChatUserId(userType);
+    public List<ChatRoomUserResponse> getChatRoomUserRefreshList() {
+        Integer chatUserId = getChatUserId();
         QueryWrapper<ChatRoomUserDto> queryWrapper = Wrappers.query();
         queryWrapper.eq("cru.user_id", chatUserId);
         queryWrapper.orderByDesc("cru.is_top", "cru.timestamp");
@@ -415,9 +415,9 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public ChatUnreadCountResponse getChatUnreadCount(UserTypeEm userType) {
+    public ChatUnreadCountResponse getChatUnreadCount() {
         ChatUnreadCountResponse response = new ChatUnreadCountResponse();
-        Integer chatUserId = getChatUserId(userType);
+        Integer chatUserId = getChatUserId();
         long chatUnreadCount = getChatUnreadCount(chatUserId);
         response.setChatUnreadCount(chatUnreadCount);
 
@@ -439,8 +439,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public String gotoSendMsg(UserTypeEm userType, Integer friendId) {
-        Integer chatUserId = getChatUserId(userType);
+    public String gotoSendMsg(Integer friendId) {
+        Integer chatUserId = getChatUserId();
         String chatId = TioUtil.generateChatId(chatUserId, friendId);
         boolean existed = existUserChatRoom(chatId, chatUserId);
         if (!existed) {
@@ -482,8 +482,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public ChatRoomMsgInfoResponse getChatRoomMsgInfo(UserTypeEm userType, String chatId) {
-        Integer chatUserId = getChatUserId(userType);
+    public ChatRoomMsgInfoResponse getChatRoomMsgInfo(String chatId) {
+        Integer chatUserId = getChatUserId();
         ChatRoomMsgInfoResponse response = new ChatRoomMsgInfoResponse();
         ChatRoomMsgInfoDto chatRoomMsgInfoDto = baseMapper.selectChatRoomMsgInfo(chatId, chatUserId);
         if (Objects.isNull(chatRoomMsgInfoDto)) {
@@ -534,8 +534,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public boolean updateMsgNoDisturb(UserTypeEm userType, String chatId, Boolean msgNoDisturb) {
-        Integer chatUserId = getChatUserId(userType);
+    public boolean updateMsgNoDisturb(String chatId, Boolean msgNoDisturb) {
+        Integer chatUserId = getChatUserId();
         LambdaUpdateWrapper<ChatRoomUserRel> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatRoomUserRel::getChatId, chatId)
                 .eq(ChatRoomUserRel::getUserId, chatUserId)
@@ -545,17 +545,17 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public boolean updateIsTop(UserTypeEm userType, String chatId, Boolean isTop) {
+    public boolean updateIsTop(String chatId, Boolean isTop) {
         LambdaUpdateWrapper<ChatRoomUserRel> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatRoomUserRel::getChatId, chatId)
-                .eq(ChatRoomUserRel::getUserId, getChatUserId(userType))
+                .eq(ChatRoomUserRel::getUserId, getChatUserId())
                 .eq(ChatRoomUserRel::getIsTop, !isTop)
                 .set(ChatRoomUserRel::getIsTop, isTop);
         return chatRoomUserRelService.update(updateWrapper);
     }
 
-    private Integer getChatUserId(UserTypeEm userType) {
-        return chatUserService.getCurrentChatUserId(userType);
+    private Integer getChatUserId() {
+        return chatUserService.getCurrentChatUserId();
     }
 
     @Override
@@ -567,8 +567,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public boolean cleanMsgList(UserTypeEm userType, String chatId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public boolean cleanMsgList(String chatId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return Boolean.TRUE.equals(transactionTemplate.execute(status -> {
             chatMsgUserRelService.cleanMsgList(chatUserId, chatId);
             cleanLastMsg(chatId, chatUserId);
@@ -590,8 +590,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
     }
 
     @Override
-    public Boolean deleteChatRoom(UserTypeEm userType, String chatId) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId(userType);
+    public Boolean deleteChatRoom(String chatId) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
         return transactionTemplate.execute(t -> {
             ChatRoomUserRel chatRoomUserRel = chatRoomUserRelService.getChatRoomUserRel(chatId, chatUserId);
             if (chatRoomUserRel == null) {

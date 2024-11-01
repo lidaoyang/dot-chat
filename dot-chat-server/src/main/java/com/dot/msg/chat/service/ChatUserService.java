@@ -1,8 +1,6 @@
 package com.dot.msg.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
-import com.dot.comm.entity.LoginUsername;
 import com.dot.msg.chat.dto.ChatUserSimDto;
 import com.dot.msg.chat.model.ChatUser;
 import com.dot.msg.chat.response.ChatUserInfoResponse;
@@ -28,49 +26,39 @@ public interface ChatUserService extends IService<ChatUser> {
 
     List<Integer> getAllChatUserIds();
 
-    /**
-     * 根据用户id和类型获取聊天室用户
-     *
-     * @param userId   用户ID
-     * @param userType 用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)
-     * @return ChatUser
-     **/
-    ChatUser getChatUser(Integer userId, String userType);
+    ChatUser getByPhone(String phone);
 
     /**
      * 根据用户id和类型获取聊天室用户
      *
      * @param userId   用户ID
-     * @param userType 用户类型(ENTERPRISE:服务商企业;SUPPLIER:供应商;PL_ADMIN:平台管理员;ENT_USER:企业用户)
      * @return ChatUser
      **/
-    Integer getChatUserId(Integer userId, String userType);
+    ChatUser getChatUser(Integer userId);
+
+    /**
+     * 根据用户id和类型获取聊天室用户
+     *
+     * @param userId   用户ID
+     * @return ChatUser
+     **/
+    Integer getChatUserId(Integer userId);
 
     /**
      * 获取当前聊天室用户
      *
-     * @param userType 用户类型
      * @return ChatUser
      */
-    ChatUserResponse getCurrentChatUser(UserTypeEm userType);
+    ChatUserResponse getCurrentChatUser();
 
     /**
      * 获取当前聊天室用户ID
      *
-     * @param userType 用户类型
      * @return ChatUser
      */
-    Integer getCurrentChatUserId(UserTypeEm userType);
+    Integer getCurrentChatUserId();
 
     String getNicknameById(Integer id);
-
-    /**
-     * 添加聊天室用户
-     *
-     * @param loginUser 用户登录信息
-     * @return ChatUser
-     */
-    ChatUser addChatUser(LoginUsername loginUser);
 
     /**
      * 更新聊天室用户在线状态
@@ -84,34 +72,37 @@ public interface ChatUserService extends IService<ChatUser> {
     /**
      * 获取聊天室用户列表-不包含好友(用户搜索添加)
      *
-     * @param userType 用户类型
      * @param keyword  关键词
      * @return 用户列表
      */
-    List<ChatUserSearchResponse> getSearchChatUserList(UserTypeEm userType, String keyword);
+    List<ChatUserSearchResponse> getSearchChatUserList(String keyword);
 
-    ChatUserInfoResponse getChatUserInfo(UserTypeEm userType, Integer userId);
+    ChatUserInfoResponse getChatUserInfo(Integer userId);
 
-    List<Integer> getChatUserIds(UserTypeEm userType, Integer enterpriseId);
-
-    boolean updatePhoneAndEnterpriseId(Integer id, String userType, Integer enterpriseId, String account);
+    List<Integer> getAllUserIds();
 
     /**
      * 更新聊天室用户头像
      *
      * @param imgFile  图片文件
-     * @param userType 用户类型
      */
-    String updateAvatar(MultipartFile imgFile, UserTypeEm userType);
+    String updateAvatar(MultipartFile imgFile);
 
     /**
      * 更新聊天室用户昵称
      *
-     * @param userType 用户类型
      * @param nickname 昵称
      * @param sex      性别
+     * @param signature 个性签名
      * @return boolean
      */
-    Boolean updateNickname(UserTypeEm userType, String nickname, Integer sex);
+    Boolean updateNickname(String nickname, Integer sex, String signature);
 
+    void updateLastLoginIpTime(Integer uid);
+
+    Boolean updatePassword(Integer uid, String oldPwd, String newPwd);
+
+    boolean isExist(String phone);
+
+    ChatUser addNewUser(String phone, String password, String nickname);
 }

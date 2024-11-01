@@ -1,7 +1,6 @@
 package com.dot.msg.notify.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.tio.em.EventTypeEm;
 import com.dot.msg.chat.tio.em.MsgTypeEm;
 import com.dot.msg.notify.dto.NotifyMsgDto;
@@ -43,10 +42,9 @@ public interface NotifyMsgService extends IService<NotifyMsg> {
     /**
      * 获取通知消息通知信息的列表
      *
-     * @param userType 用户类型
      * @return 列表
      */
-    List<EntNotifyMsgResponse> getNotifyMsgNotifyList(UserTypeEm userType, Integer limit);
+    List<EntNotifyMsgResponse> getNotifyMsgNotifyList(Integer limit);
 
     /**
      * 获取通知消息列表
@@ -96,18 +94,16 @@ public interface NotifyMsgService extends IService<NotifyMsg> {
      * 更新消息已读状态
      *
      * @param id       关联ID
-     * @param userType 用户类型
      * @return boolean
      */
-    boolean updateIsRead(UserTypeEm userType, Integer id);
+    boolean updateIsRead(Integer id);
 
     /**
      * 更新消息已读状态
      *
-     * @param userType 用户类型
      * @return boolean
      */
-    boolean allRead(UserTypeEm userType);
+    boolean allRead();
 
     /**
      * 更新消息已读状态

@@ -1,7 +1,6 @@
 package com.dot.msg.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dot.comm.em.UserTypeEm;
 import com.dot.msg.chat.model.ChatMsg;
 import com.dot.msg.chat.model.ChatRoom;
 import com.dot.msg.chat.model.ChatRoomUserRel;
@@ -47,7 +46,7 @@ public interface ChatRoomService extends IService<ChatRoom> {
      * @param chatId 聊天室ID
      * @return true:清理成功;false:清理失败
      */
-    boolean clearUnreadMsgCount(UserTypeEm userTypeEm, String chatId);
+    boolean clearUnreadMsgCount(String chatId);
 
     /**
      * 清理未读消息数
@@ -113,50 +112,46 @@ public interface ChatRoomService extends IService<ChatRoom> {
      */
     List<ChatRoomUserRel> getChatRoomUserRelListByChatId(String chatId);
 
-    List<ChatRoomUserResponse> getChatRoomUserList(UserTypeEm userType);
+    List<ChatRoomUserResponse> getChatRoomUserList();
 
-    List<ChatRoomUserResponse> getChatRoomUserRefreshList(UserTypeEm userType);
+    List<ChatRoomUserResponse> getChatRoomUserRefreshList();
 
 
-    ChatUnreadCountResponse getChatUnreadCount(UserTypeEm userType);
+    ChatUnreadCountResponse getChatUnreadCount();
 
     /**
      * 去发送信息,返回聊天室ID
      *
-     * @param userType 用户类型
      * @param friendId 好友ID
      * @return 聊天室ID
      */
-    String gotoSendMsg(UserTypeEm userType, Integer friendId);
+    String gotoSendMsg(Integer friendId);
 
 
     /**
      * 获取聊天室消息和好友申请未读数
      *
-     * @param userType 用户类型
      * @return 聊天室消息和好友申请未读数
      */
-    ChatRoomMsgInfoResponse getChatRoomMsgInfo(UserTypeEm userType, String chatId);
+    ChatRoomMsgInfoResponse getChatRoomMsgInfo(String chatId);
 
     /**
      * 更新消息免打扰
      *
-     * @param userType     用户类型
      * @param chatId       聊天室ID
      * @param msgNoDisturb 消息免打扰
      * @return true:更新成功;false:更新失败
      */
-    boolean updateMsgNoDisturb(UserTypeEm userType, String chatId, Boolean msgNoDisturb);
+    boolean updateMsgNoDisturb(String chatId, Boolean msgNoDisturb);
 
     /**
      * 更新是否置顶
      *
-     * @param userType 用户类型
      * @param chatId   聊天室ID
      * @param isTop    是否置顶
      * @return true:更新成功;false:更新失败
      */
-    boolean updateIsTop(UserTypeEm userType, String chatId, Boolean isTop);
+    boolean updateIsTop(String chatId, Boolean isTop);
 
     /**
      * 删除聊天室用户关系
@@ -170,19 +165,17 @@ public interface ChatRoomService extends IService<ChatRoom> {
     /**
      * 清空消息列表
      *
-     * @param userType 用户id
      * @param chatId 聊天id
      * @return 是否成功
      */
-    boolean cleanMsgList(UserTypeEm userType, String chatId);
+    boolean cleanMsgList(String chatId);
 
     /**
      * 删除聊天室
      *
-     * @param userType 用户类型
      * @param chatId 聊天室ID
      * @return boolean
      */
-    Boolean deleteChatRoom(UserTypeEm userType, String chatId);
+    Boolean deleteChatRoom(String chatId);
 
 }
