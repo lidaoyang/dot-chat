@@ -119,18 +119,6 @@
         <div class="header">欢迎登录</div>
         <div class="form-wrapper">
             <div class="form-wrapper-div">
-                <label for="userType">用户类型:</label>
-                <select id="userType" name="userType">
-                    <option value="ENT_USER">企业用户</option>
-                    <option value="ENTERPRISE">企业管理员</option>
-                    <option value="SUPPLIER">供应商管理员</option>
-                    <option value="PL_ADMIN">平台管理员</option>
-                </select>
-            </div>
-            <div class="form-wrapper-div">
-                <input type="hidden" id="enterpriseId">
-            </div>
-            <div class="form-wrapper-div">
                 <label for="account">账号:</label>
                 <input type="text" id="account" name="account" placeholder="请输入账号"/>
             </div>
@@ -138,16 +126,11 @@
                 <label for="password">密码:</label>
                 <input type="password" id="password" name="password" placeholder="请输入密码"/>
             </div>
-            <button class="btn" onclick="goLogin()">Login</button>
+            <button class="btn" onclick="login()">Login</button>
             <div class="footer">
                 <span>没有账号？</span><a href="register.html">立即注册</a>
             </div>
         </div>
-    </div>
-    <!--  选择登录企业对话框  -->
-    <div id="choose-ent-dialog">
-        <ul>
-        </ul>
     </div>
 </div>
 <!-- 引入 jQuery 库 -->

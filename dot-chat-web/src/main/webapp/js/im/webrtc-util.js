@@ -1014,7 +1014,7 @@ function recoveryCallDialog(callDialog) {
  */
 function checkAndOpenCallDialog() {
     let url = `${MSG_URL_PREFIX}/chat/msg/getLastCallMsg`;
-    ajaxRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取最近语音消息失败,res:", res);
             myAlert('', res.message, "err");

@@ -43,22 +43,14 @@ const TOKEN_KEY = "Authorization";
 const ENT_ID_KEY = "enterpriseId";
 const USER_ID_KEY = "userId";
 const CHAT_USER_KEY = "chatUser";
-const USER_TYPE_KEY = "user_type";
 const LAST_ACCESS_TIME_KEY = "lastAccessedTime";
 const EXPIRES_IN = "expiresIn";
 const PREV_CHAT_ID_KEY = "prev_chat_id"; // 上次选择的聊天id
 const GROUP_MEMBER_PREFIX = "group_member_";//群成员前缀
 const CONTENT_TYPE_JSON = "application/json";
 const TOAST_COUNT_KEY = "toast_count";
-const USER_TYPE_O = {
-    ENT_USER: {desc: "企业用户", val: "ENT_USER", cls: "my-label-user"},
-    ENTERPRISE: {desc: "企业管理员", val: "ENTERPRISE", cls: "my-label-ent"},
-    SUPPLIER: {desc: "供应商管理员", val: "SUPPLIER", cls: "my-label-supp"},
-    PL_ADMIN: {desc: "平台管理员", val: "PL_ADMIN", cls: "my-label-admin"}
-}
 
 
-let USER_TYPE = $.cookie(USER_TYPE_KEY);
 /**
  * 本地用户信息
  */
@@ -548,12 +540,8 @@ let mobile = isMobile(); // false为PC端，true为手机端
 
 
 function logout() {
-    if (!USER_TYPE) {
-        deleteUserCookie();
-        return;
-    }
     let url = `${SYS_URL_PREFIX}/user/logout`;
-    ajaxRequest(url, "post", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "post", {}, null, function (res) {
         if (res.code !== 200) {
             logger.error("退出失败");
             myAlert('', res.message, 'err');
@@ -571,7 +559,6 @@ function deleteUserCookie() {
     deleteCookie(LAST_ACCESS_TIME_KEY);
     deleteCookie(EXPIRES_IN);
     deleteCookie(PREV_CHAT_ID_KEY);
-    deleteCookie(USER_TYPE_KEY);
     localStorage.clear();
     location.href = "/login.html";
 }
@@ -599,7 +586,7 @@ function autoRefreshToken() {
 function refreshToken() {
     logger.info("刷新token");
     let url = `${SYS_URL_PREFIX}/user/refreshToken`;
-    ajaxRequest(url, "post", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "post", {}, null, function (res) {
         if (res.code !== 200) {
             logger.error("刷新失败");
             myAlert('', res.message, 'err');
@@ -617,12 +604,11 @@ function saveTokenToCookie(data) {
     setCookie(TOKEN_KEY, data.token, data.expiresIn);
     setCookie(LAST_ACCESS_TIME_KEY, data.lastAccessedTime, data.expiresIn);
     setCookie(EXPIRES_IN, data.expiresIn, data.expiresIn);
-    setCookie(USER_TYPE_KEY, USER_TYPE, data.expiresIn);
 }
 
 function getChatUser() {
     let url = `${MSG_URL_PREFIX}/chat/user/get`;
-    ajaxSyncRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxSyncRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             myAlert("获取用户信息失败", res.message, 'err');
             return;
@@ -651,7 +637,7 @@ function refreshChatRoomListDom() {
  */
 function refreshChatRoomList(successFn) {
     let url = `${MSG_URL_PREFIX}/chat/room/refresh/list`;
-    ajaxSyncRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxSyncRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取聊天列表失败");
             myAlert('', res.message, "err");
@@ -707,7 +693,6 @@ function isMyChatRoom(chatId) {
 function userFriendListSearch(keyword, filterGroupId, successFn) {
     let url = `${MSG_URL_PREFIX}/chat/friend/choose/list`;
     ajaxRequest(url, "get", {
-        userType: USER_TYPE,
         filterGroupId: filterGroupId,
         keywords: keyword
     }, null, function (res) {
@@ -722,7 +707,7 @@ function userFriendListSearch(keyword, filterGroupId, successFn) {
 
 function getChatUserInfo(userId, callback) {
     let url = `${MSG_URL_PREFIX}/chat/user/info`;
-    ajaxSyncRequest(url, "get", {userType: USER_TYPE, userId: userId}, null, function (res) {
+    ajaxSyncRequest(url, "get", {userId: userId}, null, function (res) {
         if (res.code !== 200) {
             logger.error("获取用户详情失败,userId:", userId, "res:", res);
             myAlert('', res.message, "err");
@@ -740,7 +725,7 @@ function getChatGroupMemberList(groupId) {
         return;
     }
     let url = `${MSG_URL_PREFIX}/chat/group/member/list`;
-    ajaxSyncRequest(url, "get", {userType: USER_TYPE, groupId: groupId}, null, function (res) {
+    ajaxSyncRequest(url, "get", {groupId: groupId}, null, function (res) {
         if (res.code !== 200) {
             myAlert('', res.message, "err");
             return;
@@ -784,7 +769,6 @@ function setCurrentRemoteGroupMemberListToLocalStore() {
 function setRemoteGroupMemberListToLocalStore(groupId) {
     let url = `${MSG_URL_PREFIX}/chat/group/member/list`;
     ajaxSyncRequest(url, "get", {
-        userType: USER_TYPE,
         groupId: groupId,
         keywords: ""
     }, null, function (res) {
@@ -1107,7 +1091,6 @@ function deleteUserMsg(msgId) {
     myConfirm("删除消息", "确定删除该消息吗？", function () {
         let url = `${MSG_URL_PREFIX}/chat/msg/delete`;
         let data = {
-            userType: USER_TYPE,
             msgId: msgId
         };
         ajaxRequest(url, "post", data, null, function (res) {
@@ -1131,7 +1114,6 @@ function revokeMsg(msgId) {
     myConfirm("撤回消息", "确定撤回该消息吗？", function () {
         let url = `${MSG_URL_PREFIX}/chat/msg/revoke`;
         let data = {
-            userType: USER_TYPE,
             msgId: msgId
         };
         ajaxRequest(url, "post", data, null, function (res) {
@@ -1156,7 +1138,6 @@ function revokeMsg(msgId) {
 function updateTopFlag(chatId, isTop) {
     let url = `${MSG_URL_PREFIX}/chat/room/updateIsTop`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         chatId: chatId,
         flag: isTop
     }, null, function (res) {
@@ -1178,7 +1159,6 @@ function updateTopFlag(chatId, isTop) {
 function updateMsgNoDisturb(chatId, flag) {
     let url = `${MSG_URL_PREFIX}/chat/room/updateMsgNoDisturb`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         chatId: chatId,
         flag: flag
     }, null, function (res) {
@@ -1200,7 +1180,6 @@ function deleteChatRoom($this) {
     myConfirm("删除聊天", "即将删除选中的聊天,并同时清空该聊天记录,确定删除该聊天吗？", function () {
         let url = `${MSG_URL_PREFIX}/chat/room/delete`;
         let data = {
-            userType: USER_TYPE,
             chatId: $this.attr("chat-id")
         };
         ajaxRequest(url, "post", data, null, function (res) {

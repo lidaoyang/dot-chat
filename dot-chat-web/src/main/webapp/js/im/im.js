@@ -14,11 +14,13 @@ let tiows
  * 初始化 websocket
  */
 function initWs() {
-    if (!USER_TYPE) {
+    let token = $.cookie(TOKEN_KEY);
+    if (!token) {
         logger.info("未登录");
+        logout();
         return;
     }
-    let queryString = 'token=' + $.cookie(TOKEN_KEY) + '&userType=' + USER_TYPE;
+    let queryString = 'token=' + token;
 
     let param = "";
     tiows = new tio.ws(ws_protocol, ip, port, queryString, param, handler, heartbeatTimeout, reconnInterval, binaryType);

@@ -128,16 +128,6 @@ function bottomMyBtnClick() {
 }
 
 function gotoMy() {
-    let userTypeO = {};
-    if (USER_TYPE === USER_TYPE_O.ENT_USER.val) {
-        userTypeO = USER_TYPE_O.ENT_USER;
-    } else if (USER_TYPE === USER_TYPE_O.ENTERPRISE.val) {
-        userTypeO = USER_TYPE_O.ENTERPRISE;
-    } else if (USER_TYPE === USER_TYPE_O.SUPPLIER.val) {
-        userTypeO = USER_TYPE_O.SUPPLIER;
-    } else if (USER_TYPE === USER_TYPE_O.PL_ADMIN.val) {
-        userTypeO = USER_TYPE_O.PL_ADMIN;
-    }
     let sexDom = ``;
     if (chatUser.sex !== null && chatUser.sex !== undefined) {
         if (chatUser.sex === 1) {
@@ -156,7 +146,6 @@ function gotoMy() {
                             <i class="my-edit"></i>
                         </span>
                         <span class="my-id">ID: ${chatUser.id}</span>
-                        <span class="my-label ${userTypeO.cls}">${userTypeO.desc}</span>
                         ${sexDom}
                     </div>
                 </div>
@@ -168,7 +157,7 @@ function gotoMy() {
                     <label>密码</label><span>****** <i class="my-edit" onclick="modifyPwdOpen()"></i></span>
                     </div>
                     <div class="more-info">
-                        <label>公司</label><span>${chatUser.enterpriseName}</span>
+                        <label>个性签名</label><span>{chatUser.signature}</span>
                     </div>
                 </div>
                 <div class="my-bottom">
@@ -314,7 +303,7 @@ function saveMyInfoClick() {
     let sex = $("#gender").val();
     sex = sex ? parseInt(sex) : 0;
     let url = `${MSG_URL_PREFIX}/chat/user/updateNickname`;
-    ajaxRequest(url, "post", {userType: USER_TYPE, nickname: nickname, sex: sex}, null, function (res) {
+    ajaxRequest(url, "post", {nickname: nickname, sex: sex}, null, function (res) {
         if (res.code !== 200) {
             logger.info("昵称更新失败,res:", res);
             myAlert('', res.message, "err");
@@ -387,7 +376,6 @@ function modifyPwdClick() {
     }
     let url = `${SYS_URL_PREFIX}/user/updatePassword`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         oldPwd: oldPwd,
         newPwd: newPwd,
         validNewPwd: validNewPwd
@@ -456,7 +444,7 @@ function loadChatFriend() {
  */
 function getChatRoomList() {
     let url = `${MSG_URL_PREFIX}/chat/room/list`;
-    ajaxRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取聊天列表失败");
             myAlert('', res.message, "err");
@@ -668,7 +656,6 @@ function getChatMsgPageFirstList() {
     setCookieDay(PREV_CHAT_ID_KEY, chatId, 1);
     let url = `${MSG_URL_PREFIX}/chat/msg/list`;
     let data = {
-        userType: USER_TYPE,
         chatId: chatId,
         pageFlippingType: PAGE_FLIPPING_TYPE.FIRST,
         limit: msgPage.limit
@@ -733,7 +720,6 @@ function getChatMsgPageUpList() {
     let chatId = chatToUser.chatId;
     let url = `${MSG_URL_PREFIX}/chat/msg/list`;
     let data = {
-        userType: USER_TYPE,
         chatId: chatId,
         msgId: msgUpPage.lastMsgId,
         pageFlippingType: chatToUser.pageFlippingType,
@@ -816,7 +802,6 @@ function pageDownMsgRecord() {
     let chatId = chatToUser.chatId
     let url = `${MSG_URL_PREFIX}/chat/msg/list`;
     let data = {
-        userType: USER_TYPE,
         chatId: chatId,
         pageFlippingType: PAGE_FLIPPING_TYPE.PULL_DOWN,
         msgId: msgPage.lastMsgId,
@@ -1356,7 +1341,7 @@ function gotoChatMsgInfo() {
  */
 function getChatRoomMsgInfo() {
     let url = `${MSG_URL_PREFIX}/chat/room/getChatRoomMsgInfo`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, chatId: chatToUser.chatId}, null, function (res) {
+    ajaxRequest(url, "get", {chatId: chatToUser.chatId}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取聊天室详情失败,chatId:", chatToUser.chatId, "res:", res);
             myAlert('', res.message, "err");
@@ -1585,7 +1570,6 @@ function applyGroup(chatId) {
         let groupId = chatId.replace("G_", "");
         let url = `${MSG_URL_PREFIX}/chat/group/applyJoinGroup`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: groupId,
             source: GROUP_SOURCE.CARD
         }, null, function (res) {
@@ -1620,7 +1604,6 @@ function msgInfoSwitch(_this) {
         url = `${MSG_URL_PREFIX}/chat/group/updateInviteCfm`;
     }
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         chatId: chatToUser.chatId,
         groupId: chatToUser.groupId,
         flag: flag
@@ -1657,7 +1640,7 @@ function moreGroupMember(_this) {
  */
 function groupQrcodeDialogOpen() {
     let url = `${MSG_URL_PREFIX}/chat/group/getGroupQrcode`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, groupId: chatToUser.groupId}, null, function (res) {
+    ajaxRequest(url, "get", {groupId: chatToUser.groupId}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取群二维码失败,groupId:", chatToUser.groupId, "res:", res);
             myAlert('', res.message, "err");
@@ -1764,7 +1747,6 @@ function modifyGroupName(_this) {
         return;
     }
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         name: name
     }, null, function (res) {
@@ -1907,7 +1889,6 @@ function saveGroupNoticeContent(noticeContent) {
     logger.info("群公告内容", noticeContent);
     let url = `${MSG_URL_PREFIX}/chat/group/updateGroupNotice`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         notice: noticeContent
     }, null, function (res) {
@@ -1992,7 +1973,6 @@ function getGroupMemberSearchList(keyword) {
     }
     let url = `${MSG_URL_PREFIX}/chat/group/member/list`;
     ajaxSyncRequest(url, "get", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         keywords: keyword
     }, null, function (res) {
@@ -2052,7 +2032,6 @@ function addGroupMember() {
     let selectedFriendIdList = Array.from(selectedFriendIdSet);
     let url = `${MSG_URL_PREFIX}/chat/group/addGroupMember`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         userIds: selectedFriendIdList.join(','),
         source: GROUP_SOURCE.INVITE
@@ -2079,7 +2058,6 @@ function removeGroupMember() {
     let selectedFriendIdList = Array.from(selectedFriendIdSet);
     let url = `${MSG_URL_PREFIX}/chat/group/removeGroupMember`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         userIds: selectedFriendIdList.join(',')
     }, null, function (res) {
@@ -2178,7 +2156,6 @@ function logoutGroup() {
     myConfirm('确定退出群聊?', "退出群聊后将会清空聊天记录,确定退出吗", function () {
         let url = `${MSG_URL_PREFIX}/chat/group/logoutGroup`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: chatToUser.groupId
         }, null, function (res) {
             if (res.code !== 200) {
@@ -2221,7 +2198,6 @@ function getGroupLeaderTranGroupMemberList(keyword) {
     }
     let url = `${MSG_URL_PREFIX}/chat/group/member/list`;
     ajaxSyncRequest(url, "get", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         keywords: keyword
     }, null, function (res) {
@@ -2271,7 +2247,6 @@ function groupLeaderTransfer(_this) {
     myConfirm('确定转让群主?', "确定选择 " + nickname + " 为新群主，你将自动放弃群主身份。", function () {
         let url = `${MSG_URL_PREFIX}/chat/group/groupLeaderTransfer`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: chatToUser.groupId,
             userId: userId
         }, null, function (res) {
@@ -2335,7 +2310,6 @@ function searchGroupMemberClick() {
 function getSearchGroupMemberList(keyword) {
     let url = `${MSG_URL_PREFIX}/chat/group/member/list`;
     ajaxSyncRequest(url, "get", {
-        userType: USER_TYPE,
         groupId: chatToUser.groupId,
         keywords: keyword
     }, null, function (res) {
@@ -2433,7 +2407,6 @@ function removeGroupManager(_this) {
     myConfirm('确定移除群管理员吗?', "确定要移除“" + nickname + "”管理员吗?", function () {
         let url = `${MSG_URL_PREFIX}/chat/group/removeGroupManager`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: chatToUser.groupId,
             userId: userId
         }, null, function (res) {
@@ -2480,7 +2453,6 @@ function addGroupManager(_this) {
     myConfirm('确定添加群管理员吗?', "确定要添加“" + nickname + "”为管理员吗?", function () {
         let url = `${MSG_URL_PREFIX}/chat/group/addGroupManager`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: chatToUser.groupId,
             userId: userId
         }, null, function (res) {
@@ -2507,7 +2479,6 @@ function dissolveGroup() {
     myConfirm('解散群聊', "解散群聊后，群成员和群主都将被移出群聊，确认解散吗？", function () {
         let url = `${MSG_URL_PREFIX}/chat/group/dissolveGroup`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             groupId: chatToUser.groupId
         }, null, function (res) {
             if (res.code !== 200) {
@@ -2530,7 +2501,6 @@ function cleanMsgList() {
     myConfirm('清空聊天记录', "确定删除" + nickname + "的聊天记录吗?", function () {
         let url = `${MSG_URL_PREFIX}/chat/room/cleanMsgList`;
         ajaxRequest(url, "post", {
-            userType: USER_TYPE,
             chatId: chatToUser.chatId,
         }, null, function (res) {
             if (res.code !== 200) {
@@ -2667,7 +2637,6 @@ function searchMsgHistoryPage() {
 
     let url = `${MSG_URL_PREFIX}/chat/msg/list`;
     let data = {
-        userType: USER_TYPE,
         chatId: chatToUser.chatId,
         msgType: msgType,
         sendUserId: sendUserId,
@@ -2902,7 +2871,6 @@ function relayMsg(msgIds) {
     }
     let url = `${MSG_URL_PREFIX}/chat/msg/relay`;
     ajaxRequest(url, "post", {
-        userType: USER_TYPE,
         msgIds: msgIds.join(","),
         chatIds: chatIds,
         toUserIds: toUserIds
@@ -2979,7 +2947,7 @@ function getFriendApplyList() {
     //清空未读好友申请ID集合
     unreadFriendApplyIdSet.clear();
     let url = `${MSG_URL_PREFIX}/chat/friend/apply/list`;
-    ajaxRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取好友申请列表失败,chatId:", chatId, "res:", res);
             myAlert('', res.message, "err");
@@ -3037,7 +3005,7 @@ function goFriendApplyInfoPage(_this) {
 
 function getFriendApplyInfo(applyId) {
     let url = `${MSG_URL_PREFIX}/chat/friend/apply/info`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, applyId: applyId}, null, function (res) {
+    ajaxRequest(url, "get", {applyId: applyId}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取好友申请详情失败,applyId:", applyId, "res:", res);
             myAlert('', res.message, "err");
@@ -3180,7 +3148,7 @@ function replayMsgSend() {
         myAlert('', '请输入回复内容', "err");
         return;
     }
-    let data = JSON.stringify({userType: USER_TYPE, applyId: applyId, replayContent: content});
+    let data = JSON.stringify({applyId: applyId, replayContent: content});
     let url = `${MSG_URL_PREFIX}/chat/friend/apply/replay`;
     ajaxRequest(url, "post", data, CONTENT_TYPE_JSON, function (res) {
         if (res.code !== 200) {
@@ -3219,7 +3187,6 @@ function agreeFriendApply() {
     let label = $("#label-agree").val();
     let url = `${MSG_URL_PREFIX}/chat/friend/apply/agree`;
     let data = JSON.stringify({
-        userType: USER_TYPE,
         applyId: applyId,
         remark: remark,
         label: label
@@ -3241,7 +3208,7 @@ function agreeFriendApply() {
  */
 function getFriendList() {
     let url = `${MSG_URL_PREFIX}/chat/friend/list`;
-    ajaxRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取好友列表失败,", "res:", res);
             myAlert('', res.message, "err");
@@ -3282,7 +3249,7 @@ function goFriendInfoPage(_this) {
 
 function getFriendInfo(friendId) {
     let url = `${MSG_URL_PREFIX}/chat/friend/info`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, friendId: friendId}, null, function (res) {
+    ajaxRequest(url, "get", {friendId: friendId}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取好友详情失败,friendId:", friendId, "res:", res);
             myAlert('', res.message, "err");
@@ -3324,7 +3291,7 @@ function getFriendInfo(friendId) {
 function sendMsgBtnClick(_this) {
     let userId = $(_this).attr("user-id");
     let url = `${MSG_URL_PREFIX}/chat/room/gotoSendMsg`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, friendId: userId}, null, function (res) {
+    ajaxRequest(url, "get", {friendId: userId}, null, function (res) {
         if (res.code !== 200) {
             logger.info("去聊天室失败,friendId:", userId, "res:", res);
             myAlert('', res.message, "err");
@@ -3352,7 +3319,7 @@ function modifyFriendRemark(_this) {
         return;
     }
     let url = `${MSG_URL_PREFIX}/chat/friend/modifyRemark`;
-    ajaxRequest(url, "post", {userType: USER_TYPE, friendId: friendId, remark: remark}, null, function (res) {
+    ajaxRequest(url, "post", {friendId: friendId, remark: remark}, null, function (res) {
         if (res.code !== 200) {
             logger.info("修改好友备注失败,friendId:", friendId, "res:", res);
             myAlert('', res.message, "err");
@@ -3378,7 +3345,7 @@ function remarkClick(_this) {
  */
 function getChatTotalUnreadCount() {
     let url = `${MSG_URL_PREFIX}/chat/room/getUnreadCount`;
-    ajaxRequest(url, "get", {userType: USER_TYPE}, null, function (res) {
+    ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
             logger.info("获取总未读数失败,res:", res);
             myAlert('', res.message, "err");
@@ -3491,7 +3458,7 @@ function createGroup() {
     }
     let selectedFriendIdList = Array.from(selectedFriendIdSet);
     let url = `${MSG_URL_PREFIX}/chat/group/create`;
-    ajaxRequest(url, "post", {userType: USER_TYPE, members: selectedFriendIdList.join(',')}, null, function (res) {
+    ajaxRequest(url, "post", {members: selectedFriendIdList.join(',')}, null, function (res) {
         if (res.code !== 200) {
             logger.info("创建群聊失败,selectedFriendIdSet:", selectedFriendIdSet);
             myAlert('', res.message, "err");
@@ -3589,7 +3556,7 @@ function addFriendSearchClick() {
         return;
     }
     let url = `${MSG_URL_PREFIX}/chat/user/getSearchList`;
-    ajaxRequest(url, "get", {userType: USER_TYPE, keyword: keyword}, null, function (res) {
+    ajaxRequest(url, "get", {keyword: keyword}, null, function (res) {
         if (res.code !== 200) {
             logger.info("搜索用户列表失败,keyword:", keyword);
             myAlert('', res.message, "err");
@@ -3654,7 +3621,6 @@ function sendAddFriendApplyClick() {
         return;
     }
     let data = JSON.stringify({
-        userType: USER_TYPE,
         friendId: friendId,
         source: source,
         remark: remark,

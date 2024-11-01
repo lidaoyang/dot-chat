@@ -28,7 +28,6 @@
                         <div class="my-name-info">
                             <span class="my-name">小名</span>
                             <span class="my-id">ID: <span class="my-id-v">2</span></span>
-                            <span class="my-label">企业用户</span>
                         </div>
                     </div>
                     <div class="my-more">
@@ -36,7 +35,7 @@
                             <label>账号</label><span class="my-phone">1111</span>
                         </div>
                         <div class="my-more-info">
-                            <label>公司</label><span class="my-enterprise">wwwwsss</span>
+                            <label>个性签名</label><span class="my-signature">-</span>
                         </div>
                     </div>
                     <div class="my-bottom">
@@ -168,7 +167,7 @@
                 </div>
                 <div class="modify-name">
                     <p id="modify-nick" class="modify-nick">LLLQQQ</p>
-                    <p id="modify-area" class="modify-area">浙江省 温州市</p>
+                    <p id="modify-signature" class="modify-signature">-</p>
                 </div>
             </div>
             <div class="modify-greet">
@@ -181,6 +180,8 @@
                         <option value="2">女</option>
                         <option value="0" selected>保密</option>
                     </select>
+                    <label for="signature">个性签名</label>
+                    <input id="signature" type="text" placeholder="个性签名"/>
                 </div>
                 <div style="text-align: right">
                     <button class="primarybtn" onclick="saveMyInfoClick()">保存</button>

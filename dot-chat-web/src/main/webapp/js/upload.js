@@ -7,7 +7,6 @@
 function uploadImageFile(file, model, successFn) {
     let formData = new FormData();
     formData.append('image', file);
-    formData.append("userType", USER_TYPE);
     formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/image`;
     $.ajax({
@@ -44,7 +43,6 @@ function uploadImageFile(file, model, successFn) {
 function uploadImageFileAsync(file, model, successFn) {
     let formData = new FormData();
     formData.append('image', file);
-    formData.append("userType", USER_TYPE);
     formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/async/image`;
     $.ajax({
@@ -81,7 +79,6 @@ function uploadImageFileAsync(file, model, successFn) {
 function uploadVideoAsync(file, model, successFn) {
     let formData = new FormData();
     formData.append('file', file);
-    formData.append("userType", USER_TYPE);
     formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/async/video`;
     $.ajax({
@@ -117,7 +114,6 @@ function uploadVideoAsync(file, model, successFn) {
 function uploadFile(file, model, successFn) {
     let formData = new FormData();
     formData.append('file', file);
-    formData.append("userType", USER_TYPE);
     formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/file`;
     $.ajax({
@@ -153,7 +149,6 @@ function uploadFile(file, model, successFn) {
 function uploadFileAsync(file, model, successFn) {
     let formData = new FormData();
     formData.append('file', file);
-    formData.append("userType", USER_TYPE);
     formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/async/file`;
     $.ajax({
@@ -194,7 +189,6 @@ function uploadChatUserAvatar(file, successFn) {
     }
     let formData = new FormData();
     formData.append('image', file);
-    formData.append("userType", USER_TYPE);
     let url = `${MSG_URL_PREFIX}/chat/user/updateAvatar`;
     $.ajax({
         url: url,

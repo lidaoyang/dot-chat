@@ -1442,22 +1442,6 @@ body {
     padding: 1px 2px;
 }
 
-.my-info .my-head .my-name-info .my-label-user {
-    background-color: #4CAF50;
-}
-
-.my-info .my-head .my-name-info .my-label-ent {
-    background-color: #ed87e0;
-}
-
-.my-info .my-head .my-name-info .my-label-supp {
-    background-color: #5da5ef;
-}
-
-.my-info .my-head .my-name-info .my-label-admin {
-    background-color: #efab5d;
-}
-
 .my-info .my-head .my-name-info .my-sex {
     background-size: 100%;
     background-repeat: no-repeat;
