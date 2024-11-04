@@ -3,6 +3,7 @@ package com.dot.comm.utils;
 
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author: Dao-yang.
  * @date: Created in 2024/3/19 14:04
  */
+@Slf4j
 public class MakeGroupHeadPicUtil {
 
     // 围边使用的灰色
@@ -204,7 +206,8 @@ public class MakeGroupHeadPicUtil {
             }
             return (BufferedImage) itemp;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("图片缩放失败,picPath:{}", picPath);
+            log.error("图片缩放失败",e);
         }
         return null;
     }

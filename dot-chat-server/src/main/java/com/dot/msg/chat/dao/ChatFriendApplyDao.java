@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface ChatFriendApplyDao extends BaseMapper<ChatFriendApply> {
 
-    @Select("select cfa.id, cfa.apply_user_id,cfa.friend_id, cu.nickname,cfaur.remark,cu.avatar,cu.enterprise_name,cfaur.unread_count, cfa.status, cfa.apply_reply,cfa.apply_reason " +
+    @Select("select cfa.id, cfa.apply_user_id,cfa.friend_id, cu.nickname,cfaur.remark,cu.avatar,cu.signature,cfaur.unread_count, cfa.status, cfa.apply_reply,cfa.apply_reason " +
             "from chat_friend_apply cfa " +
             "         inner join chat_friend_apply_user_rel cfaur on cfa.id = cfaur.apply_id " +
             "         inner join chat_user cu on cu.id = cfaur.friend_id " +
@@ -24,7 +24,7 @@ public interface ChatFriendApplyDao extends BaseMapper<ChatFriendApply> {
             "order by cfaur.id desc")
     List<ChatFriendApplyDto> selectChatFriendApplyList(@Param("userId") Integer userId);
 
-    @Select("select cfa.id, cfa.apply_user_id,cfa.friend_id, cu.nickname,cfaur.remark,cu.avatar,cu.enterprise_name,cfaur.remark, cfa.status, cfaur.label,cfa.source ,cfaur.unread_count " +
+    @Select("select cfa.id, cfa.apply_user_id,cfa.friend_id, cu.nickname,cfaur.remark,cu.avatar,cu.signature,cfaur.remark, cfa.status, cfaur.label,cfa.source ,cfaur.unread_count " +
             "from chat_friend_apply cfa " +
             "         inner join chat_friend_apply_user_rel cfaur on cfa.id = cfaur.apply_id " +
             "         inner join chat_user cu on cu.id = cfaur.friend_id " +

@@ -53,10 +53,10 @@ public class ChatUserInfoResponse implements Serializable {
 	private String remark;
 
 	/**
-	 * 企业名称
+	 * 个性签名
 	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
+	@Schema(description = "个性签名")
+	private String signature;
 
 	/**
 	 * 标签(多个标签用英文逗号分割)

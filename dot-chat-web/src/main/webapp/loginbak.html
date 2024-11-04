@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <meta name="viewport" content="width=device-width,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>注册</title>
+    <title>登录</title>
     <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css"/>
     <style>
         * {
@@ -46,7 +46,13 @@
             margin-left: 2px;
             width: 100%;
         }
-
+        .form-wrapper select {
+            width: 97%;
+            height: 35px;
+            padding-left: 5px;
+            font-size: 14px;
+            margin-left: 2px;
+        }
         .form-wrapper input {
             width: 94%;
             height: 32px;
@@ -85,6 +91,22 @@
             cursor: pointer; /* 鼠标悬停时改变鼠标样式为指针 */
         }
 
+        .ent-dialog-item {
+            height: 36px;
+            border-bottom: 1px solid #dfdfdf;
+            line-height: 36px;
+            padding-left: 15px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 225px;
+            cursor: default;
+        }
+
+        .ent-dialog-item:hover {
+            background-color: #cce5ff;
+        }
+
         .footer {
             margin-top: 10px;
             text-align: center;
@@ -94,51 +116,43 @@
 <body>
 <div class="container">
     <div class="login-wrapper">
-        <div class="header">注册并登录</div>
+        <div class="header">欢迎登录</div>
         <div class="form-wrapper">
             <div class="form-wrapper-div">
-                <label for="account">手机号:</label>
-                <input type="text" id="account" name="account" placeholder="请输手机号"/>
+                <label for="account">账号:</label>
+                <input type="text" id="account" name="account" placeholder="请输入账号"/>
             </div>
             <div class="form-wrapper-div">
                 <label for="password">密码:</label>
                 <input type="password" id="password" name="password" placeholder="请输入密码"/>
             </div>
-            <div class="form-wrapper-div">
-                <label for="repassword">确认密码:</label>
-                <input type="password" id="repassword" name="repassword" placeholder="请输入确认密码"/>
-            </div>
-            <div class="form-wrapper-div">
-                <label for="nickname">昵称:</label>
-                <input type="text" id="nickname" name="nickname" placeholder="请输入昵称"/>
-            </div>
-            <button class="btn" onclick="registerAndLogin()">Register And Login</button>
+            <button class="btn" onclick="login()">Login</button>
             <div class="footer">
-                <span>已有账号？</span><a href="login.html">去登录</a>
+                <span>没有账号？</span><a href="register.html">立即注册</a>
             </div>
         </div>
-    </div>
-    <!--  选择登录企业对话框  -->
-    <div id="choose-ent-dialog">
-        <ul>
-        </ul>
     </div>
 </div>
 <!-- 引入 jQuery 库 -->
 <script src="js/jquery/jquery-3.7.1.min.js"></script>
 <script src="js/jquery-ui/jquery-ui.min.js"></script>
 <script src="js/jquery/jquery.cookie-1.4.1.min.js"></script>
-
-
 <script src="js/moment.js"></script>
+
 <script src="js/custom-log.js"></script>
 <script src="js/base.js"></script>
-<script>
-    if (mobile) {
-        location.href = "../mobile/register.html";
-    }
-</script>
 
+<!--手机端查看浏览器控制台-->
+<script src="js/jsdelivr-eruda.js"></script>
+<script>
+    if (mobile){
+        location.href = "../mobile/login.html";
+    }
+    eruda.init();
+    // if (env !== 'prod') {
+    //     eruda.init();
+    // }
+</script>
 </body>
 </html>
 

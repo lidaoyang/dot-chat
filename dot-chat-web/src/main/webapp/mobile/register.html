@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../js/jquery-ui/jquery-ui.min.css"/>
+    <title>注册账号</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 280px;
+            background-image: url("../ico/login_header_bg.png");
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .header .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+        }
+
+        .header .logo img {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(221.44deg, rgb(130, 169, 247) 0%, rgb(191, 210, 250) 100%);
+            box-shadow: -2px -4px 10px rgb(226, 234, 250), 2px 4px 10px rgb(219, 232, 255);
+        }
+
+        .header .label {
+            margin-top: 16px;
+            width: 81px;
+            height: 28px;
+            /** 文本1 */
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 27px;
+            color: rgba(30, 33, 33, 1);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .content {
+            width: 80%;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .content label {
+            height: 22px;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 21px;
+            color: rgba(30, 33, 33, 1);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .content input {
+            width: 100%;
+            height: 43px;
+            margin-bottom: 10px;
+            border: none;
+            border-bottom: 1px solid rgb(225, 225, 225);
+        }
+
+        .content input::placeholder {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 19px;
+            color: rgba(159, 171, 171, 1);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .content input:focus {
+            outline: none;
+        }
+
+        .content button {
+            width: 100%;
+            height: 44px;
+            border: none;
+            border-radius: 24px;
+            background: linear-gradient(90deg, rgba(65, 167, 250, 1) 0%, rgba(180, 145, 250, 1) 100%);
+            /** 文本1 */
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 21px;
+            color: rgba(255, 255, 255, 1);
+            margin-top: 20px;
+        }
+
+        .content .register {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 17px;
+            color: rgba(123, 135, 135, 1);
+        }
+
+        .content .register a {
+            color: rgba(61, 63, 67, 1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="body">
+    <div class="header">
+        <div class="logo">
+            <img src="../ico/logo.png" alt="">
+        </div>
+        <div class="label">
+            <span>立即注册</span>
+        </div>
+    </div>
+    <div class="content register">
+        <label for="account">手机号</label>
+        <input id="account" class="account" type="text" placeholder="请输入手机号"/>
+        <label for="password">密码</label>
+        <input id="password" class="password" type="password" placeholder="请输入密码"/>
+        <label for="repassword">确认密码</label>
+        <input id="repassword" class="repassword" type="password" placeholder="请输入确认密码"/>
+        <label for="nickname">昵称</label>
+        <input id="nickname" class="nickname" type="text" placeholder="请输入昵称"/>
+
+        <button id="login" type="button" onclick="registerAndLogin()">注册并登录</button>
+        <div class="register">
+            已有账号？ <a href="./login.html">立即登录</a>
+        </div>
+    </div>
+</div>
+<!-- 引入 jQuery 库 -->
+<script src="../js/jquery/jquery-3.7.1.min.js"></script>
+<script src="../js/jquery-ui/jquery-ui.min.js"></script>
+<script src="../js/jquery/jquery.cookie-1.4.1.min.js"></script>
+
+<script src="../js/moment.js"></script>
+<script src="../js/custom-log.js"></script>
+<script src="../js/base.js"></script>
+<script>
+    if (!mobile) {
+        location.href = "../register.html";
+    }
+</script>
+</body>
+</html>

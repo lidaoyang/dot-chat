@@ -1,137 +1,412 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- saved from url=(0023)https://www.tid520.com/ -->
+<html lang="zh-CN">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <meta name="viewport" content="width=device-width,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css"/>
+    <title>登录</title>
     <style>
-        * {
-            list-style: none;
-            padding: 0;
+        *, *:before, *:after {
+            box-sizing: border-box;
             margin: 0;
-            font-size: 14px;
-            text-decoration: none;
-            outline: none;
-            font-family: '微软雅黑', sans-serif;
-        }
-
-        html {
-            height: 100%;
+            padding: 0;
         }
 
         body {
-            height: 100%;
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+            background: #ededed;
         }
 
-        .container {
-            height: 100%;
-            background-image: linear-gradient(to right, #999999, #330867);
+        input, button {
+            border: none;
+            outline: none;
+            background: none;
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
         }
 
-        .login-wrapper {
-            background-color: bisque;
-            width: 210px;
-            height: 586px;
-            border-radius: 15px;
-            padding: 0 50px;
-            position: relative;
+        .tip {
+            font-size: 20px;
+            margin: 40px auto 50px;
+            text-align: center;
+        }
+
+        .content {
+            overflow: hidden;
+            position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 550px;
+            margin: -300px 0 0 -450px;
+            background: #fff;
         }
 
-        .form-wrapper-div {
-            margin-bottom: 15px;
-            margin-left: 2px;
-            width: 100%;
-        }
-        .form-wrapper select {
-            width: 97%;
-            height: 35px;
-            padding-left: 5px;
-            font-size: 14px;
-            margin-left: 2px;
-        }
-        .form-wrapper input {
-            width: 94%;
-            height: 32px;
-            padding-left: 5px;
-            font-size: 14px;
-            margin-left: 2px;
+        .form {
+            position: relative;
+            width: 640px;
+            height: 100%;
+            transition: -webkit-transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
+            padding: 50px 30px 0;
         }
 
-        .form-wrapper label {
+        .sub-cont {
+            overflow: hidden;
+            position: absolute;
+            left: 640px;
+            top: 0;
+            width: 900px;
+            height: 100%;
+            padding-left: 260px;
+            background: #fff;
+            transition: -webkit-transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
+        }
+
+        .content.s--signup .sub-cont {
+            -webkit-transform: translate3d(-640px, 0, 0);
+            transform: translate3d(-640px, 0, 0);
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            width: 260px;
+            height: 44px;
+            color: #fff;
             font-size: 15px;
-            font-weight: 330;
-            color: #868686;
+            cursor: pointer;
+            border: none;
+            border-radius: 24px;
+            background: linear-gradient(90deg, rgba(65, 167, 250, 1) 0%, rgba(180, 145, 250, 1) 100%);
+            /** 文本1 */
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 21px;
+            color: rgba(255, 255, 255, 1);
         }
+
+        .img {
+            overflow: hidden;
+            z-index: 2;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100%;
+            padding-top: 360px;
+        }
+
+        .img:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 900px;
+            height: 100%;
+            background-image: url(./images/login-bg.jpg);
+            background-size: cover;
+            transition: -webkit-transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
+        }
+
+        .img:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.29);
+        }
+
+        .content.s--signup .img:before {
+            -webkit-transform: translate3d(640px, 0, 0);
+            transform: translate3d(640px, 0, 0);
+        }
+
+        .img__text {
+            z-index: 2;
+            position: absolute;
+            left: 0;
+            top: 50px;
+            width: 100%;
+            padding: 0 20px;
+            text-align: center;
+            color: #fff;
+            transition: -webkit-transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out;
+            transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
+        }
+
+        .img__text h2 {
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .img__text p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .content.s--signup .img__text.m--up {
+            -webkit-transform: translateX(520px);
+            transform: translateX(520px);
+        }
+
+        .img__text.m--in {
+            -webkit-transform: translateX(-520px);
+            transform: translateX(-520px);
+        }
+
+        .content.s--signup .img__text.m--in {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+
+        .img__btn {
+            overflow: hidden;
+            z-index: 2;
+            position: relative;
+            width: 100px;
+            height: 36px;
+            margin: 0 auto;
+            background: transparent;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .img__btn:after {
+            content: '';
+            z-index: 2;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #fff;
+            border-radius: 30px;
+        }
+
+        .img__btn span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            transition: -webkit-transform 0.6s;
+            transition: transform 0.6s;
+            transition: transform 0.6s, -webkit-transform 0.6s;
+        }
+
+        .img__btn span.m--in {
+            -webkit-transform: translateY(-72px);
+            transform: translateY(-72px);
+        }
+
+        .content.s--signup .img__btn span.m--in {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        .content.s--signup .img__btn span.m--up {
+            -webkit-transform: translateY(72px);
+            transform: translateY(72px);
+        }
+
+        h2 {
+            width: 100%;
+            font-size: 26px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            width: 260px;
+            margin: 25px auto 0;
+            text-align: center;
+        }
+
+        label span {
+            font-size: 12px;
+            color: #909399;
+            text-transform: uppercase;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            padding-bottom: 5px;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .forgot-pass {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #cfcfcf;
+        }
+
+        .forgot-pass a {
+            color: #cfcfcf;
+        }
+
+        .submit {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .fb-btn {
+            border: 2px solid #d3dae9;
+            color: #8fa1c7;
+        }
+
+        .fb-btn span {
+            font-weight: bold;
+            color: #455a81;
+        }
+
+        .sign-in {
+            transition-timing-function: ease-out;
+        }
+
+        .content.s--signup .sign-in {
+            transition-timing-function: ease-in-out;
+            transition-duration: 0.6s;
+            -webkit-transform: translate3d(640px, 0, 0);
+            transform: translate3d(640px, 0, 0);
+        }
+
+        .sign-up {
+            -webkit-transform: translate3d(-900px, 0, 0);
+            transform: translate3d(-900px, 0, 0);
+        }
+
+        .content.s--signup .sign-up {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
 
         .header {
-            font-size: 38px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .btn {
-            text-align: center;
-            padding: 10px;
-            margin-top: 40px;
-            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
-            color: #fff;
-            border: 1px solid #b7b5b5;
-            width: 100%;
-            height: 40px;
+        .header .logo {
+            width: 62px;
+            height: 62px;
+            border-radius: 15px;
         }
 
-        .btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-            cursor: pointer; /* 鼠标悬停时改变鼠标样式为指针 */
+        .header .logo img {
+            width: 62px;
+            height: 62px;
+            border-radius: 15px;
+            background: linear-gradient(221.44deg, rgb(130, 169, 247) 0%, rgb(191, 210, 250) 100%);
+            box-shadow: -2px -4px 10px rgb(226, 234, 250), 2px 4px 10px rgb(219, 232, 255);
         }
 
-        .ent-dialog-item {
-            height: 36px;
-            border-bottom: 1px solid #dfdfdf;
-            line-height: 36px;
-            padding-left: 15px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            width: 225px;
-            cursor: default;
-        }
-
-        .ent-dialog-item:hover {
-            background-color: #cce5ff;
-        }
-
-        .footer {
-            margin-top: 10px;
-            text-align: center;
+        .header .label {
+            margin-top: 16px;
+            width: 81px;
+            height: 28px;
+            /** 文本1 */
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 27px;
+            color: rgba(30, 33, 33, 1);
+            text-align: left;
+            vertical-align: top;
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <div class="login-wrapper">
-        <div class="header">欢迎登录</div>
-        <div class="form-wrapper">
-            <div class="form-wrapper-div">
-                <label for="account">账号:</label>
-                <input type="text" id="account" name="account" placeholder="请输入账号"/>
+<div class="content">
+    <div class="form sign-in login">
+        <div class="header">
+            <div class="logo">
+                <img src="./ico/logo.png" alt="">
             </div>
-            <div class="form-wrapper-div">
-                <label for="password">密码:</label>
-                <input type="password" id="password" name="password" placeholder="请输入密码"/>
-            </div>
-            <button class="btn" onclick="login()">Login</button>
-            <div class="footer">
-                <span>没有账号？</span><a href="register.html">立即注册</a>
+            <div class="label">
+                <span>欢迎登录</span>
             </div>
         </div>
+        <label>
+            <span>账号</span>
+            <input class="account" type="text">
+        </label>
+        <label>
+            <span>密码</span>
+            <input class="password" type="password">
+        </label>
+        <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
+        <button type="button" class="submit" onclick="login()">登 录</button>
+
     </div>
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2>还未注册？</h2>
+                <p>立即注册，发现大量机会！</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>已有帐号？</h2>
+                <p>有帐号就登录吧，好久不见了！</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">注 册</span>
+                <span class="m--in">登 录</span>
+            </div>
+        </div>
+        <div class="form sign-up register">
+            <div class="header">
+                <div class="logo">
+                    <img src="./ico/logo.png" alt="">
+                </div>
+                <div class="label">
+                    <span>立即注册</span>
+                </div>
+            </div>
+            <label>
+                <span>账号</span>
+                <input type="text" class="account">
+            </label>
+            <label>
+                <span>密码</span>
+                <input class="password" type="password">
+            </label>
+            <label>
+                <span>确认密码</span>
+                <input class="repassword" type="password">
+            </label>
+            <label>
+                <span>昵称</span>
+                <input class="nickname" type="text">
+            </label>
+            <button type="button" class="submit" onclick="registerAndLogin()">注 册</button>
+
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center;">
 </div>
 <!-- 引入 jQuery 库 -->
 <script src="js/jquery/jquery-3.7.1.min.js"></script>
@@ -141,16 +416,13 @@
 
 <script src="js/custom-log.js"></script>
 <script src="js/base.js"></script>
-<script src="js/login.js"></script>
-
-<!--手机端查看浏览器控制台-->
-<script src="js/jsdelivr-eruda.js"></script>
 <script>
-    eruda.init();
-    // if (env !== 'prod') {
-    //     eruda.init();
-    // }
+    if (mobile) {
+        location.href = "../mobile/login.html";
+    }
+    document.querySelector('.img__btn').addEventListener('click', function () {
+        document.querySelector('.content').classList.toggle('s--signup')
+    })
 </script>
 </body>
 </html>
-

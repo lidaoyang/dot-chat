@@ -161,7 +161,7 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
         }
         List<Integer> friendIds = getFriendIds();
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.select(ChatUser::getId, ChatUser::getNickname, ChatUser::getAvatar,ChatUser::getSex);
+        queryWrapper.select(ChatUser::getId, ChatUser::getNickname, ChatUser::getAvatar,ChatUser::getSex,ChatUser::getSignature);
         queryWrapper.notIn(ChatUser::getId, friendIds);
         queryWrapper.and(wrapper -> {
             wrapper.like(ChatUser::getNickname, keyword);

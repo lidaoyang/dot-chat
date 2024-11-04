@@ -53,10 +53,10 @@ public class ChatFriendApplyDto implements Serializable {
 	private String avatar;
 
 	/**
-	 * 企业名称
+	 * 个性签名
 	 */
-	@Schema(description = "企业名称")
-	private String enterpriseName;
+	@Schema(description = "个性签名")
+	private String signature;
 
 	/**
 	 * 未读数

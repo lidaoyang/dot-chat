@@ -157,7 +157,7 @@ function gotoMy() {
                     <label>密码</label><span>****** <i class="my-edit" onclick="modifyPwdOpen()"></i></span>
                     </div>
                     <div class="more-info">
-                        <label>个性签名</label><span>{chatUser.signature}</span>
+                        <label>个性签名</label><span>${chatUser.signature ? chatUser.signature : '-'}</span>
                     </div>
                 </div>
                 <div class="my-bottom">
@@ -291,7 +291,7 @@ function modifyMyInfoOpen() {
     $("#modify-avatar").attr("src", chatUser.avatar);
     $("#modify-nick").text(chatUser.nickname).focus();
     $("#nickname").val(chatUser.nickname);
-    $("#modify-area").text(chatUser.enterpriseName);
+    $("#modify-area").text(chatUser.signature);
     if (chatUser.sex !== null && chatUser.sex !== undefined) {
         $("#gender").val(chatUser.sex);
     }
@@ -1499,7 +1499,7 @@ function getChatUserInfoDom(_this) {
                         <label>好友来源:</label><span>-</span>
                     </div>
                 </div>`;
-            bottomDom = `<span class="send-msg-btn" user-id="${userInfo.userId}" nickname="${userInfo.nickname}" avatar="${userInfo.avatar}" enterprise-name="${userInfo.enterpriseName}" onclick="addFriendApplyClick(this,'${FRIEND_SOURCE.GROUP}')">添加为好友</span>`;
+            bottomDom = `<span class="send-msg-btn" user-id="${userInfo.userId}" nickname="${userInfo.nickname}" avatar="${userInfo.avatar}" signature="${userInfo.signature}" onclick="addFriendApplyClick(this,'${FRIEND_SOURCE.GROUP}')">添加为好友</span>`;
         }
 
         let infoDom = `
@@ -1509,7 +1509,7 @@ function getChatUserInfoDom(_this) {
                      <div class="friend-name-info">
                         <span class="friend-name">${userInfo.remark ? userInfo.remark : userInfo.nickname}</span>
                         <span class="friend-remark">昵称: ${userInfo.nickname}</span>
-                        <span class="friend-remark">公司: ${userInfo.enterpriseName}</span>
+                        <span class="friend-remark">个性签名: ${userInfo.signature}</span>
                     </div>
                 </div>
                 ${sourceDom}
@@ -2917,11 +2917,11 @@ function agreeFriendApplyDialogOpen(_this) {
     let applyId = $(_this).attr("apply-id");
     let nickname = $(_this).attr("nickname");
     let avatar = $(_this).attr("avatar");
-    let enterpriseName = $(_this).attr("enterprise-name");
+    let signature = $(_this).attr("signature");
     $("#apply-id-agree").val(applyId).focus();
     $("#add-avatar-agree").attr("src", avatar);
     $("#add-nick-agree").text(nickname);
-    $("#add-area-agree").text(enterpriseName);
+    $("#add-area-agree").text(signature);
 
     $("#remark-agree").attr("placeholder", nickname);
     chatToUser = new ChatToUser('', $(_this).attr("to-user-id"), 0, nickname, avatar);
@@ -2949,7 +2949,7 @@ function getFriendApplyList() {
     let url = `${MSG_URL_PREFIX}/chat/friend/apply/list`;
     ajaxRequest(url, "get", {}, null, function (res) {
         if (res.code !== 200) {
-            logger.info("获取好友申请列表失败,chatId:", chatId, "res:", res);
+            logger.info("获取好友申请列表失败res:", res);
             myAlert('', res.message, "err");
             return;
         }
@@ -2977,7 +2977,7 @@ function getFriendApplyList() {
                         <div class="friend-title">
                             <span class="friend-name">${friendApply.nickname}</span>
                             <span class="apply-status ${statusObj.statusHideClass}">${statusObj.statusDesc}</span>
-                            <span class="agree-btn ${statusObj.agreeBtnClass}" apply-id="${friendApply.id}" nickname="${friendApply.nickname}" avatar="${friendApply.avatar}" enterprise-name="${friendApply.enterpriseName}" >接受</span>
+                            <span class="agree-btn ${statusObj.agreeBtnClass}" apply-id="${friendApply.id}" nickname="${friendApply.nickname}" avatar="${friendApply.avatar}" signature="${friendApply.signature}" >接受</span>
                         </div>
                         <div class="friend-bottom">
                             <span class="apply-msg">${friendApply.reason}</span>
@@ -3033,7 +3033,7 @@ function getFriendApplyInfo(applyId) {
                      <div class="friend-name-info">
                         <span class="friend-name">${applyInfo.remark ? applyInfo.remark : applyInfo.nickname}</span>
                         <span class="friend-remark">昵称: ${applyInfo.nickname}</span>
-                        <span class="friend-remark">公司: ${applyInfo.enterpriseName}</span>
+                        <span class="friend-remark">个性签名: ${applyInfo.signature}</span>
                     </div>
                 </div>
                 <div class="friend-apply-msg">
@@ -3057,7 +3057,7 @@ function getFriendApplyInfo(applyId) {
                 </div>
                 <div class="friend-bottom">
                     <span class="apply-status ${statusObj.statusHideClass}">${statusObj.statusDesc}</span>
-                    <span class="agree-btn ${statusObj.agreeBtnClass}" apply-id="${applyInfo.id}" to-user-id="${toUserId}" nickname="${applyInfo.nickname}" avatar="${applyInfo.avatar}" enterprise-name="${applyInfo.enterpriseName}" onclick="agreeFriendApplyDialogOpen(this)" >通过好友验证</span>
+                    <span class="agree-btn ${statusObj.agreeBtnClass}" apply-id="${applyInfo.id}" to-user-id="${toUserId}" nickname="${applyInfo.nickname}" avatar="${applyInfo.avatar}" signature="${applyInfo.signature}" onclick="agreeFriendApplyDialogOpen(this)" >通过好友验证</span>
                 </div>
             </div>
         `;
@@ -3263,7 +3263,7 @@ function getFriendInfo(friendId) {
                      <div class="friend-name-info">
                         <span class="friend-name">${friendInfo.remark ? friendInfo.remark : friendInfo.nickname}</span>
                         <span class="friend-remark">昵称: ${friendInfo.nickname}</span>
-                        <span class="friend-remark">公司: ${friendInfo.enterpriseName}</span>
+                        <span class="friend-remark">个性签名: ${friendInfo.signature}</span>
                     </div>
                 </div>
                 <div class="friend-source">
@@ -3572,9 +3572,9 @@ function addFriendSearchClick() {
                     </div>
                     <div class="search-center">
                         <p class="search-nick">${serUser.nickname}</p>
-                        <p class="search-city">${serUser.enterpriseName}</p>
+                        <p class="search-city">${serUser.signature}</p>
                     </div>
-                    <span class="apply-add" user-id="${serUser.id}" nickname="${serUser.nickname}" avatar="${serUser.avatar}" enterprise-name="${serUser.enterpriseName}" onclick="addFriendApplyClick(this,'${FRIEND_SOURCE.SEARCH}')">加好友</span>
+                    <span class="apply-add" user-id="${serUser.id}" nickname="${serUser.nickname}" avatar="${serUser.avatar}" signature="${serUser.signature}" onclick="addFriendApplyClick(this,'${FRIEND_SOURCE.SEARCH}')">加好友</span>
                 </li>
         `;
             searchUserListDom.append(userDom);
@@ -3589,10 +3589,10 @@ function addFriendApplyClick(_this, source) {
     let userId = $(_this).attr("user-id");
     let nickname = $(_this).attr("nickname");
     let avatar = $(_this).attr("avatar");
-    let enterpriseName = $(_this).attr("enterprise-name");
+    let signature = $(_this).attr("signature");
     $("#add-avatar").attr("src", avatar);
     $("#add-nick").text(nickname);
-    $("#add-area").text(enterpriseName);
+    $("#add-area").text(signature);
 
     $("#friend-id").val(userId).focus();
     $("#source").val(source);

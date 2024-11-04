@@ -371,7 +371,7 @@ function ajaxRequest(url, method, data, contentType, successFn) {
                 return;
             }
             if (res.code !== 200) {
-                logger.error("获取数据失败,data:", data, "res:", res);
+                logger.error("操作失败,data:", data, "res:", res);
             }
             successFn(res);
         },
@@ -560,7 +560,15 @@ function deleteUserCookie() {
     deleteCookie(EXPIRES_IN);
     deleteCookie(PREV_CHAT_ID_KEY);
     localStorage.clear();
-    location.href = "/login.html";
+    toLogin();
+}
+
+function toLogin() {
+    if (mobile) {
+        location.href = "../mobile/login.html";
+    } else {
+        location.href = "../login.html";
+    }
 }
 
 let autoRefreshTokenTimer = 0;
@@ -604,6 +612,82 @@ function saveTokenToCookie(data) {
     setCookie(TOKEN_KEY, data.token, data.expiresIn);
     setCookie(LAST_ACCESS_TIME_KEY, data.lastAccessedTime, data.expiresIn);
     setCookie(EXPIRES_IN, data.expiresIn, data.expiresIn);
+}
+
+/**
+ * 注册并登录
+ */
+function registerAndLogin() {
+    let account = $(".register .account").val();
+    let password = $(".register .password").val();
+    let repassword = $(".register .repassword").val();
+
+    if (account === "" || password === "") {
+        myAlert("", "请输入账号和密码", 'warn');
+        return;
+    }
+    let regExp = /^1[3-9]\d{9}$/;
+    if (!regExp.test(account)) {
+        myAlert("", "手机格式不正确", 'warn');
+        return;
+    }
+    if (password.length < 6 || password.length > 20) {
+        myAlert("", "密码长度不能小于6位或大于20位", 'warn');
+        return;
+    }
+    if (repassword === "") {
+        myAlert("", "请输入确认密码", 'warn');
+        return;
+    }
+    if (password !== repassword) {
+        myAlert("", "两次密码不一致", 'warn');
+        return;
+    }
+    let url = `${SYS_URL_PREFIX}/user/registerAndLogin`;
+    let data = {
+        account: account,
+        password: password,
+        nickname: $(".register .nickname").val()
+    };
+    ajaxSyncRequest(url, 'post', data, null, function (res) {
+        if (res.code !== 200) {
+            myAlert("注册登录失败", res.message, 'err');
+            return;
+        }
+        setCookie(TOKEN_KEY, res.data.token, res.data.expiresIn);
+        setCookie(LAST_ACCESS_TIME_KEY, res.data.lastAccessedTime, res.data.expiresIn);
+        //获取聊天用户信息
+        getChatUser();
+    });
+}
+
+/**
+ * 登录
+ */
+function login() {
+    let account = $(".login .account").val();
+    let password = $(".login .password").val();
+    if (account === "" || password === "") {
+        myAlert("", "请输入账号和密码", 'warn');
+        return;
+    }
+    let url = `${SYS_URL_PREFIX}/user/login`;
+    let data = JSON.stringify({
+        account: account,
+        password: password
+    });
+    ajaxSyncRequest(url, 'post', data, 'application/json', function (res) {
+        if (res.code !== 200) {
+            myAlert("登录失败", res.message, 'err');
+            return;
+        }
+        // 保存token
+        saveTokenToCookie(res.data);
+        // 自动刷新token
+        autoRefreshToken();
+        //获取聊天用户信息
+        getChatUser();
+    });
 }
 
 function getChatUser() {

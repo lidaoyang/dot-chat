@@ -146,7 +146,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         return userFriendList;
     }
 
-    private ChatGroup getNewChatGroup(List<ChatUserFriendResponse> userFriendList, ChatUserResponse chatUser, String nicknameStr) {
+    private ChatGroup getNewChatGroup(List<ChatUserFriendResponse> userFriendList, ChatUserResponse chatUser,
+                                      String nicknameStr) {
         List<String> avatarList = userFriendList.stream().map(ChatUserFriendResponse::getAvatar).collect(Collectors.toList());
         avatarList.add(chatUser.getAvatar());
         ChatGroup chatGroup = new ChatGroup();
@@ -158,17 +159,18 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         return chatGroup;
     }
 
-    private List<ChatGroupMember> getNewGroupMemberList(ChatUserResponse chatUser, List<ChatUserFriendResponse> userFriendList) {
+    private List<ChatGroupMember> getNewGroupMemberList(ChatUserResponse chatUser,
+                                                        List<ChatUserFriendResponse> userFriendList) {
         List<ChatGroupMember> groupMemberList = new ArrayList<>();
         ChatGroupMember groupMemberLeader = new ChatGroupMember();
         groupMemberLeader.setUserId(chatUser.getId());
         groupMemberLeader.setIsGroupLeader(true);
-        groupMemberLeader.setSource( GroupSourceEm.CREATE.name());
+        groupMemberLeader.setSource(GroupSourceEm.CREATE.name());
         groupMemberList.add(groupMemberLeader);
         userFriendList.forEach(friend -> {
             ChatGroupMember groupMember = new ChatGroupMember();
             groupMember.setUserId(friend.getFriendId());
-            groupMember.setSource( GroupSourceEm.INVITE.name());
+            groupMember.setSource(GroupSourceEm.INVITE.name());
             groupMemberList.add(groupMember);
         });
         return groupMemberList;
@@ -182,7 +184,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         }
     }
 
-    private void saveGroupMember(List<ChatGroupMember> groupMemberList, ChatGroup chatGroup, ChatUserResponse chatUser) {
+    private void saveGroupMember(List<ChatGroupMember> groupMemberList, ChatGroup chatGroup,
+                                 ChatUserResponse chatUser) {
         groupMemberList.forEach(member -> member.setGroupId(chatGroup.getId()));
         boolean saved1 = chatGroupMemberService.saveBatch(groupMemberList);
         if (!saved1) {
@@ -204,11 +207,10 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         InputStream headIs = MakeGroupHeadPicUtil.getCombinationOfhead(avatarList);
         String type = "chatgroup";
         String filename = CommUtil.getUlid() + ".png";
-        String uploadPath = "image/" + type + "/" + chatUserId + "/" + filename;
-        if (ossConfig.isLocal()){
-            String targetPath = videoConfig.getRootPath() + "/" + uploadPath;
-            log.info("文件流保存到本地,targetPath:{}", targetPath);
-            FileUtil.saveToFile(headIs, targetPath);
+        String uploadPath = videoConfig.getRootPath() + "/" + "image/" + type + "/" + chatUserId + "/" + filename;
+        if (ossConfig.isLocal()) {
+            log.info("文件流保存到本地,targetPath:{}", uploadPath);
+            FileUtil.saveToFile(headIs, uploadPath);
         } else {
             // 上传图片到oss
             OSSUtil.getInstance(ossConfig).upload(headIs, uploadPath);
@@ -307,7 +309,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         });
     }
 
-    private void updateGroupMemberCount(Integer groupId, List<Integer> userIds, ChatGroupInfoDto chatGroupInfo, String groupAvatar) {
+    private void updateGroupMemberCount(Integer groupId, List<Integer> userIds, ChatGroupInfoDto chatGroupInfo,
+                                        String groupAvatar) {
         LambdaUpdateWrapper<ChatGroup> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroup::getId, groupId)
                 .set(ChatGroup::getMemberCount, chatGroupInfo.getMemberCount() - userIds.size());
@@ -320,7 +323,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         }
     }
 
-    private void setManagersWhere(List<Integer> userIds, ChatGroupInfoDto chatGroupInfo, LambdaUpdateWrapper<ChatGroup> updateWrapper) {
+    private void setManagersWhere(List<Integer> userIds, ChatGroupInfoDto chatGroupInfo,
+                                  LambdaUpdateWrapper<ChatGroup> updateWrapper) {
         if (StringUtils.isNotBlank(chatGroupInfo.getManagers())) {
             String[] managers = StringUtils.split(chatGroupInfo.getManagers(), ",");
             ArrayList<String> managerList = CollUtil.toList(managers);
@@ -408,7 +412,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         return one != null;
     }
 
-    private Boolean addGroupMember(String source, List<Integer> userIds, ChatUserResponse chatUser, ChatGroupInfoDto chatGroupInfo) {
+    private Boolean addGroupMember(String source, List<Integer> userIds, ChatUserResponse chatUser,
+                                   ChatGroupInfoDto chatGroupInfo) {
         Integer groupId = chatGroupInfo.getId();
         List<ChatGroupMember> groupMemberList = getNewChatGroupMembers(groupId, source, chatUser.getId(), userIds);
         return transactionTemplate.execute(t -> {
@@ -458,7 +463,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         }
     }
 
-    private Boolean inviteInGroup(Integer groupId, List<Integer> userIds, GroupSourceEm source, ChatUserResponse chatUser, List<Integer> managerList) {
+    private Boolean inviteInGroup(Integer groupId, List<Integer> userIds, GroupSourceEm source,
+                                  ChatUserResponse chatUser, List<Integer> managerList) {
         if (existsGroupApply(groupId, userIds)) {
             log.error("已经申请入群,chatUserId:{},groupId:{}", chatUser.getId(), groupId);
             throw new ApiException(ExceptionCodeEm.DATA_ALREADY, "已经申请入群");
@@ -477,7 +483,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         });
     }
 
-    private ChatGroupApply getChatGroupApply(Integer groupId, List<Integer> userIds, GroupSourceEm source, Integer inviteUserId) {
+    private ChatGroupApply getChatGroupApply(Integer groupId, List<Integer> userIds, GroupSourceEm source,
+                                             Integer inviteUserId) {
         ChatGroupApply groupApply = new ChatGroupApply();
         groupApply.setGroupId(groupId);
         groupApply.setInviteUserId((source == GroupSourceEm.SEARCH || source == GroupSourceEm.CARD) ? null : inviteUserId);
@@ -497,7 +504,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         return one != null;
     }
 
-    private List<ChatGroupApplyUserRel> getNewChatGroupApplyUserRelList(ChatGroupApply groupApply, List<Integer> managerList) {
+    private List<ChatGroupApplyUserRel> getNewChatGroupApplyUserRelList(ChatGroupApply groupApply,
+                                                                        List<Integer> managerList) {
         List<ChatGroupApplyUserRel> groupApplyUserRelList = new ArrayList<>();
         managerList.forEach(managerId -> {
             ChatGroupApplyUserRel groupApplyUserRel = new ChatGroupApplyUserRel();
@@ -508,7 +516,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         return groupApplyUserRelList;
     }
 
-    private void saveChatGroupApplyRel(Integer groupId, List<ChatGroupApplyUserRel> groupApplyUserRelList, ChatUserResponse chatUser) {
+    private void saveChatGroupApplyRel(Integer groupId, List<ChatGroupApplyUserRel> groupApplyUserRelList,
+                                       ChatUserResponse chatUser) {
         boolean saved2 = chatGroupApplyUserRelService.saveBatch(groupApplyUserRelList);
         if (!saved2) {
             log.error("邀请进群失败,chatUserId:{},groupId:{},groupApplyUserRelList:{}", chatUser.getId(), groupId, groupApplyUserRelList);
@@ -528,7 +537,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         }
     }
 
-    private List<ChatGroupMember> getNewChatGroupMembers(Integer groupId, String source, Integer inviteUserId, List<Integer> userIds) {
+    private List<ChatGroupMember> getNewChatGroupMembers(Integer groupId, String source, Integer inviteUserId,
+                                                         List<Integer> userIds) {
         List<ChatGroupMember> groupMemberList = new ArrayList<>();
         userIds.forEach(userId -> {
             ChatGroupMember groupMember = new ChatGroupMember();
@@ -643,7 +653,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         });
     }
 
-    private void transferUpdateGroupManagers(Integer groupId, Integer userId, List<Integer> managerIds, ChatUserResponse chatUser) {
+    private void transferUpdateGroupManagers(Integer groupId, Integer userId, List<Integer> managerIds,
+                                             ChatUserResponse chatUser) {
         LambdaUpdateWrapper<ChatGroup> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroup::getId, groupId);
         updateWrapper.set(ChatGroup::getGroupLeaderId, userId);
@@ -701,7 +712,8 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         });
     }
 
-    private void updateGroupManagers(Integer groupId, Integer userId, List<Integer> managerIds, ChatUserResponse chatUser) {
+    private void updateGroupManagers(Integer groupId, Integer userId, List<Integer> managerIds,
+                                     ChatUserResponse chatUser) {
         managerIds.remove(userId);
         LambdaUpdateWrapper<ChatGroup> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(ChatGroup::getId, groupId);
