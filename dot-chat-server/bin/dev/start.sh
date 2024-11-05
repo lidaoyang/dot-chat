@@ -19,19 +19,19 @@ APP_NAME=$APP_PATH/dot-chat.jar
 LOG_FILE=$APP_PATH/logs/dot-chat-out.log
 
 #启动环境   # 如果需要配置数据和redis，请在 application-prod.yml中修改, 用jar命令修改即可
-APP_OPTION="-server -Xmx700m -Xms700m -Xmn256m -Xss128m -Dspring.profiles.active=dev"
+APP_OPTION="-server -256m -Xms256m -Xmn128m -Xss64m -Dspring.profiles.active=dev"
 
 #删除旧日志
 rm -rf $LOG_FILE
 
-echo "开始停止 JURU SaaS 项目进程"
+echo "开始停止 Dot-Chat 项目进程"
 #查询进程，并杀掉当前jar/java程序
 
 pid=`ps -ef|grep $APP_NAME | grep -v grep | awk '{print $2}'`
 if [ $pid ];then
   echo "pid: $pid"
   kill -9 $pid
-  echo "JURU SaaS 项目进程进程终止成功"
+  echo "Dot-Chat 项目进程进程终止成功"
 fi
 
 echo "替换旧版本jar包"
