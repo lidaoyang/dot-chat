@@ -36,7 +36,7 @@ public class TioUtil {
         SetWithLock<ChannelContext> contextSetWithLock = Tio.getByUserid(tioConfig, userId);
         if (contextSetWithLock == null) {
             isOnline = false;
-            log.error("接收用户处于离线状态,toUserId:{}", userId);
+            log.warn("接收用户处于离线状态,toUserId:{}", userId);
         }
         return isOnline;
     }
@@ -175,7 +175,7 @@ public class TioUtil {
     public static void removeAttribute(TioConfig tioConfig, String userId, String key) {
         SetWithLock<ChannelContext> channelContexts = Tio.getByUserid(tioConfig, userId);
         if (channelContexts == null) {
-            log.error("用户处于离线状态,userId:{}", userId);
+            log.warn("用户处于离线状态,userId:{}", userId);
             return;
         }
         channelContexts.getObj().stream().findFirst().ifPresent(channelContext -> {

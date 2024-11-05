@@ -684,7 +684,7 @@ function login() {
         // 保存token
         saveTokenToCookie(res.data);
         // 自动刷新token
-        autoRefreshToken();
+        // autoRefreshToken();
         //获取聊天用户信息
         getChatUser();
     });
@@ -700,10 +700,8 @@ function getChatUser() {
         chatUser = res.data;
         localStorage.setItem(CHAT_USER_KEY, JSON.stringify(res.data));
         if (mobile) {
-            logger.error("移动端登录");
             location.href = "/mobile/index.html";
         } else {
-            logger.error("PC端登录");
             location.href = "/index.html";
         }
     });

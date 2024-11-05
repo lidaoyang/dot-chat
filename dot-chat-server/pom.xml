@@ -6,7 +6,7 @@
     <artifactId>dot-chat-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dot-chat-server</name>
-    <description>点点星星聊天室服务</description>
+    <description>星星点点聊天室服务</description>
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

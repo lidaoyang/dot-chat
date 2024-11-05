@@ -121,7 +121,7 @@ springdoc:
   default-flat-param-object: true
   group-configs:
     - group: 'default'
-      display-name: '点点星星聊天室'
+      display-name: '星星点点聊天室'
       packages-to-scan:
         - com.dot.sys.user.controller
         - com.dot.msg.chat.controller
@@ -161,7 +161,7 @@ knife4j:
 
 swagger:
   home:
-    title: '点点星星接口文档'
+    title: '星星点点接口文档'
     description: '主要功能：聊天、消息推送、消息通知'
     version: '1.0.0'
     terms-of-service: 'https://www.dot.cn'

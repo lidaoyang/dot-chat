@@ -10,7 +10,7 @@ spring:
   #  数据库配置
   datasource:
     druid:
-      url: jdbc:mysql://${DB_HOST}:3306/shop_dev?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      url: jdbc:mysql://${DB_HOST}:3306/${MYSQL_DB_NAME}?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: ${MYSQL_USERNAME}
       password: ${MYSQL_PASSWORD}
@@ -114,7 +114,7 @@ springdoc:
   default-flat-param-object: true
   group-configs:
     - group: 'default'
-      display-name: '点点星星聊天室'
+      display-name: '星星点点聊天室'
       packages-to-scan:
         - com.dot.sys.user.controller
         - com.dot.msg.chat.controller
@@ -154,7 +154,7 @@ knife4j:
 
 swagger:
   home:
-    title: '点点星星接口文档'
+    title: '星星点点接口文档'
     description: '主要功能：聊天、消息推送、消息通知'
     version: '1.0.0'
     terms-of-service: 'https://www.dot.cn'
