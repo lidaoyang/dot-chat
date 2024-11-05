@@ -207,10 +207,11 @@ public class ChatGroupServiceImpl extends ServiceImpl<ChatGroupDao, ChatGroup> i
         InputStream headIs = MakeGroupHeadPicUtil.getCombinationOfhead(avatarList);
         String type = "chatgroup";
         String filename = CommUtil.getUlid() + ".png";
-        String uploadPath = videoConfig.getRootPath() + "/" + "image/" + type + "/" + chatUserId + "/" + filename;
+        String uploadPath = videoConfig.getRootContext() + "/" + "image/" + type + "/" + chatUserId + "/" + filename;
+        String localPath = videoConfig.getRootPath() + "/" + "image/" + type + "/" + chatUserId + "/" + filename;
         if (ossConfig.isLocal()) {
-            log.info("文件流保存到本地,targetPath:{}", uploadPath);
-            FileUtil.saveToFile(headIs, uploadPath);
+            log.info("文件流保存到本地,targetPath:{}", localPath);
+            FileUtil.saveToFile(headIs, localPath);
         } else {
             // 上传图片到oss
             OSSUtil.getInstance(ossConfig).upload(headIs, uploadPath);

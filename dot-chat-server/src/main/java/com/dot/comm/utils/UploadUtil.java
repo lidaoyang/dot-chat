@@ -72,34 +72,6 @@ public class UploadUtil {
 
 
     /**
-     * 根据文件的绝对路径创建一个文件对象.
-     *
-     * @return 返回创建的这个文件对象
-     * @author Mr.Zhang
-     * @since 2020-05-08
-     */
-    public static File createFile(String filePath) throws IOException {
-        // 获取文件的完整目录
-        String fileDir = FilenameUtils.getFullPath(filePath);
-        // 判断目录是否存在，不存在就创建一个目录
-        File file = new File(fileDir);
-        if (!file.isDirectory()) {
-            // 创建失败返回null
-            if (!file.mkdirs()) {
-                throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "文件目录[" + fileDir + "]创建失败...");
-            }
-        }
-        // 判断这个文件是否存在，不存在就创建
-        file = new File(filePath);
-        if (!file.exists()) {
-            if (!file.createNewFile()) {
-                throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "目标文件创建失败...");
-            }
-        }
-        return file;
-    }
-
-    /**
      * 判断文件扩展名是否合法
      *
      * @param extName 文件的后缀名
@@ -238,7 +210,7 @@ public class UploadUtil {
         // 创建目标文件的名称，规则请看destPath方法
         String destPath = getDestPath(newFileName);
         // 创建文件
-        File file = createFile(destPath);
+        File file = FileUtil.createFile(destPath);
         // 保存文件
         multipartFile.transferTo(file);
 

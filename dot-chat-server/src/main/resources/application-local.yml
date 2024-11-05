@@ -2,7 +2,7 @@ server:
   port: 8089
   ssl:
     #证书的路径
-    key-store: classpath:ssl/webrtc.keystore
+    key-store: classpath:ssl/dot.jks
     #证书密码
     key-store-password: 123456
     #秘钥库类型
@@ -178,16 +178,16 @@ tio:
     #如果你希望通过wss来访问(不通过nginx转发),到配置中开启,不过首先你得有SSL证书（证书必须和域名相匹配，否则可能访问不了ssl）
     ssl:
       enable: true
-      keystore: classpath:ssl/webrtc.keystore
+      keystore: classpath:ssl/dot.jks
       # file of truststore，如果以classpath:开头，则从classpath中查找，否则从文件路径中查找
-      truststore: classpath:ssl/webrtc.keystore
+      truststore: classpath:ssl/dot.jks
       # password for keystore
       pwd: 123456
 
 aliyun:
   oss:
     local: true
-    domain: https://172.16.85.134:8443
+    domain: https://dev.dot.cn:8443
 
 mat:
   upload:
@@ -218,4 +218,4 @@ chat:
   icon: static/ico/ju.png
   group:
     max-member-num: 500
-    qrcode-url: https://172.16.85.134:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://dev.dot.cn:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}

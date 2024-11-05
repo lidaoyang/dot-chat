@@ -13,7 +13,7 @@ switch (env) {
     case "dev":
         ws_protocol = 'wss';
         ws_port = "9326";//9326
-        HOST = "172.16.85.134";
+        HOST = "dev.dot.cn";
         BASE_URL = "https://" + HOST + ":8089/";
         break;
     case "test":
@@ -31,7 +31,7 @@ switch (env) {
     default:
         ws_protocol = 'wss';
         ws_port = "9326";
-        HOST = "172.16.85.134";
+        HOST = "dev.dot.cn";
         BASE_URL = "https://" + HOST + ":8089/";
 }
 // 定义常量对象

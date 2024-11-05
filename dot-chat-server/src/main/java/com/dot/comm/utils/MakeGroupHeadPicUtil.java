@@ -1,6 +1,7 @@
 package com.dot.comm.utils;
 
 
+import cn.hutool.core.lang.Validator;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,18 +32,16 @@ public class MakeGroupHeadPicUtil {
         // 添加测试图片
         String destPath = "/Users/daoyang/Desktop/";
         List<String> sourcePics = new ArrayList<>();
-        sourcePics.add("http://h.hiphotos.baidu.com/zhidao/pic/item/eac4b74543a9822628850ccc8c82b9014b90eb91.jpg");
-        sourcePics.add("http://h.hiphotos.baidu.com/zhidao/pic/item/3812b31bb051f81991b9d8dbdcb44aed2f73e787.jpg");
-        sourcePics.add("https://oss.pinmallzj.com/image/maintain/2023/01/06/Groupx2766-5xo4cxg2dgdf.png");
-        sourcePics.add("https://oss.pinmallzj.com/image/maintain/2023/01/06/Groupx2767-gkfyitdx79zm.png");
-        sourcePics.add("http://h.hiphotos.baidu.com/zhidao/pic/item/c8177f3e6709c93d0f5f00e79b3df8dcd1005474.jpg");
-        sourcePics.add("http://ww1.sinaimg.cn/crop.7.22.1192.1192.1024/5c6defebjw8epti0r9noaj20xc0y1n0x.jpg");
-        sourcePics.add("http://ww1.sinaimg.cn/crop.0.0.800.800.1024/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg");
-        sourcePics.add("http://ww2.sinaimg.cn/crop.0.0.1242.1242.1024/005EWUXPjw8eto7cdd42wj30yi0yiabz.jpg");
-        sourcePics.add("http://ww2.sinaimg.cn/crop.0.0.1080.1080.1024/d773ebfajw8eum57eobkwj20u00u075w.jpg");
+        // sourcePics.add("https://dev.dot.cn:8443/media/image/chat-msg/2024-11-04/聊天室logo-5XiIvrPWI2xV.png");
+        // sourcePics.add("https://dev.dot.cn:8443/media/image/chat-msg/2024-11-04/聊天logo-9hxvrhVjHzy5.png");
+        sourcePics.add("https://dev.dot.cn:8443/media/image/chat-msg/2024-11-04/聊天logo-9hxvrhVjHzy5.png");
+        sourcePics.add("https://dev.dot.cn:8443/media/image/chat-msg/2024-11-04/聊天室logo-5XiIvrPWI2xV.png");
+        sourcePics.add("https://dev.dot.cn:8443/media/image/chat-msg/2024-11-04/Snipaste_2024-08-21_10-27-44-lXVrwXGpq6nL.jpg");
+        // sourcePics.add("http://h.hiphotos.baidu.com/zhidao/pic/item/c8177f3e6709c93d0f5f00e79b3df8dcd1005474.jpg");
 
         // 注意 存储位置最后记得加“/”
-        MakeGroupHeadPicUtil.getCombinationOfhead(sourcePics);
+        InputStream inputStream = MakeGroupHeadPicUtil.getCombinationOfhead(sourcePics);
+        FileUtil.saveToFile(inputStream, destPath + "test.png");
     }
 
     /**
@@ -160,7 +159,10 @@ public class MakeGroupHeadPicUtil {
      */
     public static BufferedImage resize2(String picPath, Integer height, Integer width, boolean fill) {
         try {
-            BufferedImage imageBuff = null;
+            if (Validator.hasChinese(picPath)){
+                picPath = FileUtil.encodeChineseUrl(picPath);
+            }
+            BufferedImage imageBuff;
             if (picPath.indexOf("https://") == 0 || picPath.indexOf("http://") == 0) { // 简单判断是网络图片还是本地图片
                 imageBuff = ImageIO.read(new URL(picPath));
             } else {

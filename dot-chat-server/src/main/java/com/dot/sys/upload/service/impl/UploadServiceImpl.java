@@ -122,7 +122,7 @@ public class UploadServiceImpl implements UploadService {
     private void upload(MultipartFile multipart, boolean isAsync, UploadResponse response) {
         try {
             // 创建文件
-            File file = UploadUtil.createFile(response.getServerPath());
+            File file = FileUtil.createFile(response.getServerPath());
             // 保存文件到本地
             multipart.transferTo(file);
             // 本地不上传OSS
