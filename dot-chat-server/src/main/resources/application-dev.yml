@@ -10,10 +10,10 @@ spring:
   #  数据库配置
   datasource:
     druid:
-      url: jdbc:mysql://${DB_HOST}:3306/${MYSQL_DB_NAME}?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
+      url: jdbc:mysql://${DB_HOST:127.0.0.1}:3306/${MYSQL_DB_NAME:dot_chat}?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=PRC
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: ${MYSQL_USERNAME}
-      password: ${MYSQL_PASSWORD}
+      username: ${MYSQL_USERNAME:dot_chat}
+      password: ${MYSQL_PASSWORD:}
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
       # 初始化时建立物理连接的个数
@@ -79,8 +79,8 @@ spring:
 
   # redis配置
   redis:
-    password: ${REDIS_PASSWORD}
-    host: ${DB_HOST}
+    password: ${REDIS_PASSWORD:}
+    host: ${DB_HOST:127.0.0.1}
     port: 6379
     timeout: 30000 # 读取超时时间（毫秒）
     connect-timeout: 30000 #连接超时时间（毫秒）
@@ -207,7 +207,7 @@ mat:
 
 # 聊天配置
 chat:
-  icon: static/ico/ju.png
+  icon: static/ico/dot-logo.jpg
   group:
     max-member-num: 500
     qrcode-url: https://test-dot.chat.jrmall.cn/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}

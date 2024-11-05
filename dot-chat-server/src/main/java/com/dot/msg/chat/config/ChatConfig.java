@@ -12,7 +12,7 @@ import lombok.Data;
 public class ChatConfig {
 
     /**
-     * 聊天室图标
+     * 聊天室图标,生成群二维码用
      */
     private String icon;
 
