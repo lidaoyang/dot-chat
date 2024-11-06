@@ -2,7 +2,6 @@ package com.dot.msg.chat.tio.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.dot.comm.constants.CommConstant;
-import com.dot.comm.constants.TioConstant;
 import com.dot.comm.utils.RedisUtil;
 import com.dot.msg.chat.em.ChatTypeEm;
 import com.dot.msg.chat.model.ChatMsg;
@@ -26,6 +25,7 @@ import org.tio.websocket.common.WsSessionContext;
 import org.tio.websocket.server.WsTioServerListener;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 用户根据情况来完成该类的实现
@@ -138,7 +138,7 @@ public class JRWsTioServerListener extends WsTioServerListener {
             if (wsRequest.getBody() == null || wsRequest.getBody().length == 0) {
                 log.warn("消息内容为空");
                 String msg = "空";
-                wsRequest.setBody(msg.getBytes(TioConstant.CHARSET));
+                wsRequest.setBody(msg.getBytes(StandardCharsets.UTF_8));
             }
         }
         if (log.isDebugEnabled()) {

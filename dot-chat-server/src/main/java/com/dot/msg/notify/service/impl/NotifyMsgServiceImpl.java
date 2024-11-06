@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dot.comm.constants.TioConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.exception.ApiException;
@@ -42,6 +41,7 @@ import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -249,12 +249,12 @@ public class NotifyMsgServiceImpl extends ServiceImpl<NotifyMsgDao, NotifyMsg> i
             boolean online = TioUtil.isOnline(jrTioConfig.getTioConfig(), request.getToUserId().toString());
             if (online) {
                 TioMessage message = getTioMessage(request);
-                WsResponse meResponse = WsResponse.fromText(message.toString(), TioConstant.CHARSET);
+                WsResponse meResponse = WsResponse.fromText(message.toString(), StandardCharsets.UTF_8.name());
                 Tio.sendToUser(jrTioConfig.getTioConfig(), message.getToUserId().toString(), meResponse);
             }
         } else if (request.getNotifyType() == NotifyTypeEm.BIZ) {
             TioMessage message = getTioMessage(request);
-            WsResponse meResponse = WsResponse.fromText(message.toString(), TioConstant.CHARSET);
+            WsResponse meResponse = WsResponse.fromText(message.toString(), StandardCharsets.UTF_8.name());
             Tio.sendToBsId(jrTioConfig.getTioConfig(), request.getLinkid(), meResponse);
         }
     }

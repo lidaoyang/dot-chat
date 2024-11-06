@@ -99,7 +99,7 @@ public class CommBeanConfig {
      */
     public StringRedisTemplate prodRedisTemplate() {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
-        redisTemplate.setConnectionFactory(createJedisConnectionFactory(0, "47.98.210.198", 6379, "pinmai.123"));
+        redisTemplate.setConnectionFactory(createJedisConnectionFactory(0, "47.98.210.198", 6379, "3L6EBJreJshLe3jW"));
         setSerializer(redisTemplate);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;

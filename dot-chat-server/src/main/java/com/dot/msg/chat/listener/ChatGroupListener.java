@@ -1,7 +1,6 @@
 package com.dot.msg.chat.listener;
 
 import cn.hutool.core.date.DateUtil;
-import com.dot.comm.constants.TioConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.msg.chat.em.ChatTypeEm;
@@ -29,6 +28,7 @@ import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 群聊事件监听
@@ -136,7 +136,7 @@ public class ChatGroupListener {
 
     private void sendGroupMsg(ChatGroupCreateEvent event, ChatMsg chatMsg) {
         TioMessage message = getGroupCreateTioMessage(event, chatMsg);
-        WsResponse meResponse = WsResponse.fromText(message.toString(), TioConstant.CHARSET);
+        WsResponse meResponse = WsResponse.fromText(message.toString(), StandardCharsets.UTF_8.name());
         Tio.sendToGroup(jrTioConfig.getTioConfig(), event.getGroupId().toString(), meResponse);
     }
 

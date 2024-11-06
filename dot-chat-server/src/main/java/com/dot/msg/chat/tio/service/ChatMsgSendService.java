@@ -6,7 +6,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.dot.comm.constants.CommConstant;
-import com.dot.comm.constants.TioConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.utils.RedisUtil;
@@ -34,6 +33,7 @@ import org.tio.core.TioConfig;
 import org.tio.websocket.common.WsResponse;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -294,12 +294,12 @@ public class ChatMsgSendService {
     }
 
     public void sendToUser(TioConfig tioConfig, TioMessage message) {
-        WsResponse meResponse = WsResponse.fromText(message.toString(), TioConstant.CHARSET);
+        WsResponse meResponse = WsResponse.fromText(message.toString(), StandardCharsets.UTF_8.name());
         Tio.sendToUser(tioConfig, message.getToUserId().toString(), meResponse);
     }
 
     public void sendToGroup(TioConfig tioConfig, TioMessage message) {
-        WsResponse meResponse = WsResponse.fromText(message.toString(), TioConstant.CHARSET);
+        WsResponse meResponse = WsResponse.fromText(message.toString(), StandardCharsets.UTF_8.name());
         Tio.sendToGroup(tioConfig, message.getToUserId().toString(), meResponse);
     }
 }
