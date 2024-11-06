@@ -86,71 +86,11 @@ public class CommBeanConfig {
         return new RedisUtil(redisTemplate);
     }
 
-    @Bean(name = "prodRedisUtil")
+/*    @Bean(name = "prodRedisUtil")
     @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
     public RedisUtil prodRedisUtil() {
-        return new RedisUtil(prodRedisTemplate());
-    }
-
-    /**
-     * 创建生产环境redis连接, 只有在测试环境下才创建
-     *
-     * @return
-     */
-    public StringRedisTemplate prodRedisTemplate() {
-        StringRedisTemplate redisTemplate = new StringRedisTemplate();
-        redisTemplate.setConnectionFactory(createJedisConnectionFactory(0, "47.98.210.198", 6379, "3L6EBJreJshLe3jW"));
-        setSerializer(redisTemplate);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
-
-    /**
-     * 公共方法:创建redis连接工厂
-     */
-    public JedisConnectionFactory createJedisConnectionFactory(int dbIndex, String host, int port, String password) {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(host);
-        redisStandaloneConfiguration.setPort(port);
-        redisStandaloneConfiguration.setDatabase(dbIndex);
-        redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
-        JedisClientConfiguration.JedisPoolingClientConfigurationBuilder jpcb = (JedisClientConfiguration.JedisPoolingClientConfigurationBuilder) JedisClientConfiguration.builder();
-        jpcb.poolConfig(getPoolConfig())
-                .and().connectTimeout(Duration.ofMillis(30000));
-        JedisClientConfiguration jedisClientConfiguration = jpcb.build();
-        return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
-    }
-
-    /**
-     * 公共方法:设置连接池属性
-     */
-    public JedisPoolConfig getPoolConfig() {
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(10);
-        jedisPoolConfig.setMaxTotal(200);
-        jedisPoolConfig.setMaxWaitMillis(-1);
-        jedisPoolConfig.setTimeBetweenEvictionRunsMillis(-1);
-        jedisPoolConfig.setTestOnBorrow(true);
-        jedisPoolConfig.setTestWhileIdle(true);
-        return jedisPoolConfig;
-    }
-
-    /**
-     * 公共方法:设置RedisTemplate的序列化方式
-     */
-    public void setSerializer(StringRedisTemplate redisTemplate) {
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(stringSerializer);// key序列化
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);// value序列化
-        redisTemplate.setHashKeySerializer(stringSerializer);// Hash key序列化
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);// Hash value序列化
-        redisTemplate.afterPropertiesSet();
-    }
+        return new RedisUtil(new RedisTemplateProdConfig().getTemplate());
+    }*/
 
     @Bean
     public FilterRegistrationBean<LogMDCFilter> logFilterRegistration() {
