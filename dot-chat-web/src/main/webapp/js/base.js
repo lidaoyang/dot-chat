@@ -1,25 +1,25 @@
 let logger = new Logger('debug');
 
 let env = "dev";// dev:开发环境,test:测试环境,prod:生产环境
-if (location.host === "dot.chat.jrmall.cn") {
+/*if (location.host === "dot.chat.jrmall.cn") {
     env = "prod";
     logger = new Logger('info');
 } else if (location.host === "test-dot.chat.jrmall.cn") {
     env = "test";
-}
+}*/
 
 let HOST, BASE_URL, ws_protocol, ws_port; // ws 或 wss;
 switch (env) {
     case "dev":
         ws_protocol = 'wss';
         ws_port = "9326";//9326
-        HOST = "dev.dot.cn";
+        HOST = "dot-chat.jrmall.cn";
         BASE_URL = "https://" + HOST + ":8089/";
         break;
     case "test":
         ws_protocol = 'wss';
         ws_port = "443";
-        HOST = "test-chat.im.dot.cn";
+        HOST = "dot-chat.jrmall.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
     case "prod":
