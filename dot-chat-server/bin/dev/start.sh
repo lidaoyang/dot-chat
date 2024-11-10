@@ -8,7 +8,7 @@ JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 #接口项目站点路径（目录按照各自配置）
-APP_PATH=/home/app/
+APP_PATH=/home/app
 
 #jar包文件名称
 APP_NAME=$APP_PATH/dot-chat.jar
