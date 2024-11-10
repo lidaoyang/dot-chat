@@ -12,7 +12,7 @@ let HOST, BASE_URL, ws_protocol, ws_port; // ws 或 wss;
 switch (env) {
     case "dev":
         ws_protocol = 'wss';
-        ws_port = "9326";//9326
+        ws_port = "443";//9326
         HOST = "dot-chat.api.jrmall.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
