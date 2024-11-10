@@ -1,6 +1,6 @@
 
 #接口项目站点路径（目录按照各自配置）
-APP_PATH=/root/pinmai/dev
+APP_PATH=/homt/app
 
 #jar包文件名称
 APP_NAME=$APP_PATH/dot-chat.jar

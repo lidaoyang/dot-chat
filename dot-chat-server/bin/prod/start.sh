@@ -9,9 +9,9 @@ JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 #接口项目站点路径（目录按照各自配置）
-APP_PATH=/root/pinmai/prod
+APP_PATH=/root/dot/prod
 
-TMP_PATH=/root/pinmai/tmp/prod/dot-chat
+TMP_PATH=/root/dot/tmp/prod/dot-chat
 
 #jar包文件名称
 APP_NAME=$APP_PATH/dot-chat.jar

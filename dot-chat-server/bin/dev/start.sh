@@ -8,9 +8,7 @@ JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 #接口项目站点路径（目录按照各自配置）
-APP_PATH=/root/pinmai/dev
-
-TMP_PATH=/root/pinmai/tmp/dev/dot-chat
+APP_PATH=/home/app/
 
 #jar包文件名称
 APP_NAME=$APP_PATH/dot-chat.jar
@@ -19,7 +17,7 @@ APP_NAME=$APP_PATH/dot-chat.jar
 LOG_FILE=$APP_PATH/logs/dot-chat-out.log
 
 #启动环境   # 如果需要配置数据和redis，请在 application-prod.yml中修改, 用jar命令修改即可
-APP_OPTION="-server -256m -Xms256m -Xmn128m -Xss64m -Dspring.profiles.active=dev"
+APP_OPTION="-server -Xmx256m -Xms256m -Xmn128m -Xss64m -Dspring.profiles.active=dev"
 
 #删除旧日志
 rm -rf $LOG_FILE
@@ -33,10 +31,6 @@ if [ $pid ];then
   kill -9 $pid
   echo "Dot-Chat 项目进程进程终止成功"
 fi
-
-echo "替换旧版本jar包"
-/bin/cp  -rf $TMP_PATH/target/dot-chat.jar $APP_NAME
-
 
 sleep 2
 
@@ -54,7 +48,7 @@ if test -e $APP_NAME;then
   #通过检测日志来判断
   while [ -f $LOG_FILE ]
   do
-      success=`grep "Started MessageCenterApplication in " $LOG_FILE`
+      success=`grep "Started DotChatApplication in " $LOG_FILE`
       if [[ "$success" != "" ]]
       then
           echo "dot-chat Started Success"
