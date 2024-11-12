@@ -146,6 +146,9 @@ public class TokenManager {
      */
 
     public boolean checkToken(String token, String modelName) {
+        if(StringUtils.isBlank(token)){
+            return false;
+        }
         return redisUtil.exists(modelName + token);
     }
 
