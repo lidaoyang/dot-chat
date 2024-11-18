@@ -42,16 +42,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(excludePathPatterns);
 
         // 前端用户登录token
-        registry.addInterceptor(frontTokenInterceptor()).addPathPatterns("/api/sys/**")
+        registry.addInterceptor(frontTokenInterceptor()).addPathPatterns("/api/sys/**","/api/msg/**")
                 .excludePathPatterns(
                         "/api/sys/user/login",
                         "/api/sys/user/registerAndLogin"
                 )
                 .excludePathPatterns(excludePathPatterns);
 
-        // 前端用户登录token
-        registry.addInterceptor(frontTokenInterceptor()).addPathPatterns("/api/msg/**")
-                .excludePathPatterns(excludePathPatterns);
     }
 
     @Override
