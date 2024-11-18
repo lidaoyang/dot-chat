@@ -25,7 +25,7 @@ public class FrontTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = tokenManager.getTokenFormRequest(request);
         // token存在时，校验token
-        boolean result = tokenManager.checkToken(TokenConstant.TOKEN_USER_REDIS,token);
+        boolean result = tokenManager.checkToken(token, TokenConstant.TOKEN_USER_REDIS);
         if(!result){
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
