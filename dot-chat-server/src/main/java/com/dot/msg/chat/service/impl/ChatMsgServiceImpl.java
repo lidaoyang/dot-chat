@@ -37,6 +37,7 @@ import com.dot.msg.chat.tio.em.MsgTypeEm;
 import com.dot.msg.chat.tio.entiy.MessageCall;
 import com.dot.msg.chat.tio.entiy.TioMessage;
 import com.dot.msg.chat.tio.util.TioUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,7 +45,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.tio.core.ChannelContext;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;

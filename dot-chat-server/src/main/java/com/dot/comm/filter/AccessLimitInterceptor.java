@@ -6,14 +6,15 @@ import com.dot.comm.constants.TokenConstant;
 import com.dot.comm.entity.ResultBean;
 import com.dot.comm.utils.CommUtil;
 import com.dot.comm.utils.RedisUtil;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.N;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     
     @Resource
     private RedisUtil redisUtil;
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {

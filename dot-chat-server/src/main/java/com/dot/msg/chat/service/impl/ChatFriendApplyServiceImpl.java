@@ -40,13 +40,13 @@ import com.dot.msg.notify.em.NotifyTypeEm;
 import com.dot.msg.notify.request.NotifyMsgSendRequest;
 import com.dot.msg.notify.response.NotifyMsgResponse;
 import com.dot.msg.notify.service.NotifyMsgService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.tio.core.ChannelContext;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

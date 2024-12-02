@@ -4,13 +4,12 @@ import com.dot.msg.chat.tio.config.JRTioConfig;
 import com.dot.msg.chat.tio.handler.JRWsMsgHandler;
 import com.dot.msg.chat.tio.listener.JRIpStatListener;
 import com.dot.msg.chat.tio.listener.JRWsTioServerListener;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.tio.server.TioServerConfig;
 import org.tio.websocket.server.WsServerStarter;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 
 /**
  * 启动websocket服务

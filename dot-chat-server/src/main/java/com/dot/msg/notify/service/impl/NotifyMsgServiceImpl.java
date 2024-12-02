@@ -34,13 +34,13 @@ import com.dot.msg.notify.response.NotifyMsgContentResponse;
 import com.dot.msg.notify.response.NotifyMsgResponse;
 import com.dot.msg.notify.service.NotifyMsgService;
 import com.dot.msg.notify.service.NotifyMsgUserRelService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;

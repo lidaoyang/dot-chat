@@ -8,12 +8,12 @@ import com.dot.comm.entity.TokenModel;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.utils.RedisUtil;
 import com.dot.comm.utils.RequestUtil;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

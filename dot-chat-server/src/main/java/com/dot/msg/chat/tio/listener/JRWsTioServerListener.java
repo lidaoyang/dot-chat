@@ -13,6 +13,7 @@ import com.dot.msg.chat.tio.entiy.MessageCall;
 import com.dot.msg.chat.tio.entiy.TioMessage;
 import com.dot.msg.chat.tio.service.ChatMsgSendService;
 import com.dot.msg.chat.tio.util.TioUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,6 @@ import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsSessionContext;
 import org.tio.websocket.server.WsTioServerListener;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 /**

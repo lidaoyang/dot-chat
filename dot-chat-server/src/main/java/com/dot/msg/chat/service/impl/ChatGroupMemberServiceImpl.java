@@ -12,11 +12,11 @@ import com.dot.msg.chat.model.ChatGroupMember;
 import com.dot.msg.chat.model.ChatUser;
 import com.dot.msg.chat.service.ChatGroupMemberService;
 import com.dot.msg.chat.service.ChatUserService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

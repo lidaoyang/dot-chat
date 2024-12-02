@@ -31,6 +31,7 @@ import com.dot.msg.chat.response.ChatUserResponse;
 import com.dot.msg.chat.service.*;
 import com.dot.msg.chat.tio.util.TioUtil;
 import com.dot.sys.upload.config.UploadFileConfig;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,7 +39,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;

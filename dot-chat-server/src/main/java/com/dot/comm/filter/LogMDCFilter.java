@@ -2,11 +2,11 @@ package com.dot.comm.filter;
 
 import cn.hutool.core.util.IdUtil;
 import com.dot.comm.constants.CommConstant;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.logging.MDC;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**

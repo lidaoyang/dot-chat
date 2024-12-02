@@ -22,6 +22,7 @@ import com.dot.msg.chat.tio.service.ChatMsgSendService;
 import com.dot.msg.notify.dto.NotifyMsgInfoDto;
 import com.dot.msg.notify.em.NotifyBizEm;
 import com.dot.msg.notify.service.NotifyMsgService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,6 @@ import org.tio.http.common.HttpResponse;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 

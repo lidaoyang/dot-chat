@@ -13,10 +13,9 @@ import com.dot.msg.chat.service.ChatUserService;
 import com.dot.sys.user.request.LoginRequest;
 import com.dot.sys.user.response.LoginResponse;
 import com.dot.sys.user.service.UserService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 用户表服务接口实现

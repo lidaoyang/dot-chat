@@ -2,11 +2,11 @@ package com.dot.msg.chat.listener;
 
 import com.dot.msg.chat.listener.event.ChatMsgSendEvent;
 import com.dot.msg.chat.tio.service.ChatMsgSendService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import javax.annotation.Resource;
 
 /**
  * 群聊事件监听

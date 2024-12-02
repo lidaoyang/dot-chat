@@ -5,12 +5,12 @@ import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.PageFlippingTypeEm;
 import com.dot.msg.chat.tio.em.MsgTypeEm;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 

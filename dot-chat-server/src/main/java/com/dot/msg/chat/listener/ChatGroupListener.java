@@ -20,6 +20,7 @@ import com.dot.msg.chat.tio.util.TioUtil;
 import com.dot.msg.notify.em.NotifyTypeEm;
 import com.dot.msg.notify.request.NotifyMsgSendRequest;
 import com.dot.msg.notify.service.NotifyMsgService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 /**

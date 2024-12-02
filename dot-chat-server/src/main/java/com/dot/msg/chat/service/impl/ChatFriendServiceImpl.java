@@ -24,11 +24,11 @@ import com.dot.msg.chat.response.ChatUserFriendResponse;
 import com.dot.msg.chat.service.ChatFriendApplyUserRelService;
 import com.dot.msg.chat.service.ChatFriendService;
 import com.dot.msg.chat.service.ChatUserService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

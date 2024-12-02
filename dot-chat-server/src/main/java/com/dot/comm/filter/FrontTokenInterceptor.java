@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.dot.comm.constants.TokenConstant;
 import com.dot.comm.entity.ResultBean;
 import com.dot.comm.manager.TokenManager;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *  移动端管理端 token验证拦截器 使用前注意需要一个@Bean手动注解，否则注入无效
