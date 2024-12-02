@@ -31,21 +31,7 @@ APP_OPTION="-server -Xmx512m -Xms512m -Xmn256m -Xss128m -Dspring.profiles.active
 #删除旧日志
 rm -rf $LOG_FILE
 
-echo "开始停止 Dot-Chat 项目进程"
-#查询进程，并杀掉当前jar/java程序
-
-pid=`ps -ef|grep $APP_NAME | grep -v grep | awk '{print $2}'`
-if [ $pid ];then
-  echo "pid: $pid"
-  kill -9 $pid
-  echo "Dot-Chat 项目进程进程终止成功"
-fi
-
-echo "替换旧版本jar包"
-/bin/cp  -rf $APP_NAME $APP_NAME.bak
-
-/bin/cp  -rf $TMP_PATH/target/dot-chat.jar $APP_NAME
-
+sh ./stop.sh
 
 
 sleep 2
@@ -75,7 +61,7 @@ if test -e $APP_NAME;then
       fi
 
 #      echo "开始检测启动失败标记"
-      fail=`grep "Application run failed" $LOG_FILE`
+      fail=`grep "APPLICATION FAILED TO START"|grep "Application run failed" $LOG_FILE`
       if [[ "$fail" != "" ]]
       then
           echo "项目启动失败"

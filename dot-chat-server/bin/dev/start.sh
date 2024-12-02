@@ -25,12 +25,8 @@ rm -rf $LOG_FILE
 echo "开始停止 Dot-Chat 项目进程"
 #查询进程，并杀掉当前jar/java程序
 
-pid=`ps -ef|grep $APP_NAME | grep -v grep | awk '{print $2}'`
-if [ $pid ];then
-  echo "pid: $pid"
-  kill -9 $pid
-  echo "Dot-Chat 项目进程进程终止成功"
-fi
+#停止进程
+sh ./stop.sh
 
 sleep 2
 
@@ -59,7 +55,7 @@ if test -e $APP_NAME;then
       fi
 
 #      echo "开始检测启动失败标记"
-      fail=`grep "Application run failed" $LOG_FILE`
+      fail=`grep "APPLICATION FAILED TO START"|grep "Application run failed" $LOG_FILE`
       if [[ "$fail" != "" ]]
       then
           echo "项目启动失败"
