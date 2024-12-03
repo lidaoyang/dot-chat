@@ -1,9 +1,10 @@
 
-#接口项目站点路径（目录按照各自配置）
-APP_PATH=/root/dot
+cd /home/app || exit
+
+echo "当前目录："$PWD
 
 #jar包文件名称
-APP_NAME=$APP_PATH/dot-chat.jar
+APP_NAME=./dot-chat.jar
 
 echo "开始停止 Dot-Chat 项目进程"
 #查询进程，并杀掉当前jar/java程序

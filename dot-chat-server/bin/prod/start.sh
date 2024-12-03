@@ -8,18 +8,17 @@ echo "开始时间："$startTime
 JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
-#接口项目站点路径（目录按照各自配置）
-APP_PATH=/root/dot/prod
+cd /home/app || exit
 
-TMP_PATH=/root/dot/tmp/prod/dot-chat
+echo "当前目录："$PWD
 
 #jar包文件名称
-APP_NAME=$APP_PATH/dot-chat.jar
+APP_NAME=./dot-chat.jar
 
 #日志文件名称
-LOG_FILE=$APP_PATH/logs/dot-chat-out.log
+LOG_FILE=./logs/dot-chat-out.log
 
-LOG_FILE_BAK=$APP_PATH/logs/backup/dot-chat-out.log.bak.$time
+LOG_FILE_BAK=./logs/backup/dot-chat-out.log.bak.$time
 
 #启动环境   # 如果需要配置数据和redis，请在 application-prod.yml中修改, 用jar命令修改即可
 APP_OPTION="-server -Xmx512m -Xms512m -Xmn256m -Xss128m -Dspring.profiles.active=prod"
