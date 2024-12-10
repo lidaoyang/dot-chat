@@ -15,6 +15,8 @@ echo "当前目录："$PWD
 #jar包文件名称
 APP_NAME=./dot-chat.jar
 
+#创建日志目录
+mkdir -p logs
 #日志文件名称
 LOG_FILE=./logs/dot-chat-out.log
 
@@ -23,6 +25,9 @@ APP_OPTION="-server -Xmx256m -Xms256m -Xmn128m -Xss64m -Dspring.profiles.active=
 
 #删除旧日志
 rm -rf $LOG_FILE
+
+# 创建日志文件
+touch $LOG_FILE
 
 echo "开始停止 Dot-Chat 项目进程"
 #查询进程，并杀掉当前jar/java程序
