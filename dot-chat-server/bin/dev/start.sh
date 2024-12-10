@@ -30,8 +30,6 @@ rm -rf $LOG_FILE
 touch $LOG_FILE
 
 echo "开始停止 Dot-Chat 项目进程"
-#查询进程，并杀掉当前jar/java程序
-
 #停止进程
 sh ./stop.sh
 
