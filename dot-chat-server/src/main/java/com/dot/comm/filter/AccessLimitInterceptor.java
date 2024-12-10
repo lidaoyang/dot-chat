@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.N;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -25,34 +24,34 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class AccessLimitInterceptor implements HandlerInterceptor {
-    
+
     @Resource
     private RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        //判断请求是否属于方法的请求
+        // 判断请求是否属于方法的请求
         if (handler instanceof HandlerMethod method) {
-            //默认1秒的访问最大次数为6次
+            // 默认1秒的访问最大次数为6次
             long seconds = 1;
             int maxCount = 6;
-            //获取方法中的注解,看是否有该注解
+            // 获取方法中的注解,看是否有该注解
             AccessLimit accessLimit = method.getMethodAnnotation(AccessLimit.class);
             if (accessLimit != null) {
                 seconds = accessLimit.seconds();
                 maxCount = accessLimit.maxCount();
             }
-            //多缓存5秒
+            // 多缓存5秒
             seconds = seconds + 5;
             String key = getKey(request);
-            
-            //从redis中获取用户访问的次数
+
+            // 从redis中获取用户访问的次数
             String strVal = redisUtil.get(key);
             long nowTime = System.currentTimeMillis();
             if (StringUtils.isBlank(strVal)) {
-                log.info("第一次访问，设置访问次数1，key:{}", key);
-                //第一次访问 设置访问次数1  seconds秒释放
+                log.info("第一次访问，key:{}", key);
+                // 第一次访问 设置访问次数1  seconds秒释放
                 String val = nowTime + ":" + 1;
                 redisUtil.set(key, val, seconds, TimeUnit.SECONDS);
             } else {
@@ -60,9 +59,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                 long time = Long.parseLong(vals[0]);
                 int count = Integer.parseInt(vals[1]);
                 if (time == 0) {
-                    log.warn("访问次数已达上限,暂停访问15秒,key:{},count:{}", key, count);
-                    ResultBean<Object> result = ResultBean.failed("访问次数已达上限！请稍后再访问");
-                    render(response, result);
+                    accessToLimitedRenderResponse(response, key, count);
                     return false;
                 }
                 if ((nowTime - time) > (seconds - 5) * 1000) {
@@ -72,27 +69,31 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                     String val = time + ":" + count;
                     redisUtil.set(key, val, seconds, TimeUnit.SECONDS);
                 } else {
-                    log.warn("访问次数已达上限,暂停访问15秒,key:{},count:{}", key, count);
-                    //超出访问次数,超出接口时间段内允许访问的次数，直接返回错误信息,同时设置过期时间 15s自动剔除
+                    // 超出访问次数,超出接口时间段内允许访问的次数，直接返回错误信息,同时设置过期时间 15s自动剔除
                     String val = "0:" + count;
                     redisUtil.set(key, val, 15L, TimeUnit.SECONDS);
-                    ResultBean<Object> result = ResultBean.failed("访问次数已达上限！请稍后再访问");
-                    render(response, result);
+                    accessToLimitedRenderResponse(response, key, count);
                     return false;
                 }
             }
         }
-        
+
         return true;
     }
-    
+
+    private void accessToLimitedRenderResponse(HttpServletResponse response, String key, int count) throws Exception {
+        log.warn("访问次数已达上限,暂停访问15秒,key:{},count:{}", key, count);
+        ResultBean<Object> result = ResultBean.failed("访问次数已达上限！请稍后再访问");
+        render(response, result);
+    }
+
     private String getKey(HttpServletRequest request) {
         StringBuilder sbKey = new StringBuilder("ACCESS:");
         String ip = CommUtil.getClientIp(request);
         sbKey.append(ip).append(":");
         String url = request.getRequestURI();
         String referer = request.getHeader("Referer");
-        if (StringUtils.isNotBlank(referer) && referer.startsWith("https://servicewechat.com/")) {//小程序访问
+        if (StringUtils.isNotBlank(referer) && referer.startsWith("https://servicewechat.com/")) {// 小程序访问
             String appID = request.getHeader("AppID");
             sbKey.append(appID);
         } else {
@@ -110,7 +111,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         sbKey.append(url);
         return sbKey.toString();
     }
-    
+
     private void render(HttpServletResponse response, ResultBean<Object> result) throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
