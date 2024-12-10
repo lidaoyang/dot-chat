@@ -48,7 +48,7 @@ public class LoginUsername implements Serializable {
      * @return 合并用户名
      */
     public String mergeUsername() {
-        return uid + SPLIT_CHAR + account + SPLIT_CHAR + SPLIT_CHAR + nickname;
+        return uid + SPLIT_CHAR + account + SPLIT_CHAR + nickname;
     }
 
     public static LoginUsername splitUsername(String username) {

@@ -21,7 +21,6 @@
         <knife4j.version>4.5.0</knife4j.version>
         <guava.version>33.3.1-jre</guava.version>
         <hutool.version>5.8.32</hutool.version>
-        <redis-client.version>3.10.0</redis-client.version>
         <ulid.version>5.2.3</ulid.version>
         <google.version>3.5.3</google.version>
         <javacv.version>1.5.9</javacv.version>
@@ -57,10 +56,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--  spring boot redis 需要commons-pool连接池依赖,默认没有引入  -->
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${redis-client.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
         <!--代码自动生成工具-->
         <dependency>

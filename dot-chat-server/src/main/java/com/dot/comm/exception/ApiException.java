@@ -20,7 +20,7 @@ public class ApiException extends RuntimeException {
     }
 
     public ApiException(ExceptionCodeEm codeEm, String errMsg) {
-        super(codeEm.getMessage());
+        super(errMsg);
         this.errCode = codeEm.getCode();
         this.errMsg = errMsg;
     }
