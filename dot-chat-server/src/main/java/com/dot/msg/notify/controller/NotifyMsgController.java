@@ -37,7 +37,7 @@ public class NotifyMsgController {
     @Operation(summary = "通知信息列表", description = "获取当前登录用户的通知信息列表(企业或供应商通知信息)")
     @GetMapping(value = "/notifylist")
     @Parameter(name = "limit", description = "一次最多加载条数,默认50")
-    public ResultBean<List<EntNotifyMsgResponse>> getNotifyMsgNotifyList(@RequestParam(required = false, defaultValue = "50") Integer limit) {
+    public ResultBean<List<EntNotifyMsgResponse>> getNotifyMsgNotifyList(@RequestParam(name = "limit", required = false, defaultValue = "50") Integer limit) {
         return ResultBean.success(notifyMsgService.getNotifyMsgNotifyList(limit));
     }
 
@@ -58,7 +58,7 @@ public class NotifyMsgController {
     @Operation(summary = "更新已读")
     @PostMapping(value = "/updateToRead")
     @Parameter(name = "id", description = "通知信息ID", required = true)
-    public ResultBean<Boolean> updateIsRead(@RequestParam @NotNull(message = "通知信息ID不能为空") Integer id) {
+    public ResultBean<Boolean> updateIsRead(@RequestParam("id") @NotNull(message = "通知信息ID不能为空") Integer id) {
         return ResultBean.success(notifyMsgService.updateIsRead(id));
     }
 

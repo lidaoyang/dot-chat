@@ -7,6 +7,9 @@ import com.dot.sys.upload.response.UploadResponse;
 import com.dot.sys.upload.service.UploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
@@ -33,47 +36,74 @@ public class UploadController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个图片文件上传(同步上传)")
     @PostMapping("/image")
-    @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
-    public ResultBean<UploadResponse> uploadImage(MultipartFile image, @RequestParam(value = "model") @NotBlank(message = "模块不能为空") String model) {
+    @Parameters({
+            @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+                    schema = @Schema(name = "file", format = "binary")),
+            @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
+    })
+    public ResultBean<UploadResponse> uploadImage(@RequestParam("image") MultipartFile image,
+                                                  @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
         return ResultBean.success(uploadService.uploadImage(image, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个图片文件上传(异步上传)")
     @PostMapping("/async/image")
-    @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
-    public ResultBean<UploadResponse> uploadImageAsync(MultipartFile image, @RequestParam(value = "model") @NotBlank(message = "模块不能为空") String model) {
+    @Parameters({
+            @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+                    schema = @Schema(name = "file", format = "binary")),
+            @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
+    })
+    public ResultBean<UploadResponse> uploadImageAsync(@RequestParam("image")MultipartFile image,
+                                                       @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
         return ResultBean.success(uploadService.uploadImageAsync(image, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个图片文件上传(同步上传)", description = "返回文件服务器地址")
     @PostMapping("/img")
-    public String uploadImageToStr(MultipartFile image) {
+    @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+            schema = @Schema(name = "file", format = "binary"))
+    public String uploadImageToStr(@RequestParam("image") MultipartFile image) {
         return uploadService.uploadImage(image, "message").getUploadPath();
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个文件上传(同步上传)")
     @PostMapping("/file")
-    @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
-    public ResultBean<UploadResponse> uploadFile(MultipartFile file, @RequestParam(value = "model") @NotBlank(message = "模块不能为空") String model) {
+    @Parameters({
+            @Parameter(name = "file", description = "文件", in = ParameterIn.DEFAULT, required = true,
+                    schema = @Schema(name = "file", format = "binary")),
+            @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
+    })
+    public ResultBean<UploadResponse> uploadFile(@RequestParam("file") MultipartFile file,
+                                                 @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
         return ResultBean.success(uploadService.uploadFile(file, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个文件上传(异步上传)")
     @PostMapping("/async/file")
-    @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
-    public ResultBean<UploadResponse> uploadFileAsync(MultipartFile file, @RequestParam(value = "model") @NotBlank(message = "模块不能为空") String model) {
+    @Parameters({
+            @Parameter(name = "file", description = "文件", in = ParameterIn.DEFAULT, required = true,
+                    schema = @Schema(name = "file", format = "binary")),
+            @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
+    })
+    public ResultBean<UploadResponse> uploadFileAsync(@RequestParam("file") MultipartFile file,
+                                                      @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
         return ResultBean.success(uploadService.uploadFileAsync(file, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "上传视频文件(异步上传)")
     @PostMapping("/async/video")
-    @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
-    public ResultBean<UploadResponse> uploadVideoAsync(MultipartFile file, @RequestParam(value = "model") @NotBlank(message = "模块不能为空") String model) {
+    @Parameters({
+            @Parameter(name = "file", description = "文件", in = ParameterIn.DEFAULT, required = true,
+                    schema = @Schema(name = "file", format = "binary")),
+            @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
+    })
+    public ResultBean<UploadResponse> uploadVideoAsync(@RequestParam("file") MultipartFile file,
+                                                       @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
         return ResultBean.success(uploadService.uploadVideoAsync(file, model));
     }
 

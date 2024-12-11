@@ -39,7 +39,7 @@ public class ChatFriendController {
     @Operation(summary = "获取好友列表")
     @GetMapping(value = "/list")
     @Parameter(name = "keywords", description = "关键词搜索(ID,nickname)")
-    public ResultBean<List<ChatUserFriendResponse>> getChatUserFriendList(@RequestParam(required = false) String keywords) {
+    public ResultBean<List<ChatUserFriendResponse>> getChatUserFriendList(@RequestParam(name = "keywords", required = false) String keywords) {
         return ResultBean.success(chatFriendService.getChatUserFriendList(keywords));
     }
 
@@ -54,8 +54,8 @@ public class ChatFriendController {
             @Parameter(name = "filterGroupId", description = "过滤群组ID"),
             @Parameter(name = "keywords", description = "关键词搜索(ID,nickname)")
     })
-    public ResultBean<List<ChatUserFriendResponse>> getChatUserFriendList(@RequestParam(required = false) Integer filterGroupId,
-                                                                          @RequestParam(required = false) String keywords) {
+    public ResultBean<List<ChatUserFriendResponse>> getChatUserFriendList(@RequestParam(name = "filterGroupId", required = false) Integer filterGroupId,
+                                                                          @RequestParam(name = "keywords", required = false) String keywords) {
         return ResultBean.success(chatFriendService.getChatUserFriendList(filterGroupId, keywords));
     }
 
@@ -66,7 +66,7 @@ public class ChatFriendController {
     @Operation(summary = "获取好友详情")
     @GetMapping(value = "/info")
     @Parameter(name = "friendId", description = "好友ID", required = true)
-    public ResultBean<ChatUserFriendInfoResponse> getChatUserFriendInfo(@RequestParam @NotNull(message = "好友ID不能为空") Integer friendId) {
+    public ResultBean<ChatUserFriendInfoResponse> getChatUserFriendInfo(@RequestParam("friendId") @NotNull(message = "好友ID不能为空") Integer friendId) {
         return ResultBean.success(chatFriendService.getChatUserFriendInfo(friendId));
     }
 
@@ -80,8 +80,8 @@ public class ChatFriendController {
             @Parameter(name = "friendId", description = "好友ID", required = true),
             @Parameter(name = "remark", description = "好友备注")
     })
-    public ResultBean<String> modifyFriendRemark(@RequestParam @NotNull(message = "好友ID不能为空") Integer friendId,
-                                                 @RequestParam(required = false) String remark) {
+    public ResultBean<String> modifyFriendRemark(@RequestParam("friendId") @NotNull(message = "好友ID不能为空") Integer friendId,
+                                                 @RequestParam(name = "remark", required = false) String remark) {
         return ResultBean.success(chatFriendService.modifyFriendRemark(friendId, remark), "修改成功");
     }
 }

@@ -50,7 +50,7 @@ public class ChatUserController {
     @Operation(summary = "搜索聊天用户", description = "搜索添加好友时使用,不包含好友")
     @GetMapping(value = "/getSearchList")
     @Parameter(name = "keyword", description = "关键词", required = true)
-    public ResultBean<List<ChatUserSearchResponse>> getSearchChatUserList(@RequestParam @NotNull(message = "关键词不能为空") String keyword) {
+    public ResultBean<List<ChatUserSearchResponse>> getSearchChatUserList(@RequestParam("keyword") @NotNull(message = "关键词不能为空") String keyword) {
         return ResultBean.success(chatUserService.getSearchChatUserList(keyword));
     }
 
@@ -61,7 +61,7 @@ public class ChatUserController {
     @Operation(summary = "获取用户详情")
     @GetMapping(value = "/info")
     @Parameter(name = "userId", description = "用户ID", required = true)
-    public ResultBean<ChatUserInfoResponse> getChatUserFriendInfo(@RequestParam @NotNull(message = "用户ID不能为空") Integer userId) {
+    public ResultBean<ChatUserInfoResponse> getChatUserFriendInfo(@RequestParam("userId") @NotNull(message = "用户ID不能为空") Integer userId) {
         return ResultBean.success(chatUserService.getChatUserInfo(userId));
     }
 
@@ -80,9 +80,9 @@ public class ChatUserController {
             @Parameter(name = "sex", description = "性别(0:保密,1:男,2:女)"),
             @Parameter(name = "signature", description = "个性签名")
     })
-    public ResultBean<Boolean> updateNickname(@RequestParam(required = false) String nickname,
-                                              @RequestParam(required = false) Integer sex,
-                                              @RequestParam(required = false) String signature) {
+    public ResultBean<Boolean> updateNickname(@RequestParam(name = "nickname", required = false) String nickname,
+                                              @RequestParam(name = "sex", required = false) Integer sex,
+                                              @RequestParam(name = "signature", required = false) String signature) {
         return ResultBean.result(chatUserService.updateNickname(nickname, sex,signature));
     }
 

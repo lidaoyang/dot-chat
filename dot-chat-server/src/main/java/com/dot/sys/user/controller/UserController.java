@@ -70,8 +70,8 @@ public class UserController {
             @Parameter(name = "newPwd", description = "新密码(长度为6-20)", required = true)
     })
     public ResultBean<Boolean> updatePassword(
-                                              @RequestParam @NotBlank(message = "原密码不能为空") String oldPwd,
-                                              @RequestParam @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 20, message = "新密码长度为6-20位") String newPwd) {
+                                              @RequestParam("oldPwd") @NotBlank(message = "原密码不能为空") String oldPwd,
+                                              @RequestParam("newPwd") @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 20, message = "新密码长度为6-20位") String newPwd) {
         return ResultBean.result(userService.updatePassword(oldPwd, newPwd));
     }
 
@@ -84,9 +84,9 @@ public class UserController {
             @Parameter(name = "nickname", description = "昵称(最大长度32位)")
     })
     public ResultBean<LoginResponse> register(
-            @RequestParam @NotBlank(message = "手机号不能为空") @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式错误") String account,
-            @RequestParam @NotBlank(message = "密码不能为空") @Length(min = 6, max = 20, message = "密码长度为6-20位") String password,
-            @RequestParam(required = false) @Length(max = 32, message = "昵称长度不能超过32位") String nickname) {
+            @RequestParam("account") @NotBlank(message = "手机号不能为空") @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式错误") String account,
+            @RequestParam("password") @NotBlank(message = "密码不能为空") @Length(min = 6, max = 20, message = "密码长度为6-20位") String password,
+            @RequestParam(name = "nickname", required = false) @Length(max = 32, message = "昵称长度不能超过32位") String nickname) {
         return ResultBean.success(userService.registerAndLogin(account, password, nickname));
     }
 }

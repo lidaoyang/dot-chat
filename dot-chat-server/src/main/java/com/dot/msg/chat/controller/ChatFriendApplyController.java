@@ -51,7 +51,7 @@ public class ChatFriendApplyController {
     @Operation(summary = "获取好友申请详情")
     @GetMapping(value = "/info")
     @Parameter(name = "applyId", description = "申请ID", required = true)
-    public ResultBean<ChatFriendApplyInfoResponse> getChatFriendApplyInfo(@RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
+    public ResultBean<ChatFriendApplyInfoResponse> getChatFriendApplyInfo(@RequestParam("applyId") @NotNull(message = "申请ID不能为空") Integer applyId) {
         return ResultBean.success(chatFriendApplyService.getChatFriendApplyInfo(applyId));
     }
 
@@ -92,7 +92,7 @@ public class ChatFriendApplyController {
     @Operation(summary = "删除好友申请")
     @PostMapping(value = "/delete")
     @Parameter(name = "applyId", description = "申请ID", required = true)
-    public ResultBean<Boolean> deleteFriendApply(@RequestParam @NotNull(message = "申请ID不能为空") Integer applyId) {
+    public ResultBean<Boolean> deleteFriendApply(@RequestParam("applyId") @NotNull(message = "申请ID不能为空") Integer applyId) {
         return ResultBean.success(chatFriendApplyService.deleteFriendApply(applyId));
     }
 

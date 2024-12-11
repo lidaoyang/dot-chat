@@ -70,7 +70,7 @@ public class ChatRoomController {
     @Operation(summary = "去聊天室", description = "从好友列表去聊天室")
     @GetMapping(value = "/gotoSendMsg")
     @Parameter(name = "friendId", description = "好友ID", required = true)
-    public ResultBean<String> gotoSendMsg(@RequestParam @NotNull(message = "好友ID不能为空") Integer friendId) {
+    public ResultBean<String> gotoSendMsg(@RequestParam("friendId") @NotNull(message = "好友ID不能为空") Integer friendId) {
         return ResultBean.success(chatRoomService.gotoSendMsg(friendId), "成功");
     }
 
@@ -81,7 +81,7 @@ public class ChatRoomController {
     @Operation(summary = "获取聊天室信息详情")
     @GetMapping(value = "/getChatRoomMsgInfo")
     @Parameter(name = "chatId", description = "聊天室ID", required = true)
-    public ResultBean<ChatRoomMsgInfoResponse> getChatRoomMsgInfo(@RequestParam @NotBlank(message = "聊天室ID不能为空") String chatId) {
+    public ResultBean<ChatRoomMsgInfoResponse> getChatRoomMsgInfo(@RequestParam("chatId") @NotBlank(message = "聊天室ID不能为空") String chatId) {
         return ResultBean.success(chatRoomService.getChatRoomMsgInfo(chatId));
     }
 
@@ -95,8 +95,8 @@ public class ChatRoomController {
             @Parameter(name = "chatId", description = "聊天室ID", required = true),
             @Parameter(name = "flag", description = "消息免打扰", required = true)
     })
-    public ResultBean<Boolean> updateMsgNoDisturb(@RequestParam @NotBlank(message = "聊天室ID不能为空") String chatId,
-                                                  @RequestParam @NotNull(message = "消息免打扰不能为空") Boolean flag) {
+    public ResultBean<Boolean> updateMsgNoDisturb(@RequestParam("chatId") @NotBlank(message = "聊天室ID不能为空") String chatId,
+                                                  @RequestParam("flag") @NotNull(message = "消息免打扰不能为空") Boolean flag) {
         return ResultBean.success(chatRoomService.updateMsgNoDisturb(chatId, flag));
     }
 
@@ -110,8 +110,8 @@ public class ChatRoomController {
             @Parameter(name = "chatId", description = "聊天室ID", required = true),
             @Parameter(name = "flag", description = "是否置顶", required = true)
     })
-    public ResultBean<Boolean> updateIsTop(@RequestParam @NotBlank(message = "聊天室ID不能为空") String chatId,
-                                           @RequestParam @NotNull(message = "是否置顶不能为空") Boolean flag) {
+    public ResultBean<Boolean> updateIsTop(@RequestParam("chatId") @NotBlank(message = "聊天室ID不能为空") String chatId,
+                                           @RequestParam("flag") @NotNull(message = "是否置顶不能为空") Boolean flag) {
         return ResultBean.success(chatRoomService.updateIsTop(chatId, flag));
     }
 
@@ -122,7 +122,7 @@ public class ChatRoomController {
     @Operation(summary = "清空聊天记录")
     @PostMapping(value = "/cleanMsgList")
     @Parameter(name = "chatId", description = "聊天室ID", required = true)
-    public ResultBean<Boolean> cleanMsgList(@RequestParam @NotBlank(message = "聊天室ID不能为空") String chatId) {
+    public ResultBean<Boolean> cleanMsgList(@RequestParam("chatId") @NotBlank(message = "聊天室ID不能为空") String chatId) {
         return ResultBean.success(chatRoomService.cleanMsgList(chatId));
     }
 
@@ -134,7 +134,7 @@ public class ChatRoomController {
     @Operation(summary = "删除聊天室")
     @PostMapping(value = "/delete")
     @Parameter(name = "chatId", description = "聊天室ID", required = true)
-    public ResultBean<Boolean> deleteChatRoom(@RequestParam @NotBlank(message = "聊天室ID不能为空") String chatId) {
+    public ResultBean<Boolean> deleteChatRoom(@RequestParam("chatId") @NotBlank(message = "聊天室ID不能为空") String chatId) {
         return ResultBean.success(chatRoomService.deleteChatRoom(chatId));
     }
 }

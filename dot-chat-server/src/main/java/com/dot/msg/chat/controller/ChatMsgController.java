@@ -64,9 +64,9 @@ public class ChatMsgController {
             @Parameter(name = "chatIds", description = "聊天室ID集合,与转发用户ID字段二选一"),
             @Parameter(name = "toUserIds", description = "转发用户ID集合,与聊天室ID字段二选一")
     })
-    public ResultBean<Boolean> relayMsg(@RequestParam @NotEmpty(message = "消息ID集合不能为空") List<Integer> msgIds,
-                                        @RequestParam(required = false) List<String> chatIds,
-                                        @RequestParam(required = false) List<Integer> toUserIds) {
+    public ResultBean<Boolean> relayMsg(@RequestParam("msgIds") @NotEmpty(message = "消息ID集合不能为空") List<Integer> msgIds,
+                                        @RequestParam(name = "chatIds", required = false) List<String> chatIds,
+                                        @RequestParam(name = "toUserIds", required = false) List<Integer> toUserIds) {
         return ResultBean.result(chatMsgService.relayMsg(msgIds, chatIds, toUserIds));
     }
 
@@ -77,7 +77,7 @@ public class ChatMsgController {
     @Operation(summary = "删除消息")
     @PostMapping(value = "/delete")
     @Parameter(name = "msgId", description = "消息ID", required = true)
-    public ResultBean<Boolean> deleteUserMsg(@RequestParam @NotNull(message = "消息ID不能为空") Integer msgId) {
+    public ResultBean<Boolean> deleteUserMsg(@RequestParam("msgId") @NotNull(message = "消息ID不能为空") Integer msgId) {
         return ResultBean.result(chatMsgService.deleteUserMsg(msgId));
     }
 
@@ -88,7 +88,7 @@ public class ChatMsgController {
     @Operation(summary = "撤回消息")
     @PostMapping(value = "/revoke")
     @Parameter(name = "msgId", description = "消息ID", required = true)
-    public ResultBean<Boolean> revokeMsg(@RequestParam @NotNull(message = "消息ID不能为空") Integer msgId) {
+    public ResultBean<Boolean> revokeMsg(@RequestParam("msgId") @NotNull(message = "消息ID不能为空") Integer msgId) {
         return ResultBean.result(chatMsgService.revokeMsg(msgId));
     }
 
@@ -99,7 +99,7 @@ public class ChatMsgController {
     @Operation(summary = "更新文件消息上传状态")
     @PostMapping(value = "/updateFileMsgStatus")
     @Parameter(name = "msgId", description = "消息ID", required = true)
-    public ResultBean<Boolean> updateFileMsgStatus(@RequestParam @NotNull(message = "消息ID不能为空") Integer msgId) {
+    public ResultBean<Boolean> updateFileMsgStatus(@RequestParam("msgId") @NotNull(message = "消息ID不能为空") Integer msgId) {
         return ResultBean.result(chatMsgService.updateFileMsgStatus(msgId));
     }
 }
