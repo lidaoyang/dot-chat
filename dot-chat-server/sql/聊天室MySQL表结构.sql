@@ -1,4 +1,4 @@
-create table dot_chat.chat_friend
+create table chat_friend
 (
     id          int auto_increment
         primary key,
@@ -17,12 +17,12 @@ create table dot_chat.chat_friend
     comment '聊天室好友表';
 
 create index is_top_initial_idx
-    on dot_chat.chat_friend (is_top desc, initial asc);
+    on chat_friend (is_top desc, initial asc);
 
 create index user_id_idx
-    on dot_chat.chat_friend (user_id);
+    on chat_friend (user_id);
 
-create table dot_chat.chat_friend_apply
+create table chat_friend_apply
 (
     id            int auto_increment
         primary key,
@@ -40,12 +40,12 @@ create table dot_chat.chat_friend_apply
     comment '聊天室新好友申请表';
 
 create index apply_user_id_idx
-    on dot_chat.chat_friend_apply (apply_user_id);
+    on chat_friend_apply (apply_user_id);
 
 create index status_idx
-    on dot_chat.chat_friend_apply (status);
+    on chat_friend_apply (status);
 
-create table dot_chat.chat_friend_apply_user_rel
+create table chat_friend_apply_user_rel
 (
     id           int auto_increment
         primary key,
@@ -61,18 +61,18 @@ create table dot_chat.chat_friend_apply_user_rel
     comment '聊天室新好友申请和用户关联表';
 
 create index apply_id_idx
-    on dot_chat.chat_friend_apply_user_rel (apply_id);
+    on chat_friend_apply_user_rel (apply_id);
 
 create index friend_id_idx
-    on dot_chat.chat_friend_apply_user_rel (friend_id);
+    on chat_friend_apply_user_rel (friend_id);
 
 create index unread_count_apply_id_user_id_idx
-    on dot_chat.chat_friend_apply_user_rel (apply_id, user_id, unread_count);
+    on chat_friend_apply_user_rel (apply_id, user_id, unread_count);
 
 create index user_id_is_read_idx
-    on dot_chat.chat_friend_apply_user_rel (user_id, unread_count);
+    on chat_friend_apply_user_rel (user_id, unread_count);
 
-create table dot_chat.chat_group
+create table chat_group
 (
     id              int auto_increment
         primary key,
@@ -92,9 +92,9 @@ create table dot_chat.chat_group
     comment '聊天室群组表';
 
 create index group_leader_id_idx
-    on dot_chat.chat_group (group_leader_id);
+    on chat_group (group_leader_id);
 
-create table dot_chat.chat_group_apply
+create table chat_group_apply
 (
     id              int auto_increment
         primary key,
@@ -111,18 +111,18 @@ create table dot_chat.chat_group_apply
     comment '聊天室邀请入群申请表';
 
 create index apply_user_id_idx
-    on dot_chat.chat_group_apply (apply_user_ids);
+    on chat_group_apply (apply_user_ids);
 
 create index group_id_idx
-    on dot_chat.chat_group_apply (group_id);
+    on chat_group_apply (group_id);
 
 create index invite_user_id_idx
-    on dot_chat.chat_group_apply (invite_user_id);
+    on chat_group_apply (invite_user_id);
 
 create index status_idx
-    on dot_chat.chat_group_apply (status);
+    on chat_group_apply (status);
 
-create table dot_chat.chat_group_apply_user_rel
+create table chat_group_apply_user_rel
 (
     id          int auto_increment
         primary key,
@@ -135,12 +135,12 @@ create table dot_chat.chat_group_apply_user_rel
     comment '聊天室邀请好友进群申请和用户关联表';
 
 create index apply_id_idx
-    on dot_chat.chat_group_apply_user_rel (apply_id);
+    on chat_group_apply_user_rel (apply_id);
 
 create index user_id_is_read_idx
-    on dot_chat.chat_group_apply_user_rel (user_id, is_read);
+    on chat_group_apply_user_rel (user_id, is_read);
 
-create table dot_chat.chat_group_member
+create table chat_group_member
 (
     id               int auto_increment
         primary key,
@@ -159,12 +159,12 @@ create table dot_chat.chat_group_member
     comment '聊天室群成员表';
 
 create index group_id_idx
-    on dot_chat.chat_group_member (group_id);
+    on chat_group_member (group_id);
 
 create index is_group_leader_is_group_manager_index
-    on dot_chat.chat_group_member (is_group_leader desc, is_group_manager desc);
+    on chat_group_member (is_group_leader desc, is_group_manager desc);
 
-create table dot_chat.chat_msg
+create table chat_msg
 (
     id           int unsigned auto_increment comment '消息id'
         primary key,
@@ -181,12 +181,12 @@ create table dot_chat.chat_msg
     comment '聊天室消息记录表';
 
 create index chat_id_idx
-    on dot_chat.chat_msg (chat_id);
+    on chat_msg (chat_id);
 
 create index send_user_id_to_user_id_msg_type_index
-    on dot_chat.chat_msg (send_user_id, to_user_id, msg_type);
+    on chat_msg (send_user_id, to_user_id, msg_type);
 
-create table dot_chat.chat_msg_user_rel
+create table chat_msg_user_rel
 (
     id              int unsigned auto_increment
         primary key,
@@ -205,12 +205,12 @@ create table dot_chat.chat_msg_user_rel
     comment '聊天信息和用户关联表';
 
 create index chat_user_id_idx
-    on dot_chat.chat_msg_user_rel (chat_id, user_id);
+    on chat_msg_user_rel (chat_id, user_id);
 
 create index user_id_is_offline_idx
-    on dot_chat.chat_msg_user_rel (user_id, is_offline);
+    on chat_msg_user_rel (user_id, is_offline);
 
-create table dot_chat.chat_notify_msg
+create table chat_notify_msg
 (
     id          int auto_increment comment 'ID'
         primary key,
@@ -225,12 +225,12 @@ create table dot_chat.chat_notify_msg
     comment '通知消息';
 
 create index event_type_linkid_msg_type_idx
-    on dot_chat.chat_notify_msg (linkid, event_type, msg_type);
+    on chat_notify_msg (linkid, event_type, msg_type);
 
 create index notify_type_idx
-    on dot_chat.chat_notify_msg (notify_type);
+    on chat_notify_msg (notify_type);
 
-create table dot_chat.chat_notify_msg_user_rel
+create table chat_notify_msg_user_rel
 (
     id            int auto_increment comment 'ID'
         primary key,
@@ -246,24 +246,24 @@ create table dot_chat.chat_notify_msg_user_rel
     comment '通知信息关联用户';
 
 create index linkid_is_read_user_id_idx
-    on dot_chat.chat_notify_msg_user_rel (linkid, is_read, user_id);
+    on chat_notify_msg_user_rel (linkid, is_read, user_id);
 
 create index notify_id_idx
-    on dot_chat.chat_notify_msg_user_rel (notify_msg_id);
+    on chat_notify_msg_user_rel (notify_msg_id);
 
 create index notify_msg_id_user_id_idx
-    on dot_chat.chat_notify_msg_user_rel (notify_msg_id, user_id);
+    on chat_notify_msg_user_rel (notify_msg_id, user_id);
 
 create index user_id_idx
-    on dot_chat.chat_notify_msg_user_rel (to_user_id);
+    on chat_notify_msg_user_rel (to_user_id);
 
 create index user_id_is_offline_idx
-    on dot_chat.chat_notify_msg_user_rel (to_user_id asc, is_offline desc);
+    on chat_notify_msg_user_rel (to_user_id asc, is_offline desc);
 
 create index user_id_is_read_idx
-    on dot_chat.chat_notify_msg_user_rel (to_user_id, is_read);
+    on chat_notify_msg_user_rel (to_user_id, is_read);
 
-create table dot_chat.chat_room
+create table chat_room
 (
     id          int auto_increment comment '主键ID'
         primary key,
@@ -278,9 +278,9 @@ create table dot_chat.chat_room
     comment '用户聊天室表';
 
 create index timestamp_idx
-    on dot_chat.chat_room (timestamp desc);
+    on chat_room (timestamp desc);
 
-create table dot_chat.chat_room_user_rel
+create table chat_room_user_rel
 (
     id                int unsigned auto_increment
         primary key,
@@ -302,12 +302,12 @@ create table dot_chat.chat_room_user_rel
     comment '聊天室和用户关联表';
 
 create index is_top_idx
-    on dot_chat.chat_room_user_rel (id asc, is_top desc);
+    on chat_room_user_rel (id asc, is_top desc);
 
 create index user_id_idx
-    on dot_chat.chat_room_user_rel (user_id);
+    on chat_room_user_rel (user_id);
 
-create table dot_chat.chat_user
+create table chat_user
 (
     id              int unsigned auto_increment
         primary key,
@@ -330,7 +330,7 @@ create table dot_chat.chat_user
 )
     comment '聊天室用户表(关联管理员表和企业用户表)';
 
-create table dot_chat.chat_user_blacklist
+create table chat_user_blacklist
 (
     id            int auto_increment
         primary key,
@@ -341,8 +341,8 @@ create table dot_chat.chat_user_blacklist
     comment '聊天室用户黑名单表';
 
 create index black_user_id_idx
-    on dot_chat.chat_user_blacklist (black_user_id);
+    on chat_user_blacklist (black_user_id);
 
 create index user_id_idx
-    on dot_chat.chat_user_blacklist (user_id);
+    on chat_user_blacklist (user_id);
 
