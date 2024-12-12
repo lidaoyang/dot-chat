@@ -6,6 +6,7 @@
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>dot-chat-web Maven Webapp</name>
+    <description>星星点点聊天室前端</description>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
