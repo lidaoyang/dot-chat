@@ -176,7 +176,7 @@
         <div class="model-body tailoring-container">
             <div class="tailoring-container-preview">
                 <div class="tailoring-box-parcel">
-                    <img id="tailoringImg">
+                    <img id="tailoringImg" alt="">
                 </div>
             </div>
             <div class="tailoring-bottom-btn">
@@ -368,10 +368,9 @@
 <!--手机端查看浏览器控制台-->
 <script src="../js/jsdelivr-eruda.js"></script>
 <script>
-    eruda.init();
-    // if (env !== 'prod') {
-    //     eruda.init();
-    // }
+    if (env === 'local') {
+        eruda.init();
+    }
 </script>
 </body>
 </html>
