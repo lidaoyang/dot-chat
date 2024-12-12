@@ -752,7 +752,7 @@ function getUserAndOpenAVCall(msgBody) {
  * @param callUser
  */
 function openAVCall(callUser) {
-    // logger.info("打开视频或语音通话对话框,callUser:", callUser);
+    logger.info("打开视频或语音通话对话框,callUser:", callUser);
     // 清除等待邀请计时器
     clearWaitingCallTimer();
     //打开通话对话框 并初始化webrtc
@@ -786,7 +786,7 @@ function openAVCallDialogAndInit(callUser) {
     }
     //设置头像和昵称
     $(".call-avatar-bg .avatar-a").attr("src", callUser.avatar);
-    $(".call-avatar-bg .nickname").text(callUser.nickname);
+    $(".call-avatar-bg .nickname").text(callUser.remark ? callUser.remark : callUser.nickname);
     //显示接通按钮
     if (callUser.isMy) { //显示本地按钮
         $(".call-local").removeClass("hide");
