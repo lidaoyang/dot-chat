@@ -19,10 +19,39 @@
 - SpringBoot 3.3
 - JDK17
 - MySQL 8.0
-- tio 第三方封装的WebSocket框架
+- tio（[第三方封装的WebSocket框架](https://gitee.com/tywo45/t-io)）
 
 ### 前端
 
 - HTML + CSS + JavaScript + jQuery
 
 ## 页面截图
+
+### 登录注册
+![登录](screenshot/login.png)
+![注册](screenshot/register.png)
+
+### 移动端聊天界面
+
+![聊天室页面](screenshot/chatroom.png)
+![好友页面](screenshot/friends.png)
+![我的](screenshot/my.png)
+
+![群聊天页面](screenshot/msg-group.png)
+![单聊页面](screenshot/msg-s.png)
+![单聊页面2](screenshot/msg-s2.png)
+![单聊视频播放页面](screenshot/msg-video-play.png)
+![发送文件视频页面](screenshot/msg-send-file.png)
+![发送表情页面](screenshot/msg-send-emoji.png)
+![发送视频通话页面](screenshot/msg-send-video.png)
+![视频通话页面](screenshot/msg-video-call.png)
+![聊天信息更多页面](screenshot/msg-more.png)
+![聊天信息更多页面](screenshot/msg-group-more.png)
+
+### PC端聊天界面
+![聊天室页面](screenshot/pc-chatroom.png)
+![发送聊天表情](screenshot/pc-msg-send-emoji.png)
+![发送截图](screenshot/pc-msg-send-screenshot.png)
+![发送视频通话](screenshot/pc-msg-send-video-call.png)
+![视频通话](screenshot/pc-msg-video-call.png)
+![好友页面](screenshot/pc-friends.png)
