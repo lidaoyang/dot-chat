@@ -5,32 +5,8 @@
  * @param successFn 成功回调
  */
 function uploadImageFile(file, model, successFn) {
-    let formData = new FormData();
-    formData.append('image', file);
-    formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/image`;
-    $.ajax({
-        url: url,
-        data: formData,
-        type: 'post',
-        async: false,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        xhrFields: {
-            withCredentials: false
-        },
-        success: function (res) {
-            if (!checkResCode(res)){
-                return;
-            }
-            let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status);
-            successFn(msgFileO);
-        },
-        error: function (err) {
-            console.error(err);
-        }
-    });
+    uploadSync(url, file, model, successFn);
 }
 
 
@@ -41,32 +17,8 @@ function uploadImageFile(file, model, successFn) {
  * @param successFn 成功回调
  */
 function uploadImageFileAsync(file, model, successFn) {
-    let formData = new FormData();
-    formData.append('image', file);
-    formData.append("model", model);
     let url = `${SYS_URL_PREFIX}/upload/async/image`;
-    $.ajax({
-        url: url,
-        data: formData,
-        type: 'post',
-        async: false,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        xhrFields: {
-            withCredentials: false
-        },
-        success: function (res) {
-            if (!checkResCode(res)){
-                return;
-            }
-            let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status);
-            successFn(msgFileO);
-        },
-        error: function (err) {
-            console.error(err);
-        }
-    });
+    uploadAsync(url, file, model, successFn);
 }
 
 
@@ -77,10 +29,50 @@ function uploadImageFileAsync(file, model, successFn) {
  * @param successFn 成功回调
  */
 function uploadVideoAsync(file, model, successFn) {
+    let url = `${SYS_URL_PREFIX}/upload/async/video`;
+    uploadAsync(url, file, model, successFn);
+}
+
+/**
+ * 上传文件
+ * @param file 文件
+ * @param model 模式
+ * @param successFn 成功回调
+ */
+function uploadFile(file, model, successFn) {
+    let url = `${SYS_URL_PREFIX}/upload/file`;
+    uploadSync(url, file, model, successFn);
+}
+
+/**
+ * 上传文件(异步)
+ * @param file 文件
+ * @param model 模式
+ * @param successFn 成功回调
+ */
+function uploadFileAsync(file, model, successFn) {
+    let url = `${SYS_URL_PREFIX}/upload/async/file`;
+    uploadAsync(url, file, model, successFn);
+}
+
+
+/**
+ * 同步上传
+ * @param url 上传地址
+ * @param file 文件
+ * @param model 模式
+ * @param successFn 成功回调
+ */
+function uploadSync(url, file, model, successFn) {
+    let token = $.cookie(TOKEN_KEY);
+    if (!token) {
+        logger.error("token过期");
+        deleteUserCookie();
+        return;
+    }
     let formData = new FormData();
     formData.append('file', file);
     formData.append("model", model);
-    let url = `${SYS_URL_PREFIX}/upload/async/video`;
     $.ajax({
         url: url,
         data: formData,
@@ -89,11 +81,14 @@ function uploadVideoAsync(file, model, successFn) {
         processData: false,
         contentType: false,
         dataType: 'json',
+        headers: {
+            'Authorization': token
+        },
         xhrFields: {
-            withCredentials: false
+            withCredentials: false //为true时用途就是跨域请求是要不要携带cookie,既然是跨域请求，服务端要设置Access-Control-Allow-Origin，告诉浏览器允许跨域，而且这个值必须指定域名，不能设置为*
         },
         success: function (res) {
-            if (!checkResCode(res)){
+            if (!checkResCode(res)) {
                 return;
             }
             let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status, res.data.coverUrl);
@@ -106,16 +101,22 @@ function uploadVideoAsync(file, model, successFn) {
 }
 
 /**
- * 上传文件
+ * 异步上传
+ * @param url 上传地址
  * @param file 文件
  * @param model 模式
  * @param successFn 成功回调
  */
-function uploadFile(file, model, successFn) {
+function uploadAsync(url, file, model, successFn) {
+    let token = $.cookie(TOKEN_KEY);
+    if (!token) {
+        logger.error("token过期");
+        deleteUserCookie();
+        return;
+    }
     let formData = new FormData();
     formData.append('file', file);
     formData.append("model", model);
-    let url = `${SYS_URL_PREFIX}/upload/file`;
     $.ajax({
         url: url,
         data: formData,
@@ -124,49 +125,17 @@ function uploadFile(file, model, successFn) {
         processData: false,
         contentType: false,
         dataType: 'json',
-        xhrFields: {
-            withCredentials: false //为true时用途就是跨域请求是要不要携带cookie,既然是跨域请求，服务端要设置Access-Control-Allow-Origin，告诉浏览器允许跨域，而且这个值必须指定域名，不能设置为*
+        headers: {
+            'Authorization': token
         },
-        success: function (res) {
-            if (!checkResCode(res)){
-                return;
-            }
-            let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status);
-            successFn(msgFileO);
-        },
-        error: function (err) {
-            console.error(err);
-        }
-    });
-}
-
-/**
- * 上传文件(异步)
- * @param file 文件
- * @param model 模式
- * @param successFn 成功回调
- */
-function uploadFileAsync(file, model, successFn) {
-    let formData = new FormData();
-    formData.append('file', file);
-    formData.append("model", model);
-    let url = `${SYS_URL_PREFIX}/upload/async/file`;
-    $.ajax({
-        url: url,
-        data: formData,
-        type: 'post',
-        async: false,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
         xhrFields: {
             withCredentials: false
         },
         success: function (res) {
-            if (!checkResCode(res)){
+            if (!checkResCode(res)) {
                 return;
             }
-            let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status);
+            let msgFileO = new MsgFileO(res.data.fileName, res.data.newFileName, res.data.fileSize, res.data.extName, res.data.url, res.data.status, res.data.coverUrl);
             successFn(msgFileO);
         },
         error: function (err) {
@@ -205,7 +174,7 @@ function uploadChatUserAvatar(file, successFn) {
             withCredentials: false
         },
         success: function (res) {
-            if (!checkResCode(res)){
+            if (!checkResCode(res)) {
                 return;
             }
             chatUser.avatar = res.data;
@@ -218,7 +187,7 @@ function uploadChatUserAvatar(file, successFn) {
     });
 }
 
-function  checkResCode(res) {
+function checkResCode(res) {
     if (res.code === 401) {
         logger.info("token过期,res:", res);
         deleteUserCookie();

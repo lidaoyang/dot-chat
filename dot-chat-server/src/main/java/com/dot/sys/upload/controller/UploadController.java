@@ -37,35 +37,35 @@ public class UploadController {
     @Operation(summary = "单个图片文件上传(同步上传)")
     @PostMapping("/image")
     @Parameters({
-            @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+            @Parameter(name = "file", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
                     schema = @Schema(name = "file", format = "binary")),
             @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
     })
-    public ResultBean<UploadResponse> uploadImage(@RequestParam("image") MultipartFile image,
+    public ResultBean<UploadResponse> uploadImage(@RequestParam("file") MultipartFile file,
                                                   @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
-        return ResultBean.success(uploadService.uploadImage(image, model));
+        return ResultBean.success(uploadService.uploadImage(file, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个图片文件上传(异步上传)")
     @PostMapping("/async/image")
     @Parameters({
-            @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+            @Parameter(name = "file", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
                     schema = @Schema(name = "file", format = "binary")),
             @Parameter(name = "model", description = "模块 小程序miniapp,用户user,商品product,商品详情content,微信wechat,news文章", required = true)
     })
-    public ResultBean<UploadResponse> uploadImageAsync(@RequestParam("image")MultipartFile image,
+    public ResultBean<UploadResponse> uploadImageAsync(@RequestParam("file") MultipartFile file,
                                                        @RequestParam("model") @NotBlank(message = "模块不能为空") String model) {
-        return ResultBean.success(uploadService.uploadImageAsync(image, model));
+        return ResultBean.success(uploadService.uploadImageAsync(file, model));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "单个图片文件上传(同步上传)", description = "返回文件服务器地址")
     @PostMapping("/img")
-    @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+    @Parameter(name = "file", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
             schema = @Schema(name = "file", format = "binary"))
-    public String uploadImageToStr(@RequestParam("image") MultipartFile image) {
-        return uploadService.uploadImage(image, "message").getUploadPath();
+    public String uploadImageToStr(@RequestParam("file") MultipartFile file) {
+        return uploadService.uploadImage(file, "message").getUploadPath();
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")

@@ -157,7 +157,7 @@ public class UploadUtil {
     /**
      * web目录可访问的路径
      */
-    public static String getUploadPath(String type, String modelPath, String rootContext) {
+    public static String getUploadPath(String rootContext, String type, String modelPath) {
         // 文件分隔符转化为当前系统的格式
         return rootContext + "/" + type + "/" + modelPath + "/" + DateUtil.today() + "/";
     }

@@ -96,10 +96,10 @@ public class UploadServiceImpl implements UploadService {
     private void uploadVideoCoverImg(MultipartFile multipart, String model, UploadResponse uploadResponse) {
         InputStream imageInputStream = VideoUtil.coverImageInputStream(1, multipart);
         String newFileName = uploadResponse.getNewFileName().substring(0, uploadResponse.getNewFileName().lastIndexOf(".")) + ".jpg";
-        String uploadPath = UploadUtil.getUploadPath(videoConfig.getRootContext(),videoConfig.getType(), model) + newFileName;
-        if (ossConfig.isLocal()){
+        String uploadPath = UploadUtil.getUploadPath(videoConfig.getRootContext(), videoConfig.getType(), model) + newFileName;
+        if (ossConfig.isLocal()) {
             uploadResponse.setStatus(1);
-            String targetPath = videoConfig.getRootPath() + "/" + uploadPath;
+            String targetPath = videoConfig.getRootPath() + "/" + UploadUtil.getUploadPath(videoConfig.getType(), model) + newFileName;
             log.info("文件流保存到本地,targetPath:{}", targetPath);
             FileUtil.saveToFile(imageInputStream, targetPath);
         } else {
@@ -110,7 +110,8 @@ public class UploadServiceImpl implements UploadService {
         uploadResponse.setCoverUrl(coverUrl);
     }
 
-    private UploadResponse uploadFile(MultipartFile multipart, UploadFileConfig uploadConfig, String model, boolean isAsync) {
+    private UploadResponse uploadFile(MultipartFile multipart, UploadFileConfig uploadConfig, String model,
+                                      boolean isAsync) {
         if (null == multipart || multipart.isEmpty()) {
             throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "上传的文件对象不存在...");
         }
@@ -126,7 +127,7 @@ public class UploadServiceImpl implements UploadService {
             // 保存文件到本地
             multipart.transferTo(file);
             // 本地不上传OSS
-            if (ossConfig.isLocal()){
+            if (ossConfig.isLocal()) {
                 response.setStatus(1);
                 return;
             }
@@ -165,12 +166,13 @@ public class UploadServiceImpl implements UploadService {
         // 新文件名
         String newFileName = UploadUtil.fileName(shortName, extName);
 
-        String localFilePath = UploadUtil.getFullPath(uploadConfig.getRootPath(), uploadConfig.getType(), model)+ newFileName;
-        String uploadPath = UploadUtil.getUploadPath(uploadConfig.getType(), model, uploadConfig.getRootContext()) + newFileName;
+        String localFilePath = UploadUtil.getFullPath(uploadConfig.getRootPath(), uploadConfig.getType(), model) + newFileName;
+        String uploadPath = UploadUtil.getUploadPath(uploadConfig.getRootContext(), uploadConfig.getType(), model) + newFileName;
         return getUploadResponse(multipart, fileName, newFileName, extName, localFilePath, uploadPath);
     }
 
-    private UploadResponse getUploadResponse(MultipartFile multipart, String fileName, String newFileName, String extName,
+    private UploadResponse getUploadResponse(MultipartFile multipart, String fileName, String newFileName,
+                                             String extName,
                                              String localFilePath, String uploadPath) {
         UploadResponse result = new UploadResponse();
         String url = ossConfig.getDomain() + "/" + uploadPath;
