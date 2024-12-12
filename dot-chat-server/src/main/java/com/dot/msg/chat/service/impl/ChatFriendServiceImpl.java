@@ -149,7 +149,7 @@ public class ChatFriendServiceImpl extends ServiceImpl<ChatFriendDao, ChatFriend
     private String getInitial(String remark, String nickname) {
         String nick = StringUtils.isBlank(remark) ? nickname : remark;
         String first = nick.substring(0, 1);
-        String firstPY = PinYinUtil.toFirstCharUpper(first);
+        String firstPY = PinYinUtil.getFirstLetterUpper(first);
         if (!CharUtil.isLetter(firstPY.charAt(0))) {
             firstPY = CommConstant.LAST_LATTER;
         }

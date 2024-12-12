@@ -182,10 +182,10 @@ public class ChatMsgSendService {
         if (lastMsgCall.getCallType() == CallTypeEm.invite) {
             lastMsgCall.setCallType(CallTypeEm.no_answer);
         } else if (lastMsgCall.getCallType() == CallTypeEm.accept
-                || lastMsgCall.getCallType() == CallTypeEm.offer
-                || lastMsgCall.getCallType() == CallTypeEm.answer
-                || lastMsgCall.getCallType() == CallTypeEm.candidate1
-                || lastMsgCall.getCallType() == CallTypeEm.candidate2) {
+                   || lastMsgCall.getCallType() == CallTypeEm.offer
+                   || lastMsgCall.getCallType() == CallTypeEm.answer
+                   || lastMsgCall.getCallType() == CallTypeEm.candidate1
+                   || lastMsgCall.getCallType() == CallTypeEm.candidate2) {
             lastMsgCall.setCallType(CallTypeEm.dropped);
         } else {
             return;
@@ -225,17 +225,21 @@ public class ChatMsgSendService {
         } else if (oldCall.getCallType() == CallTypeEm.hangup || oldCall.getCallType() == CallTypeEm.dropped) {
             DateTime now = DateUtil.date();
             oldCall.setHangupTime(now.toString());
-            oldCall.setDuration((int) ((now.getTime() - DateUtil.parseDateTime(oldCall.getAcceptTime()).getTime()) / 1000));
+            if (StringUtils.isNotBlank(oldCall.getAcceptTime())) {
+                oldCall.setDuration((int) ((now.getTime() - DateUtil.parseDateTime(oldCall.getAcceptTime()).getTime()) / 1000));
+            } else {
+                log.warn("挂断时通话接通时间为空,oldCall:{}", oldCall);
+            }
             oldCall.setDroppedUserId(messageCall.getDroppedUserId());
             messageCall.setDuration(oldCall.getDuration());
             message.setMsg(JSON.toJSONString(messageCall));
             message.setMsgType(MsgTypeEm.getMstType(chatMsg.getMsgType()));
         }
         if (oldCall.getCallType() == CallTypeEm.hangup
-                || oldCall.getCallType() == CallTypeEm.refuse
-                || oldCall.getCallType() == CallTypeEm.cancel
-                || oldCall.getCallType() == CallTypeEm.no_answer
-                || oldCall.getCallType() == CallTypeEm.dropped) {
+            || oldCall.getCallType() == CallTypeEm.refuse
+            || oldCall.getCallType() == CallTypeEm.cancel
+            || oldCall.getCallType() == CallTypeEm.no_answer
+            || oldCall.getCallType() == CallTypeEm.dropped) {
             // 删除通话中标识
             redisUtil.remove(CommConstant.CHAT_MSG_CALLING_KEY + chatMsg.getSendUserId());
             redisUtil.remove(CommConstant.CHAT_MSG_CALLING_KEY + chatMsg.getToUserId());
