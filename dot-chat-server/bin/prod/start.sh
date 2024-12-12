@@ -18,9 +18,9 @@ APP_NAME=./dot-chat.jar
 #创建日志目录
 mkdir -p logs
 #日志文件名称
-LOG_FILE=./logs/dot-chat-out.log
+LOG_FILE=./logs/console.log
 
-LOG_FILE_BAK=./logs/backup/dot-chat-out.log.bak.$time
+LOG_FILE_BAK=./logs/backup/console.log.bak.$time
 
 #启动环境   # 如果需要配置数据和redis，请在 application-prod.yml中修改, 用jar命令修改即可
 APP_OPTION="-server -Xmx512m -Xms512m -Xmn256m -Xss128m -Dspring.profiles.active=prod"
