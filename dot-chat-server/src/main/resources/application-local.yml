@@ -193,7 +193,7 @@ tio:
 aliyun:
   oss:
     local: true
-    domain: https://dev.dot.cn:8443
+    domain: https://172.16.85.134:8443
 
 mat:
   upload:
@@ -224,4 +224,4 @@ chat:
   icon: static/ico/dot-logo.jpg
   group:
     max-member-num: 500
-    qrcode-url: https://dev.dot.cn:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://172.16.85.134:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
