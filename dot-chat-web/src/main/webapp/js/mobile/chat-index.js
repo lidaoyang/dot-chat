@@ -40,6 +40,18 @@ function addPopstateEventListener() {
     window.addEventListener("popstate", function (e) {
         // 记录用户通过手机返回时的历史状态
         logger.info("点击了手机的返回,history.state:", history.state, e);
+        if ($('.video-dialog').is(":visible")) {
+            closeVideo();
+            return;
+        }
+        if ($(".chat-msg-modal").is(":visible")) {
+            $(".chat-msg-modal").remove();
+            return;
+        }
+        if ($(".ui-widget-overlay").is(":visible")) {
+            toastr.info("请关闭对话框再返回");
+            return;
+        }
         // 获取页面上的返回按钮元素
         let $leftArrow = $(".header .left-arrow");
         // 获取返回操作类型
