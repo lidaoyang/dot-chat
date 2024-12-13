@@ -732,10 +732,10 @@ function getUserAndOpenAVCall(msgBody) {
         return;
     }
     let toUserId;
-    if (msgBody.sendUserId === chatUser.id && msgBody.toUserId === chatUser.id) {
+    if (msgBody.sendUserId === msgBody.toUserId && msgBody.toUserId === chatUser.id) { //发送者发给自己的
         toUserId = chatToUser.id;
     } else {
-        toUserId = msgBody.toUserId;
+        toUserId = msgBody.sendUserId;
     }
     getChatUserInfo(toUserId, function (callUser) {
         callUser.isMy = msgBody.sendUserId === chatUser.id;

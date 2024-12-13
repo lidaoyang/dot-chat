@@ -36,7 +36,7 @@ let IMHandler = function () {
      */
     this.onmessage = function (event, ws) {
         let msgBody = JSON.parse(event.data);
-        // logger.info(msgBody);
+        // logger.info(event.data);
         if (msgBody.msgType === MsgType.SYSTEM_WARNING) {
             myAlert('系统提示', msgBody.msg, 'warn');
             return;

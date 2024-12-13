@@ -1,7 +1,7 @@
 let logger = new Logger('debug');
 
 let env = "dev";// dev:开发环境,test:测试环境,prod:生产环境
-if (location.host === "dev.dot.cn:8443") {
+if (location.host !== "dot-chat.jrmall.cn") {
     env = "local"
 }
 
@@ -22,7 +22,7 @@ switch (env) {
     default:
         ws_protocol = 'wss';
         ws_port = "9326";
-        HOST = "dev.dot.cn";
+        HOST = "172.16.85.134";
         BASE_URL = "https://" + HOST + ":8089/";
 }
 // 定义常量对象
@@ -163,7 +163,9 @@ function MsgFileO(fileName, newFileName, fileSize, extName, fileUrl, status, cov
     this.extName = extName;
     this.fileUrl = fileUrl;
     this.status = status;
-    this.coverUrl = coverUrl;
+    if (coverUrl) {
+        this.coverUrl = coverUrl;
+    }
 }
 
 /**
