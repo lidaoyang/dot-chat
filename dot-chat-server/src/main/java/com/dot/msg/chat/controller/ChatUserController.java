@@ -9,6 +9,8 @@ import com.dot.msg.chat.service.ChatUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -50,7 +52,8 @@ public class ChatUserController {
     @Operation(summary = "搜索聊天用户", description = "搜索添加好友时使用,不包含好友")
     @GetMapping(value = "/getSearchList")
     @Parameter(name = "keyword", description = "关键词", required = true)
-    public ResultBean<List<ChatUserSearchResponse>> getSearchChatUserList(@RequestParam("keyword") @NotNull(message = "关键词不能为空") String keyword) {
+    public ResultBean<List<ChatUserSearchResponse>> getSearchChatUserList(
+            @RequestParam("keyword") @NotNull(message = "关键词不能为空") String keyword) {
         return ResultBean.success(chatUserService.getSearchChatUserList(keyword));
     }
 
@@ -61,14 +64,18 @@ public class ChatUserController {
     @Operation(summary = "获取用户详情")
     @GetMapping(value = "/info")
     @Parameter(name = "userId", description = "用户ID", required = true)
-    public ResultBean<ChatUserInfoResponse> getChatUserFriendInfo(@RequestParam("userId") @NotNull(message = "用户ID不能为空") Integer userId) {
+    public ResultBean<ChatUserInfoResponse> getChatUserFriendInfo(
+            @RequestParam("userId") @NotNull(message = "用户ID不能为空") Integer userId) {
         return ResultBean.success(chatUserService.getChatUserInfo(userId));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "更新用户头像")
     @PostMapping("/updateAvatar")
-    public ResultBean<String> updateAvatar(MultipartFile image) {
+    @Parameter(name = "image", description = "图片文件", in = ParameterIn.DEFAULT, required = true,
+            schema = @Schema(name = "image", format = "binary"))
+    public ResultBean<String> updateAvatar(
+            @RequestParam("image") @NotNull(message = "上传文件不能为空") MultipartFile image) {
         return ResultBean.success(chatUserService.updateAvatar(image), "操作成功");
     }
 
@@ -83,7 +90,7 @@ public class ChatUserController {
     public ResultBean<Boolean> updateNickname(@RequestParam(name = "nickname", required = false) String nickname,
                                               @RequestParam(name = "sex", required = false) Integer sex,
                                               @RequestParam(name = "signature", required = false) String signature) {
-        return ResultBean.result(chatUserService.updateNickname(nickname, sex,signature));
+        return ResultBean.result(chatUserService.updateNickname(nickname, sex, signature));
     }
 
 }
