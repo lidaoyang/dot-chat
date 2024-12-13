@@ -84,7 +84,8 @@ spring:
       port: 6379
       timeout: 30000 # 读取超时时间（毫秒）
       connect-timeout: 30000 #连接超时时间（毫秒）
-      database: 15
+      database: 0
+      health-check: true # 是否开启健康检查(RedisHealthCheck.class)
       lettuce:
         pool:
           enabled: true
