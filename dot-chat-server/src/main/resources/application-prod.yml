@@ -101,8 +101,7 @@ spring:
 
 logging:
   level:
-    com.dot: debug
-    com.dot.msg.chat.tio: info
+    com.dot: info
   config: classpath:logback-spring.xml
   file:
     path: ./logs
