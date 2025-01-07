@@ -7,6 +7,7 @@ import com.dot.msg.chat.request.ChatFriendApplyAgreeRequest;
 import com.dot.msg.chat.request.ChatFriendApplyReplayRequest;
 import com.dot.msg.chat.response.ChatFriendApplyInfoResponse;
 import com.dot.msg.chat.response.ChatFriendApplyResponse;
+import com.dot.msg.chat.response.ChatUserResponse;
 
 import java.util.List;
 
@@ -42,6 +43,14 @@ public interface ChatFriendApplyService extends IService<ChatFriendApply> {
     boolean addChatFriendApply(ChatFriendApplyAddRequest request);
 
     /**
+     * 添加好友申请, 返回申请ID
+     *
+     * @param request 添加好友申请请求
+     * @return 申请ID
+     */
+    Integer addChatFriendApplyRetApplyId(ChatFriendApplyAddRequest request);
+
+    /**
      * 回复好友申请
      *
      * @param request 请求参数
@@ -55,6 +64,13 @@ public interface ChatFriendApplyService extends IService<ChatFriendApply> {
      * @return chatId
      */
     String agreeFriendApply(ChatFriendApplyAgreeRequest request);
+
+    /**
+     * 同意好友申请
+     *
+     * @return chatId
+     */
+    String agreeFriendApplyRetChatId(ChatFriendApplyAgreeRequest request, ChatUserResponse chatUser);
 
     /**
      * 删除好友申请

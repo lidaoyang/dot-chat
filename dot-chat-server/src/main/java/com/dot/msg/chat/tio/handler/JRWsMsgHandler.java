@@ -3,12 +3,15 @@ package com.dot.msg.chat.tio.handler;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
+import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
+import com.dot.comm.utils.RedisUtil;
 import com.dot.msg.chat.dto.ChatUserMsgDto;
 import com.dot.msg.chat.em.ChatTypeEm;
+import com.dot.msg.chat.listener.event.UserRegisterAddDefaultFriendEvent;
 import com.dot.msg.chat.model.ChatGroupMember;
 import com.dot.msg.chat.model.ChatUser;
 import com.dot.msg.chat.service.ChatGroupMemberService;
@@ -25,6 +28,7 @@ import com.dot.msg.notify.service.NotifyMsgService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
@@ -64,6 +68,13 @@ public class JRWsMsgHandler implements IWsMsgHandler {
 
     @Resource
     private NotifyMsgService notifyMsgService;
+
+    @Resource
+    private ApplicationEventPublisher eventPublisher;
+
+    @Resource(name = "redisUtil")
+    private RedisUtil redisUtil;
+
 
     /**
      * 握手时走这个方法，业务可以在这里获取cookie，request参数等
@@ -108,6 +119,18 @@ public class JRWsMsgHandler implements IWsMsgHandler {
         // 发送离线通知消息
         sendOfflineNotifyMsg(channelContext, chatUser);
 
+        // 注册用户添加默认好友
+        registerUserAddDefaultFriendEvent(chatUser);
+    }
+
+    private void registerUserAddDefaultFriendEvent(ChatUser chatUser) {
+        if (redisUtil.exists(CommConstant.CHAT_USER_FIRST_KEY+ chatUser.getId())){
+            try {
+                eventPublisher.publishEvent(new UserRegisterAddDefaultFriendEvent(chatUser.getId()));
+            } catch (Exception e) {
+                log.warn("注册用户添加默认好友失败,chatUser:{}", chatUser, e);
+            }
+        }
     }
 
     /**

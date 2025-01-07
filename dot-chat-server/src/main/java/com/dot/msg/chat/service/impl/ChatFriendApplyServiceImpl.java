@@ -153,8 +153,16 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
 
     @Override
     public boolean addChatFriendApply(ChatFriendApplyAddRequest request) {
+        Integer chatUserId = chatUserService.getCurrentChatUserId();
+        request.setChatUserId(chatUserId);
+        Integer applyId = addChatFriendApplyRetApplyId(request);
+        return ObjectUtil.isNotNull(applyId);
+    }
+
+    @Override
+    public Integer addChatFriendApplyRetApplyId(ChatFriendApplyAddRequest request) {
         ChatFriendApply chatFriendApply = getAddChatFriendApply(request);
-        Boolean execute = transactionTemplate.execute(t -> {
+        transactionTemplate.execute(t -> {
             boolean ret = saveOrUpdateFriendApply(chatFriendApply);
             if (ret) {
                 // 保存好友申请关联表
@@ -166,13 +174,12 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         });
         // 设置当前用户选中的好友申请ID
         TioUtil.setCurrFriendApplyId(jrTioConfig.getTioConfig(), chatFriendApply.getApplyUserId().toString(), chatFriendApply.getId());
-        return Boolean.TRUE.equals(execute);
+        return chatFriendApply.getId();
     }
 
     private ChatFriendApply getAddChatFriendApply(ChatFriendApplyAddRequest request) {
-        Integer chatUserId = chatUserService.getCurrentChatUserId();
         ChatFriendApply chatFriendApply = new ChatFriendApply();
-        chatFriendApply.setApplyUserId(chatUserId);
+        chatFriendApply.setApplyUserId(request.getChatUserId());
         chatFriendApply.setFriendId(request.getFriendId());
         chatFriendApply.setStatus(ChatFriendApplyStatusEm.APPLYING.getStatus());
         chatFriendApply.setSource(request.getSource());
@@ -220,7 +227,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         }
     }
 
-    private List<ChatFriendApplyUserRel> getAddChatFriendApplyUserRelList(ChatFriendApply chatFriendApply, ChatFriendApplyAddRequest request) {
+    private List<ChatFriendApplyUserRel> getAddChatFriendApplyUserRelList(ChatFriendApply chatFriendApply,
+                                                                          ChatFriendApplyAddRequest request) {
         List<ChatFriendApplyUserRel> chatFriendApplyUserRelList = new ArrayList<>();
         List<ChatFriendApplyUserRel> applyUserRelList = getChatFriendApplyUserRelList(chatFriendApply.getId());
         if (CollUtil.isEmpty(applyUserRelList)) {
@@ -259,7 +267,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         return applyUserRel;
     }
 
-    private ChatFriendApplyUserRel getAddApplyUserRel(Integer applyId, Integer userId, Integer friendId, String remark, String label) {
+    private ChatFriendApplyUserRel getAddApplyUserRel(Integer applyId, Integer userId, Integer friendId, String remark,
+                                                      String label) {
         ChatFriendApplyUserRel applyUserRel = new ChatFriendApplyUserRel();
         applyUserRel.setApplyId(applyId);
         applyUserRel.setUserId(userId);
@@ -336,7 +345,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         sendFriendApplyNotify(applyId, sendUserId, toUserId, EventTypeEm.FRIEND_AGREE, "同意");
     }
 
-    private void sendFriendApplyNotify(Integer applyId, Integer sendUserId, Integer toUserId, EventTypeEm eventType, String content) {
+    private void sendFriendApplyNotify(Integer applyId, Integer sendUserId, Integer toUserId, EventTypeEm eventType,
+                                       String content) {
         NotifyMsgSendRequest msgSendRequest = new NotifyMsgSendRequest();
         msgSendRequest.setLinkid(applyId.toString());
         msgSendRequest.setSendUserId(sendUserId);
@@ -367,6 +377,11 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
     @Override
     public String agreeFriendApply(ChatFriendApplyAgreeRequest request) {
         ChatUserResponse chatUser = chatUserService.getCurrentChatUser();
+        return agreeFriendApplyRetChatId(request, chatUser);
+    }
+
+    @Override
+    public String agreeFriendApplyRetChatId(ChatFriendApplyAgreeRequest request, ChatUserResponse chatUser) {
         Integer chatUserId = chatUser.getId();
         ChatFriendApply friendApply = this.getById(request.getApplyId());
         if (!chatUserId.equals(friendApply.getFriendId())) {
@@ -397,13 +412,17 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
 
     private void sendSystemToUser(ChatFriendApplyAgreeRequest request, Integer chatUserId, ChatFriendApply friendApply) {
         ChannelContext channelContext = TioUtil.getChannelContext(jrTioConfig.getTioConfig(), chatUserId.toString());
+        if (channelContext == null) {
+            channelContext = TioUtil.getChannelContext(jrTioConfig.getTioConfig(), friendApply.getApplyUserId().toString());
+        }
         if (channelContext != null) {
             TioMessage message = getMessage(request, chatUserId, friendApply);
             chatMsgSendService.sendAndSaveMsg(channelContext, message);
         }
     }
 
-    private TioMessage getMessage(ChatFriendApplyAgreeRequest request, Integer chatUserId, ChatFriendApply friendApply) {
+    private TioMessage getMessage(ChatFriendApplyAgreeRequest request, Integer chatUserId,
+                                  ChatFriendApply friendApply) {
         String nickname = StringUtils.defaultIfBlank(request.getRemark(), request.getNickname());
         String msgContent = "你已添加了" + nickname + "，现在可以开始聊天了。";
         TioMessage message = new TioMessage(MsgTypeEm.SYSTEM, msgContent);
@@ -421,7 +440,8 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         return this.update(updateWrapper);
     }
 
-    private ChatFriendAddRequest getChatFriendAddRequest(ChatFriendApply friendApply, String nickname, ChatFriendApplyAgreeRequest applyAgreeRequest) {
+    private ChatFriendAddRequest getChatFriendAddRequest(ChatFriendApply friendApply, String nickname,
+                                                         ChatFriendApplyAgreeRequest applyAgreeRequest) {
         ChatFriendAddRequest chatFriendAddRequest = new ChatFriendAddRequest();
         chatFriendAddRequest.setApplyUserId(friendApply.getApplyUserId());
         chatFriendAddRequest.setFriendId(friendApply.getFriendId());
@@ -430,8 +450,10 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         ChatFriendApplyUserRel applyUserRel = getFriendApplyUserRel(friendApply.getId(), friendApply.getApplyUserId());
         chatFriendAddRequest.setRemark(applyUserRel.getRemark());
         chatFriendAddRequest.setLabel(applyUserRel.getLabel());
-        ChatUser applyChatUser = chatUserService.getById(friendApply.getApplyUserId());
-        applyAgreeRequest.setNickname(applyChatUser.getNickname());
+        if (StringUtils.isBlank(applyAgreeRequest.getNickname())){
+            ChatUser applyChatUser = chatUserService.getById(friendApply.getApplyUserId());
+            applyAgreeRequest.setNickname(applyChatUser.getNickname());
+        }
         chatFriendAddRequest.setApplyAgreeRequest(applyAgreeRequest);
         return chatFriendAddRequest;
     }

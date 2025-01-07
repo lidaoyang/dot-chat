@@ -10,7 +10,8 @@ public enum ChatSourceEm {
     SEARCH("通过搜索添加"),
     CARD("通过名片添加"),
     GROUP("通过群聊添加"),
-    QRCODE("通过二维码添加");
+    QRCODE("通过二维码添加"),
+    SYSTEM("系统默认添加");
 
 
     private String desc;

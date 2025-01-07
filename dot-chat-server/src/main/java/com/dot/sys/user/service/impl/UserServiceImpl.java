@@ -1,6 +1,7 @@
 package com.dot.sys.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.TokenModel;
@@ -106,6 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponse registerAndLogin(String phone, String password, String nickname) {
         ChatUser newUser = chatUserService.addNewUser(phone, password, nickname);
+        redisUtil.set(CommConstant.CHAT_USER_FIRST_KEY + newUser.getId(), "1",5L);
         return getLoginResponseAndToken(newUser);
     }
 

@@ -1,5 +1,6 @@
 package com.dot.msg.chat.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -33,6 +34,10 @@ public class ChatFriendApplyAddRequest implements Serializable {
 	@Schema(description = "好友ID",requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull(message = "好友ID不能为空")
 	private Integer friendId;
+
+	@Schema(description = "用户ID",hidden = true)
+	@JsonIgnore
+	private Integer chatUserId;
 
 	/**
 	 * 好友备注
