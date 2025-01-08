@@ -143,11 +143,11 @@ function topSearch() {
 }
 
 function topSearchItemDom(user, type) {
-    let clickStr='';
+    let clickStr = '';
     if (type === 'user') {
-         clickStr = "sendMsgBtnClick("+user.friendId+")";
+        clickStr = "sendMsgBtnClick(" + user.friendId + ")";
     } else {
-        clickStr = "toSendMsg('"+user.chatId+"')";
+        clickStr = "toSendMsg('" + user.chatId + "')";
         user = user.toUser;
     }
     return `
@@ -162,7 +162,7 @@ function topSearchItemDom(user, type) {
             `;
 }
 
-function toSendMsg(chatId){
+function toSendMsg(chatId) {
     //缓存1天聊天id
     setCookieDay(PREV_CHAT_ID_KEY, chatId, 1);
     loadChatRoom();
@@ -3149,9 +3149,7 @@ function searchRelayUserList1(tabId) {
     // 清空选中
     selectedFriendIdSet.clear();
     $(".replay-msg-btn").attr("disabled", true);
-
     let keyword = $("#relay-keyword-input").val();
-    // logger.info("searchRelayUserList tabId:", tabId);
     if (tabId === "relay-user-list") {
         getRelayUserFriendList(keyword);
     } else {
@@ -3188,12 +3186,14 @@ function generateRelayUserListDom(searchUserList, type) {
     } else {
         listDom = $("#relay-user-list ul");
     }
+    let action = $(".replay-msg-btn").attr("action");
+    // logger.info('type', type,'action',action, "searchUserList", searchUserList);
     listDom.html("");
     for (let i = 0; i < searchUserList.length; i++) {
         let userId;
         let serUser = searchUserList[i];
         if (type === "chat") {
-            if ($(".replay-msg-btn").attr("action") === "card" && serUser.chatType === ChatType.SINGLE) {
+            if (action === "card" && serUser.chatType === ChatType.SINGLE) {
                 continue;
             }
             userId = serUser.chatId;
@@ -3220,8 +3220,8 @@ function generateRelayUserListDom(searchUserList, type) {
 }
 
 function openRelayMsgUserDialog(msgId) {
-    getRelayChatRoomList();
     $(".replay-msg-btn").attr("msg-id", msgId).attr("action", "relay").text("转发");
+    getRelayChatRoomList();
     $("#relay-msg-user-dialog").dialog({title: "转发消息"}).dialog("open");
 }
 
@@ -3229,9 +3229,9 @@ function openSendCardMsgDialog() {
     if (!checkToUser()) {
         return;
     }
-    $(".relay-msg-user .primarybtn").click();
     $(".replay-msg-btn").attr("action", "card").text("发送");
     $("#relay-msg-user-dialog").dialog({title: "发送名片"}).dialog("open");
+    $(".relay-msg-user .primarybtn").click();
 }
 
 function relayMsgBtnClick(_this) {

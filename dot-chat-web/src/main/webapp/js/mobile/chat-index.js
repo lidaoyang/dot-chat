@@ -2827,15 +2827,15 @@ function generateRelayUserListDom(searchUserList, type) {
 
 
 function openRelayMsgUserDialog(msgId) {
-    getRelayChatRoomList();
     $(".replay-msg-btn").attr("msg-id", msgId).attr("action", "relay");
+    getRelayChatRoomList();
     $("#relay-msg-user-dialog").dialog({title: "转发消息"}).dialog("open");
 }
 
 function openSendCardMsgDialog() {
     chatRoomListCache = [];
-    getRelayChatRoomList();
     $(".replay-msg-btn").attr("action", "card");
+    getRelayChatRoomList();
     $("#relay-msg-user-dialog").dialog({title: "发送名片"}).dialog("open");
 }
 
