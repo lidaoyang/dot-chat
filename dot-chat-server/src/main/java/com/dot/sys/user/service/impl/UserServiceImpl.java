@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponse registerAndLogin(String phone, String password, String nickname) {
         ChatUser newUser = chatUserService.addNewUser(phone, password, nickname);
-        redisUtil.set(CommConstant.CHAT_USER_FIRST_KEY + newUser.getId(), "1",5L);
+        redisUtil.set(CommConstant.CHAT_USER_FIRST_KEY + newUser.getId(), "1");
         return getLoginResponseAndToken(newUser);
     }
 

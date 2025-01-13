@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Redis工具类（String类型）
- * 
+ *
  * @author: daoyang
  * @create: 2022-06-23 16:02
  */
@@ -28,7 +28,7 @@ public class RedisUtil {
     /**
      * 写入缓存
      *
-     * @param key redis键
+     * @param key   redis键
      * @param value redis值
      * @return 是否成功
      */
@@ -47,8 +47,8 @@ public class RedisUtil {
     /**
      * 写入缓存设置时效时间
      *
-     * @param key redis键
-     * @param value redis值
+     * @param key        redis键
+     * @param value      redis值
      * @param expireTime 有效期(秒)
      * @return 是否成功
      */
@@ -59,7 +59,7 @@ public class RedisUtil {
     /**
      * 写入缓存设置时效时间
      *
-     * @param key redis键
+     * @param key   redis键
      * @param value redis值
      * @return 是否成功
      */
@@ -110,11 +110,10 @@ public class RedisUtil {
      * 删除key,也删除对应的value
      *
      * @param key Redis键名
+     * @return 是否成功, true-成功, false-失败/不存在
      */
-    public void remove(final String key) {
-        if (exists(key)) {
-            redisTemplate.delete(key);
-        }
+    public boolean remove(final String key) {
+        return redisTemplate.delete(key);
     }
 
     /**
@@ -140,7 +139,7 @@ public class RedisUtil {
 
     /**
      * multiSet 批量添加(少量数据批量添加时,建议使用)
-     * 
+     *
      * @param kvMap key-value kvMap
      */
     public void batchSet(Map<String, String> kvMap) {
@@ -149,16 +148,16 @@ public class RedisUtil {
 
     /**
      * 利用pipeline批量添加,支持设置失效时间
-     * 
-     * @param map key-value map
+     *
+     * @param map     key-value map
      * @param seconds 过期时间(秒)
      */
     public void batchSetOrExpire(Map<String, String> map, Long seconds) {
         RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-        redisTemplate.executePipelined((RedisCallback<String>)connection -> {
+        redisTemplate.executePipelined((RedisCallback<String>) connection -> {
             map.forEach((key, value) -> {
                 connection.set(Objects.requireNonNull(serializer.serialize(key)), Objects.requireNonNull(serializer.serialize(value)),
-                    Expiration.seconds(seconds), RedisStringCommands.SetOption.UPSERT);
+                        Expiration.seconds(seconds), RedisStringCommands.SetOption.UPSERT);
             });
             return null;
         }, serializer);
@@ -166,7 +165,7 @@ public class RedisUtil {
 
     /**
      * 批量获取
-     * 
+     *
      * @param keys key列表
      * @return 值列表
      */
@@ -176,7 +175,7 @@ public class RedisUtil {
 
     /**
      * Redis批量Delete
-     * 
+     *
      * @param keys key列表
      */
     public void batchDelete(List<String> keys) {
@@ -186,9 +185,9 @@ public class RedisUtil {
     /**
      * 哈希 添加
      *
-     * @param key Redis键
+     * @param key     Redis键
      * @param hashKey 哈希键
-     * @param value 哈希值
+     * @param value   哈希值
      */
     public void hmSet(String key, String hashKey, String value) {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
@@ -198,7 +197,7 @@ public class RedisUtil {
     /**
      * 哈希获取数据
      *
-     * @param key Redis键
+     * @param key     Redis键
      * @param hashKey 哈希键
      * @return 哈希值
      */
@@ -210,7 +209,7 @@ public class RedisUtil {
     /**
      * 判断hash是否存在键
      *
-     * @param key Redis键
+     * @param key     Redis键
      * @param hashKey 哈希键
      * @return 是否存在
      */
@@ -222,7 +221,7 @@ public class RedisUtil {
     /**
      * 删除hash中一条或多条数据
      *
-     * @param key Redis键
+     * @param key      Redis键
      * @param hashKeys 哈希键名数组
      * @return 删除数量
      */
@@ -256,7 +255,7 @@ public class RedisUtil {
     /**
      * 列表-追加值
      *
-     * @param key Redis键名
+     * @param key   Redis键名
      * @param value 列表值
      */
     public void lPush(String key, String value) {
@@ -267,7 +266,7 @@ public class RedisUtil {
     /**
      * 列表-删除值
      *
-     * @param key Redis键名
+     * @param key   Redis键名
      * @param value 列表值
      */
     public void lRemove(String key, String value) {
@@ -278,9 +277,9 @@ public class RedisUtil {
     /**
      * 列表-获取指定范围数据
      *
-     * @param key Redis键名
+     * @param key   Redis键名
      * @param start 开始行号（start:0，end:-1查询所有值）
-     * @param end 结束行号
+     * @param end   结束行号
      * @return 列表
      */
     public List<String> lRange(String key, long start, long end) {
@@ -301,7 +300,7 @@ public class RedisUtil {
     /**
      * 集合添加
      *
-     * @param key Redis键名
+     * @param key   Redis键名
      * @param value 值
      */
     public void add(String key, String value) {
@@ -323,7 +322,7 @@ public class RedisUtil {
     /**
      * 有序集合添加
      *
-     * @param key Redis键名
+     * @param key   Redis键名
      * @param value 值
      * @param score 排序号
      */
@@ -335,9 +334,9 @@ public class RedisUtil {
     /**
      * 有序集合-获取指定范围
      *
-     * @param key Redis键
+     * @param key        Redis键
      * @param startScore 开始序号
-     * @param endScore 结束序号
+     * @param endScore   结束序号
      * @return 集合
      */
     public Set<String> rangeByScore(String key, double startScore, double endScore) {
@@ -382,7 +381,7 @@ public class RedisUtil {
     public void batchHashMapSet(HashMultimap<String, Map<String, String>> batchMap) {
         // 设置5秒超时时间
         redisTemplate.expire("max", 25, TimeUnit.SECONDS);
-        redisTemplate.executePipelined((RedisCallback<List<Map<String, String>>>)connection -> {
+        redisTemplate.executePipelined((RedisCallback<List<Map<String, String>>>) connection -> {
             for (Map.Entry<String, Map<String, String>> hash : batchMap.entries()) {
                 // 哈希名,即表名
                 byte[] hashName = redisTemplate.getStringSerializer().serialize(hash.getKey());
@@ -446,7 +445,7 @@ public class RedisUtil {
     public void batchHashMapListSet(List<Map<String, Map<String, String>>> list) {
         // 设置5秒超时时间
         redisTemplate.expire("max", 25, TimeUnit.SECONDS);
-        redisTemplate.executePipelined((RedisCallback<List<Map<String, String>>>)connection -> {
+        redisTemplate.executePipelined((RedisCallback<List<Map<String, String>>>) connection -> {
             for (Map<String, Map<String, String>> dataMap : list) {
                 Iterator<Map.Entry<String, Map<String, String>>> iterator = dataMap.entrySet().iterator();
                 while (iterator.hasNext()) {
@@ -475,10 +474,10 @@ public class RedisUtil {
     /**
      * 只有不存在的时候才设置键值对。
      *
-     * @param key string key
-     * @param value string value
+     * @param key        string key
+     * @param value      string value
      * @param expireTime Long 过期时间
-     * @param timeUnit TimeUnit 时间格式
+     * @param timeUnit   TimeUnit 时间格式
      * @return true:设置成功;false:设置失败
      */
     public boolean setnx(String key, String value, Long expireTime, TimeUnit timeUnit) {

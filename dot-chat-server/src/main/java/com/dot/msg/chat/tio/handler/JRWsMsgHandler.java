@@ -124,7 +124,7 @@ public class JRWsMsgHandler implements IWsMsgHandler {
     }
 
     private void registerUserAddDefaultFriendEvent(ChatUser chatUser) {
-        if (redisUtil.exists(CommConstant.CHAT_USER_FIRST_KEY+ chatUser.getId())){
+        if (redisUtil.remove(CommConstant.CHAT_USER_FIRST_KEY+ chatUser.getId())){
             try {
                 eventPublisher.publishEvent(new UserRegisterAddDefaultFriendEvent(chatUser.getId()));
             } catch (Exception e) {
