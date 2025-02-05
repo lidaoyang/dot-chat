@@ -105,7 +105,7 @@ public class JRWsTioServerListener extends WsTioServerListener {
         messageCall.setMsgId(chatMsg.getId());
         messageCall.setDroppedUserId(sendUserId);
 
-        TioMessage message = new TioMessage(MsgTypeEm.getMstType(chatMsg.getMsgType()), JSON.toJSONString(messageCall));
+        TioMessage message = new TioMessage(MsgTypeEm.getMsgType(chatMsg.getMsgType()), JSON.toJSONString(messageCall));
         message.setId(messageCall.getMsgId());
         message.setChatType(ChatTypeEm.SINGLE);
         message.setSendUserId(sendUserId);

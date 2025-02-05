@@ -431,7 +431,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
         chatMsgList.forEach(chatMsg -> {
             if (CollUtil.isNotEmpty(toGroupIds)) {
                 toGroupIds.forEach(groupId -> {
-                    TioMessage message = new TioMessage(MsgTypeEm.getMstType(chatMsg.getMsgType()), chatMsg.getMsg());
+                    TioMessage message = new TioMessage(MsgTypeEm.getMsgType(chatMsg.getMsgType()), chatMsg.getMsg());
                     message.setChatType(ChatTypeEm.GROUP);
                     message.setSendUserId(chatUser.getId());
                     message.setToUserId(groupId);
@@ -440,7 +440,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
             }
             if (CollUtil.isNotEmpty(toUserIds)) {
                 toUserIds.forEach(toUserId -> {
-                    TioMessage message = new TioMessage(MsgTypeEm.getMstType(chatMsg.getMsgType()), chatMsg.getMsg());
+                    TioMessage message = new TioMessage(MsgTypeEm.getMsgType(chatMsg.getMsgType()), chatMsg.getMsg());
                     message.setChatType(ChatTypeEm.SINGLE);
                     message.setSendUserId(chatUser.getId());
                     message.setToUserId(toUserId);

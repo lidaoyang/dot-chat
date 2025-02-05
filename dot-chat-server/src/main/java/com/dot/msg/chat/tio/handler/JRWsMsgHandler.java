@@ -211,7 +211,7 @@ public class JRWsMsgHandler implements IWsMsgHandler {
     }
 
     private TioMessage getOfflineMessage(ChatUserMsgDto offlineMsg) {
-        TioMessage message = new TioMessage(MsgTypeEm.getMstType(offlineMsg.getMsgType()), offlineMsg.getMsg());
+        TioMessage message = new TioMessage(MsgTypeEm.getMsgType(offlineMsg.getMsgType()), offlineMsg.getMsg());
         message.setChatId(offlineMsg.getChatId());
         message.setSendUserId(offlineMsg.getSendUserId());
         message.setSendTime(offlineMsg.getSendTime());
@@ -241,7 +241,7 @@ public class JRWsMsgHandler implements IWsMsgHandler {
 
     private TioMessage getTioMessage(NotifyMsgInfoDto offlineNotifyMsg) {
         TioMessage message = new TioMessage();
-        message.setMsgType(MsgTypeEm.getMstType(offlineNotifyMsg.getMsgType()));
+        message.setMsgType(MsgTypeEm.getMsgType(offlineNotifyMsg.getMsgType()));
         message.setEventType(EventTypeEm.getEventType(offlineNotifyMsg.getEventType()));
         message.setToUserId(offlineNotifyMsg.getToUserId());
         message.setMsg(offlineNotifyMsg.getMsgContent());

@@ -234,7 +234,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
                 lastMsg = lastMsg.substring(0, 42);
             }
         } else {
-            lastMsg = "[" + MsgTypeEm.getMstTypeDesc(chatMsg.getMsgType()) + "]";
+            lastMsg = "[" + MsgTypeEm.getMsgTypeDesc(chatMsg.getMsgType()) + "]";
         }
         return lastMsg;
     }

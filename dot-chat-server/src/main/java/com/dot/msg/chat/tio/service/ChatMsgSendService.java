@@ -233,7 +233,7 @@ public class ChatMsgSendService {
             oldCall.setDroppedUserId(messageCall.getDroppedUserId());
             messageCall.setDuration(oldCall.getDuration());
             message.setMsg(JSON.toJSONString(messageCall));
-            message.setMsgType(MsgTypeEm.getMstType(chatMsg.getMsgType()));
+            message.setMsgType(MsgTypeEm.getMsgType(chatMsg.getMsgType()));
         }
         if (oldCall.getCallType() == CallTypeEm.hangup
             || oldCall.getCallType() == CallTypeEm.refuse
