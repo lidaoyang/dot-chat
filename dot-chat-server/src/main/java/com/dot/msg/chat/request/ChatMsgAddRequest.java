@@ -67,4 +67,9 @@ public class ChatMsgAddRequest implements Serializable {
     @Schema(description = "消息接收用户ID(群消息时为群ID)")
     private Integer toUserId;
 
+    /**
+     * 设备类型(PC,MOBILE)
+     */
+    private String deviceType;
+
 }

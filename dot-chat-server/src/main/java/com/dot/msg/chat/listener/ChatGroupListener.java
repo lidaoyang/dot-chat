@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.msg.chat.em.ChatTypeEm;
+import com.dot.msg.chat.em.DeviceTypeEm;
 import com.dot.msg.chat.listener.event.*;
 import com.dot.msg.chat.model.ChatMsg;
 import com.dot.msg.chat.model.ChatMsgUserRel;
@@ -94,13 +95,13 @@ public class ChatGroupListener {
     }
 
     private void saveAndSendMsg(ChatGroupCreateEvent event, ChatRoom chatRoom) {
-        ChatMsg chatMsg = getAndSaveChatMsg(event, chatRoom);
+        ChatMsg chatMsg = getAndSaveSysChatMsg(event, chatRoom);
         saveChatMsgRel(event, chatMsg);
         sendGroupMsg(event, chatMsg);
         chatRoomService.updateLastMsg(chatMsg);
     }
 
-    private ChatMsg getAndSaveChatMsg(ChatGroupCreateEvent event, ChatRoom chatRoom) {
+    private ChatMsg getAndSaveSysChatMsg(ChatGroupCreateEvent event, ChatRoom chatRoom) {
         String msgContent = "你邀请" + event.getNicknameStr() + "加入了群聊";
         ChatMsg chatMsg = new ChatMsg();
         chatMsg.setChatId(chatRoom.getChatId());
@@ -109,6 +110,7 @@ public class ChatGroupListener {
         chatMsg.setSendUserId(event.getUserId());
         chatMsg.setToUserId(chatRoom.getGroupId());
         chatMsg.setMsgType(MsgTypeEm.SYSTEM.name());
+        chatMsg.setDeviceType(DeviceTypeEm.SYS.name());
         chatMsg.setMsg(msgContent);
         chatMsg.setSendTime(DateUtil.now());
         chatMsg.setTimestamp(DateUtil.current());

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.dot.msg.chat.em.ChatTypeEm;
 import com.dot.msg.chat.tio.em.EventTypeEm;
 import com.dot.msg.chat.tio.em.MsgTypeEm;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -24,20 +23,20 @@ public class TioMessage implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "消息ID")
+    /**
+     * 消息ID
+     */
     private Integer id;
 
     /**
      * 撤回消息的ID
      */
-    @Schema(description = "撤回消息的ID")
     private Integer revokeId;
 
 
     /**
      * 聊天室ID
      */
-    @Schema(description = "聊天室ID")
     private String chatId;
 
     /**
@@ -49,7 +48,6 @@ public class TioMessage implements Serializable {
     /**
      * 事件类型(消息类型为事件消息时有值)
      */
-    @Schema(description = "事件类型(消息类型为事件消息时有值)")
     private EventTypeEm eventType;
 
     /**
@@ -81,6 +79,11 @@ public class TioMessage implements Serializable {
      * 发送时间
      */
     private String sendTime;
+
+    /**
+     * 设备类型(PC,MOBILE)
+     */
+    private String deviceType;
 
     public TioMessage() {
     }

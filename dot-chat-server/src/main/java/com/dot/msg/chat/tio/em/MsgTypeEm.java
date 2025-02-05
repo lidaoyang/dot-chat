@@ -43,19 +43,19 @@ public enum MsgTypeEm {
         this.desc = desc;
     }
 
-    public static MsgTypeEm getMstType(String name) {
-        for (MsgTypeEm mstType : MsgTypeEm.values()) {
-            if (mstType.name().equals(name)) {
-                return mstType;
+    public static MsgTypeEm getMsgType(String name) {
+        for (MsgTypeEm typeEm : MsgTypeEm.values()) {
+            if (typeEm.name().equals(name)) {
+                return typeEm;
             }
         }
         return null;
     }
 
-    public static String getMstTypeDesc(String type) {
-        for (MsgTypeEm mstType : MsgTypeEm.values()) {
-            if (mstType.name().equals(type)) {
-                return mstType.getDesc();
+    public static String getMsgTypeDesc(String type) {
+        for (MsgTypeEm typeEm : MsgTypeEm.values()) {
+            if (typeEm.name().equals(type)) {
+                return typeEm.getDesc();
             }
         }
         return null;

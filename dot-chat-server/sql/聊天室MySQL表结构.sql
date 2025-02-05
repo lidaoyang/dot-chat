@@ -186,6 +186,10 @@ create index chat_id_idx
 create index send_user_id_to_user_id_msg_type_index
     on chat_msg (send_user_id, to_user_id, msg_type);
 
+alter table chat_msg
+    add device_type varchar(6) null comment '设备类型(PC,MOBILE)';
+
+
 create table chat_msg_user_rel
 (
     id              int unsigned auto_increment

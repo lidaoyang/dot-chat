@@ -259,7 +259,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
         }
         log.info("保存一条聊天信息,chatId:{}", request.getChatId());
         // 保存消息记录
-        ChatMsg chatMsg = getChatMsg(request);
+        ChatMsg chatMsg = getNewChatMsg(request);
         Boolean executed = transactionTemplate.execute(t -> {
             boolean saved = this.save(chatMsg);
             if (saved) {
@@ -314,7 +314,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
         }
     }
 
-    private ChatMsg getChatMsg(ChatMsgAddRequest request) {
+    private ChatMsg getNewChatMsg(ChatMsgAddRequest request) {
         ChatMsg chatMsg = new ChatMsg();
         chatMsg.setChatId(request.getChatId());
         chatMsg.setChatType(request.getChatType());
@@ -325,6 +325,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
         chatMsg.setMsg(request.getMsg());
         chatMsg.setSendTime(DateUtil.now());
         chatMsg.setTimestamp(DateUtil.current());
+        chatMsg.setDeviceType(request.getDeviceType());
         return chatMsg;
     }
 

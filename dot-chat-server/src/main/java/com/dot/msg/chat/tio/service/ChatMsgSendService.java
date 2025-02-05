@@ -291,6 +291,7 @@ public class ChatMsgSendService {
         msgAddRequest.setMsg(message.getMsg());
         msgAddRequest.setSendUserId(message.getSendUserId());
         msgAddRequest.setToUserId(message.getToUserId());
+        msgAddRequest.setDeviceType(message.getDeviceType());
         if (ChatTypeEm.GROUP == message.getChatType()) {
             msgAddRequest.setGroupId(message.getToUserId());
         }

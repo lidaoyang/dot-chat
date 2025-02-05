@@ -100,6 +100,10 @@ const ChatType = {
     GROUP: "GROUP" // 群聊
 };
 
+/**
+ * 事件类型
+ * @type {{FRIEND_APPLY: string, FRIEND_AGREE: string, FRIEND_REJECT: string, GROUP_CREATE: string, GROUP_APPLY: string, GROUP_ACCEPT: string, GROUP_REJECT: string, GROUP_JOIN: string, GROUP_KICK: string, GROUP_EXIT: string, GROUP_DISMISS: string, GROUP_BAN: string, REVOKE_MSG: string}}
+ */
 const EventType = {
     FRIEND_APPLY: "FRIEND_APPLY",//好友申请
     FRIEND_AGREE: "FRIEND_AGREE",//同意好友申请
@@ -115,12 +119,30 @@ const EventType = {
     GROUP_BAN: "GROUP_BAN", //群禁言
     REVOKE_MSG: "REVOKE_MSG" //撤销消息
 }
+/**
+ * 设备类型
+ * @type {{PC: string, MOBILE: string}}
+ */
+const DEVICE_TYPE = {
+    PC: "PC",
+    MOBILE: "MOBILE",
+    SYS: "SYS"
+}
+
+/**
+ * 好友来源
+ * @type {{SEARCH: string, CARD: string, GROUP: string}}
+ */
 const FRIEND_SOURCE = {
     SEARCH: "SEARCH",//通过搜索添加
     CARD: "CARD",//通过名片添加
     GROUP: "GROUP"//通过群聊添加
 }
 
+/**
+ * 群来源
+ * @type {{SEARCH: string, CARD: string, INVITE: string, QRCODE: string}}
+ */
 const GROUP_SOURCE = {
     SEARCH: "SEARCH",//通过搜索入群
     CARD: "CARD",//通过名片入群
@@ -143,6 +165,7 @@ function TioMessage(msgType, chatType, msgContent, sendUserId, toUserId) {
     this.msg = msgContent;
     this.sendUserId = sendUserId;
     this.toUserId = toUserId;
+    this.deviceType = mobile ? DEVICE_TYPE.MOBILE : DEVICE_TYPE.PC;
 }
 
 /**

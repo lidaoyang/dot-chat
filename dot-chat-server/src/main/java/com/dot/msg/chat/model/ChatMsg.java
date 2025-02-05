@@ -90,4 +90,10 @@ public class ChatMsg implements Serializable {
 	@Schema(description = "时间戳")
 	private Long timestamp;
 
+	/**
+	 * 设备类型(PC,MOBILE)
+	 */
+	@Schema(description = "设备类型(PC,MOBILE)")
+	private String deviceType;
+
 }
