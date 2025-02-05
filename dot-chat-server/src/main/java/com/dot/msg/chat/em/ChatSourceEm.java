@@ -29,18 +29,18 @@ public enum ChatSourceEm {
     }
 
     public static ChatSourceEm get(String name) {
-        for (ChatSourceEm mstType : ChatSourceEm.values()) {
-            if (mstType.name().equals(name)) {
-                return mstType;
+        for (ChatSourceEm sourceEm : ChatSourceEm.values()) {
+            if (sourceEm.name().equals(name)) {
+                return sourceEm;
             }
         }
         return null;
     }
 
     public static String getDesc(String type) {
-        for (ChatSourceEm mstType : ChatSourceEm.values()) {
-            if (mstType.name().equals(type)) {
-                return mstType.getDesc();
+        for (ChatSourceEm sourceEm : ChatSourceEm.values()) {
+            if (sourceEm.name().equals(type)) {
+                return sourceEm.getDesc();
             }
         }
         return null;

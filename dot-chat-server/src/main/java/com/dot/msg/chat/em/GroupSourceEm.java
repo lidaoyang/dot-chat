@@ -29,18 +29,18 @@ public enum GroupSourceEm {
     }
 
     public static GroupSourceEm get(String name) {
-        for (GroupSourceEm mstType : GroupSourceEm.values()) {
-            if (mstType.name().equals(name)) {
-                return mstType;
+        for (GroupSourceEm sourceEm : GroupSourceEm.values()) {
+            if (sourceEm.name().equals(name)) {
+                return sourceEm;
             }
         }
         return null;
     }
 
     public static String getDesc(String type) {
-        for (GroupSourceEm mstType : GroupSourceEm.values()) {
-            if (mstType.name().equals(type)) {
-                return mstType.getDesc();
+        for (GroupSourceEm sourceEm : GroupSourceEm.values()) {
+            if (sourceEm.name().equals(type)) {
+                return sourceEm.getDesc();
             }
         }
         return null;

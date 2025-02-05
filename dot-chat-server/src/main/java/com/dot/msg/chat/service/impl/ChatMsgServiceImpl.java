@@ -509,7 +509,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
             log.info("发送撤回消息系统消息,chatUserId:{},msgId:{}", chatUser.getId(), chatMsg.getId());
             TioMessage message = new TioMessage(MsgTypeEm.EVENT, chatUser.getNickname() + "撤回了一条消息");
             message.setSendUserId(chatUser.getId());
-            message.setChatType(ChatTypeEm.getMstType(chatMsg.getChatType()));
+            message.setChatType(ChatTypeEm.getChatType(chatMsg.getChatType()));
             message.setEventType(EventTypeEm.REVOKE_MSG);
             message.setToUserId(chatMsg.getToUserId());
             message.setSendTime(DateUtil.now());

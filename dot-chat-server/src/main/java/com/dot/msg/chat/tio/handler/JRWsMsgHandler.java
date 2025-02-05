@@ -187,7 +187,7 @@ public class JRWsMsgHandler implements IWsMsgHandler {
             log.info("发送离线消息,用户id:{},size:{}", chatUser.getId(), offlineMsgList.size());
             /* //发送离线消息,会出现重复问题
             offlineMsgList.forEach(offlineMsg -> {
-                TioMessage message = getMessage(offlineMsg);
+                TioMessage message = getOfflineMessage(offlineMsg);
                 if (ChatTypeEm.SINGLE.name().equals(offlineMsg.getChatType())) { // 单聊消息
                     // 把离线消息重新发送给登录的用户
                     chatMsgSendService.sendToUser(channelContext.tioConfig, message);
@@ -210,12 +210,12 @@ public class JRWsMsgHandler implements IWsMsgHandler {
         }
     }
 
-    private TioMessage getMessage(ChatUserMsgDto offlineMsg) {
+    private TioMessage getOfflineMessage(ChatUserMsgDto offlineMsg) {
         TioMessage message = new TioMessage(MsgTypeEm.getMstType(offlineMsg.getMsgType()), offlineMsg.getMsg());
         message.setChatId(offlineMsg.getChatId());
         message.setSendUserId(offlineMsg.getSendUserId());
         message.setSendTime(offlineMsg.getSendTime());
-        message.setChatType(ChatTypeEm.getMstType(offlineMsg.getChatType()));
+        message.setChatType(ChatTypeEm.getChatType(offlineMsg.getChatType()));
         message.setToUserId(offlineMsg.getToUserId());
         return message;
     }

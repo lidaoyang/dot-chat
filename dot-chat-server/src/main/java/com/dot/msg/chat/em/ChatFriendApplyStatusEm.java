@@ -26,10 +26,10 @@ public enum ChatFriendApplyStatusEm {
     }
 
 
-    public static ChatFriendApplyStatusEm getMstType(String name) {
-        for (ChatFriendApplyStatusEm mstType : ChatFriendApplyStatusEm.values()) {
-            if (mstType.name().equals(name)) {
-                return mstType;
+    public static ChatFriendApplyStatusEm getStatusType(String name) {
+        for (ChatFriendApplyStatusEm statusEm : ChatFriendApplyStatusEm.values()) {
+            if (statusEm.name().equals(name)) {
+                return statusEm;
             }
         }
         return null;

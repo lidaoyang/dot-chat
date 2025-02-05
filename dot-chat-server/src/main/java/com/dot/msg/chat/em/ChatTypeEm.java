@@ -26,19 +26,19 @@ public enum ChatTypeEm {
         this.desc = desc;
     }
 
-    public static ChatTypeEm getMstType(String name) {
-        for (ChatTypeEm mstType : ChatTypeEm.values()) {
-            if (mstType.name().equals(name)) {
-                return mstType;
+    public static ChatTypeEm getChatType(String name) {
+        for (ChatTypeEm typeEm : ChatTypeEm.values()) {
+            if (typeEm.name().equals(name)) {
+                return typeEm;
             }
         }
         return null;
     }
 
-    public static String getMstTypeDesc(String type) {
-        for (ChatTypeEm mstType : ChatTypeEm.values()) {
-            if (mstType.getDesc().equals(type)) {
-                return mstType.getDesc();
+    public static String getChatTypeDesc(String type) {
+        for (ChatTypeEm typeEm : ChatTypeEm.values()) {
+            if (typeEm.getDesc().equals(type)) {
+                return typeEm.getDesc();
             }
         }
         return null;
