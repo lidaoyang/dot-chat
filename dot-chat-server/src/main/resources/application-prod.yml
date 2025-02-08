@@ -124,6 +124,7 @@ springdoc:
         - com.dot.sys.upload.controller
         - com.dot.msg.chat.controller
         - com.dot.msg.notify.controller
+        - com.dot.deepseek.controller
 knife4j:
   enable: true
   setting:
