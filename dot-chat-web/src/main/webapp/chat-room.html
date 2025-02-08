@@ -37,10 +37,12 @@
                     <li id="nav-msgrecord" onclick="openChatMsgHistoryDialog()">
                         <img src="ico/msg.png" alt="历史记录"/>
                     </li>
-                    <li id="nav-audio-call" class="call" onclick="sendInviteCall('AUDIO_CALL')"><img
-                            src="ico/call_audio_pc.png" alt="语音通话"/></li>
-                    <li id="nav-video-call" class="call" onclick="sendInviteCall('VIDEO_CALL')"><img
-                            src="ico/call_video_pc.png" alt="视频通话"/></li>
+                    <li id="nav-audio-call" class="call" onclick="sendInviteCall('AUDIO_CALL')">
+                        <img src="ico/call_audio_pc.png" alt="语音通话"/></li>
+                    <li id="nav-video-call" class="call" onclick="sendInviteCall('VIDEO_CALL')">
+                        <img src="ico/call_video_pc.png" alt="视频通话"/></li>
+                    <li id="nav-ai-reply-msg" class="ai-reply-msg">
+                        <img src="ico/ai_icon.png" alt="Ai智能回复"/></li>
                 </ul>
             </div>
             <div class="but-text">
@@ -331,6 +333,18 @@
         <div class="video-play">
             <video id="video" src="" preload="auto" controls="controls" autoplay="autoplay"></video>
             <img onclick="closeVideo()" class="video-close" src="./ico/x-red.png" width="25" height="25" alt="关闭"/>
+        </div>
+    </div>
+
+    <!--  AI智能消息对话框  -->
+    <div class="ai-msg-dialog" style="display: none;">
+        <div class="ai-content">
+            <i class="ai-loading" style="display: none;"></i>
+            <p id="ai-output" class="ai-output"></p>
+        </div>
+        <div class="ai-msg-btns">
+            <button class="ai-btn" onclick="editAiMsg()" disabled>编辑</button>
+            <button class="ai-btn" onclick="sendAiMsg()" disabled>发送</button>
         </div>
     </div>
 

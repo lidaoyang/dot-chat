@@ -808,6 +808,8 @@ function loadChatRoom() {
             registerNavFaceClick();
             //注册聊天信息页点击事件
             registerNavTopMsgMoreClick();
+            //注册聊天室ai消息点击事件
+            registerNavAiMsgClick();
             //设置内容输入框键盘事件
             contentKeydown();
             //注册聊天信息页粘贴事件

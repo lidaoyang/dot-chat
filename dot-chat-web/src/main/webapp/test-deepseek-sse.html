@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE with sse.js</title>
+</head>
+<body>
+<h1>SSE Stream Example</h1>
+<button onclick="startStream()">Start Stream</button>
+<pre id="ai-output"></pre>
+
+
+<script src="js/jquery/jquery-3.7.1.min.js"></script>
+<script src="js/jquery/jquery.cookie-1.4.1.min.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/custom-log.js"></script>
+<script src="js/base.js"></script>
+<script src="js/sse/sse.js"></script>
+<script src="js/sse/deepseek-sse-util.js"></script>
+<script>
+    function startStream() {
+        let data = {
+            messages: [
+                new DSAiMessage('system', '你是当前聊天中的一员,名称叫吉祥,你来帮我继续回答对方的信息吧', 'system'),
+                new DSAiMessage('吉祥', 'ok,开始吧!'),
+                new DSAiMessage('daoyang', '太好了！我已经登录游戏了，你邀请我吧。今天想玩哪个英雄？'),
+                // new DSAiMessage('吉祥', '我玩射手吧,小鲁班来了!'),
+            ]
+        }
+        startSSE(data);
+    }
+</script>
+</body>
+</html>

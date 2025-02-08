@@ -28,8 +28,10 @@ switch (env) {
 // 定义常量对象
 const SYS_API_PREFIX = "api/sys"; // 接口前缀
 const MSG_API_PREFIX = "api/msg"; // 接口前缀
+const DEEPSEEK_API_PREFIX = "api/deepseek/chat"; // 接口前缀
 const SYS_URL_PREFIX = BASE_URL + SYS_API_PREFIX; // url前缀
 const MSG_URL_PREFIX = BASE_URL + MSG_API_PREFIX; // url前缀
+const DEEPSEEK_URL_PREFIX = BASE_URL + DEEPSEEK_API_PREFIX; // url前缀
 const TOKEN_KEY = "Authorization";
 const ENT_ID_KEY = "enterpriseId";
 const USER_ID_KEY = "userId";

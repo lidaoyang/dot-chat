@@ -20,13 +20,6 @@
             <label class="send-attachment-item-label">相册</label>
             <input id="picFileInput" class="hide" type="file" accept="image/*" />
         </li>
-        <li class="send-attachment-item">
-            <div id="attachment-video" class="send-attachment-item-img" onclick="openVideoDialog()">
-                <img class="icon-image" src="../ico/_video.png" alt="视频"/>
-            </div>
-            <label class="send-attachment-item-label">视频</label>
-            <input id="videoFileInput" class="hide" type="file" accept="video/*" />
-        </li>
         <li class="send-attachment-item call" onclick="sendInviteCall('AUDIO_CALL')" >
             <div id="audio-call" class="send-attachment-item-img">
                 <img class="icon-image" src="../ico/call_audio_m.png" alt="语音通话"/>
@@ -38,6 +31,19 @@
                 <img class="icon-image" src="../ico/call_video_m.png" alt="视频通话"/>
             </div>
             <label class="send-attachment-item-label">视频通话</label>
+        </li>
+        <li class="send-attachment-item ai-replay-msg" onclick="sendInviteCall('VIDEO_CALL')" >
+            <div id="ai-reply-msg" class="send-attachment-item-img" onclick="aiReplyMsg()">
+                <img class="icon-image" src="../ico/ai_icon.png" alt="Ai智能回复"/>
+            </div>
+            <label class="send-attachment-item-label">Ai智能</label>
+        </li>
+        <li class="send-attachment-item">
+            <div id="attachment-video" class="send-attachment-item-img" onclick="openVideoDialog()">
+                <img class="icon-image" src="../ico/_video.png" alt="视频"/>
+            </div>
+            <label class="send-attachment-item-label">视频</label>
+            <input id="videoFileInput" class="hide" type="file" accept="video/*" />
         </li>
         <li class="send-attachment-item">
             <div id="attachment-file" class="send-attachment-item-img" onclick="openFileDialog()">

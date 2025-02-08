@@ -176,8 +176,9 @@ html, body {
 
 .top-search-dialog .search-item .item-nickname {
     flex: 1;
-    margin:  0 3px 0 10px;
+    margin: 0 3px 0 10px;
 }
+
 .top-search-dialog .search-item .item-nickname .nickname {
     width: 190px;
     overflow: hidden;
@@ -472,7 +473,7 @@ html, body {
 
 .main .box .box-right {
     float: left;
-    width: 750px;
+    width: 754px;
     height: 100%;
 }
 
@@ -3256,3 +3257,55 @@ html, body {
 }
 
 /*视频通话样式end*/
+
+/*AI 智能消息样式 start*/
+.ai-msg-dialog {
+    position: relative;
+    z-index: 100;
+    left: 28%;
+    bottom: 37%;
+    width: 710px;
+    padding: 6px;
+    overflow: hidden;
+    border: 1px solid #b7b5b5;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
+}
+.ai-msg-dialog .ai-content{
+    display: grid;
+    place-items: center; /* 水平和垂直居中 */
+    height: 60px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-y: auto;
+}
+.ai-msg-dialog .ai-content .ai-loading {
+    background-image: url("../ico/loading3.gif");
+    background-size: 190%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 60px;
+    height: 60px;
+}
+.ai-msg-dialog .ai-content .ai-output {
+
+}
+
+.ai-msg-dialog .ai-msg-btns {
+    position: absolute;
+    padding: 2px 4px 2px 4px;
+    right: 19px;
+    bottom: 0;
+    border: 1px solid #b7b5b5;
+    background-color: #ffffff;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
+}
+
+.ai-msg-dialog .ai-msg-btns .ai-btn {
+    font-size: 11px;
+    padding: 0 2px;
+    cursor: pointer;
+}

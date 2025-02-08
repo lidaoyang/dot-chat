@@ -53,7 +53,7 @@ function sendMsg() {
 }
 
 /**
- * 发送各种对象格式的信息(图片,视频,文件,名片等)
+ * 发送各种对象格式的信息(图片,视频,文件,名片,文本等)
  * @param contentObj json格式的消息
  * @param msgType 消息类型
  */

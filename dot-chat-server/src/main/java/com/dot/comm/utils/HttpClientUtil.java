@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.utils.vo.HttpResponseVo;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.dot.deepseek.utils.SseEmitterUtil;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +42,11 @@ import java.util.concurrent.Executors;
 public class HttpClientUtil {
 
     // 前缀
-    public static String PREFIX = "--";
+    private static final String PREFIX = "--";
     // 换行符
-    public static String ROW = "\r\n";
+    private static final String ROW = "\r\n";
     // 产生一个边界
-    static String BOUNDARY = UUID.randomUUID().toString().replaceAll("-", "");
+    private static final String BOUNDARY = UUID.randomUUID().toString().replaceAll("-", "");
 
     /**
      * post 请求
@@ -468,10 +468,9 @@ public class HttpClientUtil {
      *
      * @param url       请求地址
      * @param headerMap 请求头信息
-     * @param httpRes   http响应对象
      */
-    public static SseEmitter doGetForStream(String url, Map<String, String> headerMap, HttpServletResponse httpRes) {
-        return doRequestForStream(url, Method.GET, headerMap, null);
+    public static void doGetForStream(String url, Map<String, String> headerMap, Integer userId) {
+        doRequestForStream(url, Method.GET, headerMap, null, userId);
     }
 
     /**
@@ -481,8 +480,8 @@ public class HttpClientUtil {
      * @param headerMap 请求头信息
      * @param jsonBody  请求体信息
      */
-    public static SseEmitter doPostForStream(String url, Map<String, String> headerMap, String jsonBody) {
-        return doRequestForStream(url, Method.POST, headerMap, jsonBody);
+    public static void doPostForStream(String url, Map<String, String> headerMap, String jsonBody, Integer userId) {
+        doRequestForStream(url, Method.POST, headerMap, jsonBody, userId);
     }
 
     /**
@@ -492,11 +491,9 @@ public class HttpClientUtil {
      * @param method    GET POST
      * @param headerMap 请求头信息
      */
-    public static SseEmitter doRequestForStream(String url, Method method, Map<String, String> headerMap,
-                                                String jsonBody) {
+    public static void doRequestForStream(String url, Method method, Map<String, String> headerMap,
+                                          String jsonBody, Integer userId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        SseEmitter emitter = new SseEmitter(60_000L * 2); // 设置超时时间（60秒）
-
         executor.execute(() -> {
             // 使用 Apache HttpClient 5 发送请求
             try (CloseableHttpClient client = HttpClients.createDefault()) {
@@ -507,29 +504,37 @@ public class HttpClientUtil {
                      BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        log.info("接收到数据: {}", line);
-                        if (line.startsWith("data: ")) {
-                            String jsonData = line.substring(6);
-                            if ("[DONE]".equals(jsonData)) {
-                                break;
-                            }
-                            JSONObject jsonObject = JSONObject.parseObject(jsonData);
-                            String content = jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content");
-                            if (StringUtils.isNotBlank(content)) {
-                                emitter.send(content);
-                            }
+                        log.debug("接收到数据: {}", line);
+                        SseEmitter emitter = SseEmitterUtil.get(userId);
+                        if (emitter == null) {
+                            log.info("用户[{}]已离线，取消接收数据", userId);
+                            return;
+                        }
+                        if (!line.startsWith("data: ")) {
+                            continue;
+                        }
+                        String jsonData = line.substring(6);
+                        if ("[DONE]".equals(jsonData)) {
+                            break;
+                        }
+                        JSONObject jsonObject = JSONObject.parseObject(jsonData);
+                        String content = jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content");
+                        if (StringUtils.isNotBlank(content)) {
+                            emitter.send(content);
                         }
                     }
-                    log.info("流式处理结束,line:{}", line);
-                    emitter.complete();
+                    log.info("流式处理结束");
+                    SseEmitter emitter = SseEmitterUtil.get(userId);
+                    if (emitter != null) {
+                        emitter.complete();
+                    }
                 }
             } catch (Exception e) {
                 log.error("处理请求时发生错误", e);
-                emitter.completeWithError(e);
             }
         });
-        return emitter;
     }
+
 
     private static void addHeader(Map<String, String> headerMap, HttpRequestBase request) {
         if (headerMap != null) {

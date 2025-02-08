@@ -45,7 +45,8 @@
             </div>
             <div class="search">
                 <i class="icon-sear"></i>
-                <input id="top-search-input" class="search-input" name="top-search" placeholder="搜索(昵称和聊天室)" autocomplete="off" type="text" />
+                <input id="top-search-input" class="search-input" name="top-search" placeholder="搜索(昵称和聊天室)"
+                       autocomplete="off" type="text"/>
                 <i class="clean-search" onclick="clearSearchInput()"></i>
                 <i id="add-operation" class="add-operation"></i>
             </div>
@@ -388,13 +389,18 @@
 <!--截屏插件-->
 <script src="./js/js-screen-shot/screenShotPlugin.umd.js"></script>
 
+<!--引入自定义基础库-->
 <script src="js/moment.js"></script>
 <script src="js/custom-log.js"></script>
 <script src="js/base.js"></script>
 <script src="js/upload.js"></script>
 <script src="js/emoji.js"></script>
 <script src="js/chat-index.js"></script>
+<!--流式请求处理js-->
+<script src="js/sse/sse.js"></script>
+<script src="js/sse/deepseek-sse-util.js"></script>
 
+<!--视频通话和发送信息js-->
 <script src="js/im/tio/tiows.js"></script>
 <script src="js/im/imHandler.js"></script>
 <script src="js/im/im.js"></script>
