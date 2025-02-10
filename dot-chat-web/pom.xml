@@ -16,11 +16,22 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>dot-chat-web</finalName>
-    </build>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <build>
+        <!--打包配置-->
+        <finalName>dot-chat</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <excludes>
+                    <exclude>test/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+
 </project>
