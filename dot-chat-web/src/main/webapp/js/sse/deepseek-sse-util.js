@@ -143,6 +143,7 @@ function startSSE(messages) {
             $('.ai-loading').hide();
         }
         if (event.readyState === 2) {
+            $('.ai-loading').hide();
             let $aiOutput = $("#ai-output");
             if ($aiOutput.text() === '') {
                 $aiOutput.html('服务器繁忙，请稍后再试。');
