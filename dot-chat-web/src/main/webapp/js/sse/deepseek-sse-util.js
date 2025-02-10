@@ -49,7 +49,7 @@ function getDeepSeekAiMsgList() {
         let content = $msgDom.find(".msg-text-wrap").text();
         deepSeekAiMsgList.push(new DSAiMessage(name + uid, content));
     }
-    logger.info("AI消息列表:", deepSeekAiMsgList);
+    // logger.info("AI消息列表:", deepSeekAiMsgList);
     return deepSeekAiMsgList;
 }
 
