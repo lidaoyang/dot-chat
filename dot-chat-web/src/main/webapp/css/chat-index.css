@@ -3262,8 +3262,8 @@ html, body {
 .ai-msg-dialog {
     position: relative;
     z-index: 100;
-    left: 28%;
-    bottom: 37%;
+    left: 27%;
+    bottom: 39%;
     width: 710px;
     padding: 6px;
     overflow: hidden;
@@ -3281,23 +3281,26 @@ html, body {
     word-break: break-all;
     overflow-y: auto;
 }
-.ai-msg-dialog .ai-content .ai-loading {
+.ai-msg-dialog .ai-loading {
+    position: absolute;
+    top: -1px;
     background-image: url("../ico/loading3.gif");
-    background-size: 190%;
+    background-size: 230%;
     background-position: center;
     background-repeat: no-repeat;
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 95px;
 }
 .ai-msg-dialog .ai-content .ai-output {
 
 }
 
 .ai-msg-dialog .ai-msg-btns {
-    position: absolute;
+    float: right;
+    position: relative;
     padding: 2px 4px 2px 4px;
-    right: 19px;
-    bottom: 0;
+    right: 10px;
+    bottom: -6px;
     border: 1px solid #b7b5b5;
     background-color: #ffffff;
     border-radius: 5px 5px 0 0;

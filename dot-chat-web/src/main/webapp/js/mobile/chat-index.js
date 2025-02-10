@@ -863,7 +863,7 @@ function cleanChatMsgUnreadCount() {
  */
 function generateChatMsgDom(user, chatMsg) {
     if (chatMsg.msgType === MsgType.SYSTEM || chatMsg.msgType === MsgType.EVENT) {
-        return '<li><div class="sysinfo">' + chatMsg.msg + '</div></li>';
+        return '<li class="sys"><div class="sysinfo">' + chatMsg.msg + '</div></li>';
     }
     let msgDom = getMsgDom(chatMsg);
     if (msgDom === '') {

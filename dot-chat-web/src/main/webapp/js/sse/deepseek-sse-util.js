@@ -20,6 +20,34 @@ function editAiMsg() {
     $('.ai-btn').attr('disabled', true);
 }
 
+
+/**
+ * 设置AI消息列表
+ */
+function getDeepSeekAiMsgList() {
+    // 清空
+    let deepSeekAiMsgList = [];
+    deepSeekAiMsgList.push(new DSAiMessage(chatUser.nickname + chatUser.id, '你是当前聊天中的一员,你来帮我继续回答对方的信息吧', 'system'));
+    let msgListDom = $("#chat-msg-list").children();
+    let lastThreeDom = msgListDom.length <= 5 ? msgListDom : msgListDom.slice(-5);
+    for (let i = 0; i < lastThreeDom.length; i++) {
+        let $msgDom = $(lastThreeDom[i]);
+        if ($msgDom.attr("class") === "sys") {
+            continue;
+        }
+        let msgType = $msgDom.find(".msg-text").attr("msg-type");
+        if (msgType !== MsgType.TEXT) {
+            continue;
+        }
+        let uid = $msgDom.find(".avatar").attr("user-id");
+        let name = $msgDom.find(".msg-name").text();
+        let content = $msgDom.find(".msg-text-wrap").text();
+        deepSeekAiMsgList.push(new DSAiMessage(name + uid, content));
+    }
+    logger.info("AI消息列表:", deepSeekAiMsgList);
+    return deepSeekAiMsgList;
+}
+
 /**
  * 注册AI消息点击事件
  */
@@ -30,13 +58,26 @@ function registerNavAiMsgClick() {
         }
         $(".ai-msg-dialog").show();
         $('.ai-loading').show();
-        $("#ai-output").html('');
+        let $aiOutput = $("#ai-output");
+        $aiOutput.html('');
 
-        let data = {
+        // 设置AI消息列表
+        let deepSeekAiMsgList = getDeepSeekAiMsgList();
+
+        if (deepSeekAiMsgList.length <= 1) {
+            $aiOutput.html('还没有聊天上下文,请先联系对方,等对方回复后,我在参与吧!');
+            return;
+        }
+
+        /*let data = {
             messages: [
-                new DSAiMessage('system', '你是当前聊天中的一员,名称叫吉祥,你来帮我继续回答对方的信息吧', 'system'),
-                new DSAiMessage('daoyang', '快来玩王者啊，我邀请你。今天想玩哪个英雄？'),
+                new DSAiMessage('吉祥', '你是当前聊天中的一员,你来帮我继续回答对方的信息吧', 'system'),
+                new DSAiMessage('吉祥', '快来玩王者啊，我邀请你。今天想玩哪个英雄？'),
+                // new DSAiMessage('吉祥', '来了,我玩射手吧!'),
             ]
+        }*/
+        let data = {
+            messages: deepSeekAiMsgList
         }
         // 开始sse接收AI数据
         startSSE(data);
@@ -92,12 +133,17 @@ function startSSE(messages) {
         logger.info('Custom Event:', event.data);
     });
     sseClient.addEventListener('readystatechange', (event) => {
-        logger.info('readystatechange event:', event);
+        // logger.info('readystatechange event:', event);
         if (event.readyState === 1) {
             $('.ai-loading').hide();
         }
         if (event.readyState === 2) {
-            $('.ai-btn').removeAttr('disabled');
+            let $aiOutput = $("#ai-output");
+            if ($aiOutput.text() === '') {
+                $aiOutput.html('服务器繁忙，请稍后再试。');
+            } else {
+                $('.ai-btn').removeAttr('disabled');
+            }
         }
     });
     // 错误处理
