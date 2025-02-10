@@ -32,7 +32,7 @@ function editAiMsg() {
 function getDeepSeekAiMsgList() {
     // 清空
     let deepSeekAiMsgList = [];
-    deepSeekAiMsgList.push(new DSAiMessage(chatUser.nickname + chatUser.id, '你是当前聊天中的一员,你来帮我继续回答对方的信息吧', 'system'));
+    deepSeekAiMsgList.push(new DSAiMessage(chatUser.nickname + chatUser.id, '你是当前聊天中的一员,你来帮我简单的回答一下对方吧', 'system'));
     let msgListDom = $("#chat-msg-list").children();
     let lastThreeDom = msgListDom.length <= 3 ? msgListDom : msgListDom.slice(-3);
     for (let i = 0; i < lastThreeDom.length; i++) {
