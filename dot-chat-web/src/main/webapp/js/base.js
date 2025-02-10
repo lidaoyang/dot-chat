@@ -725,6 +725,13 @@ function getChatUser() {
     });
 }
 
+function checkToUser() {
+    if (!chatToUser || chatToUser.isDissolve === "true") {
+        return false;
+    }
+    return true;
+}
+
 /**
  * 刷新聊天列表DOM
  */

@@ -32,8 +32,8 @@
             </div>
             <label class="send-attachment-item-label">视频通话</label>
         </li>
-        <li class="send-attachment-item ai-replay-msg" onclick="sendInviteCall('VIDEO_CALL')" >
-            <div id="ai-reply-msg" class="send-attachment-item-img" onclick="aiReplyMsg()">
+        <li class="send-attachment-item ai-replay-msg" >
+            <div id="nav-ai-reply-msg" class="send-attachment-item-img">
                 <img class="icon-image" src="../ico/ai_icon.png" alt="Ai智能回复"/>
             </div>
             <label class="send-attachment-item-label">Ai智能</label>
@@ -80,6 +80,18 @@
             </ul>
             <i class="emoji-remove" onclick="removeInputEmoji()"></i>
         </div>
+    </div>
+</div>
+
+<!--  AI智能消息对话框  -->
+<div class="ai-msg-dialog" style="display: none;">
+    <div class="ai-content">
+        <i class="ai-loading" style="display: none;"></i>
+        <p id="ai-output" class="ai-output"></p>
+    </div>
+    <div class="ai-msg-btns">
+        <button class="ai-btn" onclick="editAiMsg()" disabled>编辑</button>
+        <button class="ai-btn margin-left-10" onclick="sendAiMsg()" disabled>发送</button>
     </div>
 </div>
 

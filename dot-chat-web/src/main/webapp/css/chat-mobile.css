@@ -621,7 +621,7 @@ body {
 
 .msg-footer .add-operation {
     float: right;
-    background-image: url(../ico/加-黑.png);
+    background-image: url(../ico/加-黑-ai.png);
     background-size: 100% 100%;
     height: 32px;
     width: 32px;
@@ -2793,5 +2793,64 @@ body {
 .call-audio-msg-icon {
     background-image: url("../ico/call_audio_msg.png");
 }
-
 /*视频通话样式end*/
+
+
+/*AI 智能消息样式 start*/
+.ai-msg-dialog {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    width: 96%;
+    padding: 6px;
+    overflow: hidden;
+    border: 1px solid #b7b5b5;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
+}
+.ai-msg-dialog .ai-content{
+    display: grid;
+    place-items: center; /* 水平和垂直居中 */
+    height: 60px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-y: auto;
+}
+.ai-msg-dialog .ai-loading {
+    position: absolute;
+    top: -1px;
+    background-image: url("../ico/loading3.gif");
+    background-size: 230%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 95px;
+}
+.ai-msg-dialog .ai-content .ai-output {
+
+}
+
+.ai-msg-dialog .ai-msg-btns {
+    float: right;
+    position: relative;
+    padding: 3px 4px 3px 4px;
+    right: 10px;
+    bottom: -6px;
+    border: 1px solid #b7b5b5;
+    background-color: #ffffff;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
+}
+
+.ai-msg-dialog .ai-msg-btns .margin-left-10 {
+    margin-left: 10px;
+}
+
+.ai-msg-dialog .ai-msg-btns .ai-btn {
+    font-size: 11px;
+    padding: 0 2px;
+    cursor: pointer;
+}
+/*AI 智能消息样式 ent*/

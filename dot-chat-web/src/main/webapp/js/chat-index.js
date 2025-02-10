@@ -1566,13 +1566,6 @@ function changeScreenShot() {
     });
 }
 
-function checkToUser() {
-    if (!chatToUser || chatToUser.isDissolve === "true") {
-        return false;
-    }
-    return true;
-}
-
 /**
  * 注册聊天历史消息图片缩放
  */

@@ -595,6 +595,8 @@ function loadChatMsg() {
                 registerChatMsgPictureChange();
                 //注册文件点击事件
                 registerChatMsgFileChange();
+                //注册聊天室ai消息点击事件
+                registerNavAiMsgClick();
             }
             initRelayMsgUserDialog();
             initRelayUserTabs();

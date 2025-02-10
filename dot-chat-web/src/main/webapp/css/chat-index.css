@@ -3255,7 +3255,6 @@ html, body {
 .call-audio-msg-icon {
     background-image: url("../ico/call_audio_msg.png");
 }
-
 /*视频通话样式end*/
 
 /*AI 智能消息样式 start*/
@@ -3298,7 +3297,7 @@ html, body {
 .ai-msg-dialog .ai-msg-btns {
     float: right;
     position: relative;
-    padding: 2px 4px 2px 4px;
+    padding: 3px 4px 3px 4px;
     right: 10px;
     bottom: -6px;
     border: 1px solid #b7b5b5;
@@ -3307,8 +3306,13 @@ html, body {
     box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
 }
 
+.ai-msg-dialog .ai-msg-btns .margin-left-10 {
+    margin-left: 10px;
+}
+
 .ai-msg-dialog .ai-msg-btns .ai-btn {
     font-size: 11px;
     padding: 0 2px;
     cursor: pointer;
 }
+/*AI 智能消息样式 ent*/

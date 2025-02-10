@@ -15,7 +15,12 @@ function editAiMsg() {
         myAlert('', "内容不能为空", 'warn');
         return;
     }
-    $("#content-input").val(content);
+    let $contentInput = $("#content-input");
+    $contentInput.val(content);
+    if (mobile){
+        // 触发内容输入框变化的处理函数，以处理输入后的逻辑，如更新界面显示等
+        contentInputChange($contentInput);
+    }
     $(".ai-msg-dialog").hide();
     $('.ai-btn').attr('disabled', true);
 }
