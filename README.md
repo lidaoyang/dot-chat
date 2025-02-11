@@ -2,7 +2,7 @@
 
 ## 简介
 
-这是一个基于Web技术开发的高仿微信聊天软件，支持手机端和PC端。用户可以通过浏览器访问，实现即时通讯、消息推送、语音视频通话等功能。
+这是一个基于Web技术开发的高仿微信聊天软件，支持手机端和PC端。用户可以通过浏览器访问，实现即时通讯、消息推送、语音视频通话等功能。已接入AI智能回复功能，如果不知道怎么回复，可以使用"AI智能回复"来帮你回复。
 
 ## 特性
 
@@ -11,6 +11,7 @@
 - **语音视频通话**：集成实时语音和视频通话功能。
 - **用户管理**：支持用户注册、登录、好友添加等功能。
 - **群聊功能**：支持创建和加入群聊，进行多人聊天。
+- **AI智能回复**：AI智能回复功能，根据好友的回复内容，自动生成回复信息。
 
 ## 测试地址  https://dot-chat.jrmall.cn
 
@@ -49,6 +50,10 @@
 ![视频通话页面](screenshot/msg-video-call.png)
 ![聊天信息更多页面](screenshot/msg-more.png)
 ![聊天信息更多页面](screenshot/msg-group-more.png)
+### AI智能回复移动端截图
+![AI智能回复3](screenshot/msg-ai-3.jpg)
+![AI智能回复2](screenshot/msg-ai-2.jpg)
+![AI智能回复1](screenshot/msg-ai-1.jpg)
 
 ### PC端聊天界面
 ![聊天室页面](screenshot/pc-chatroom.png)
@@ -57,3 +62,7 @@
 ![发送视频通话](screenshot/pc-msg-send-video-call.png)
 ![视频通话](screenshot/pc-msg-video-call.png)
 ![好友页面](screenshot/pc-friends.png)
+
+### AI智能回复PC端截图
+![AI智能回复2](screenshot/pc-msg-ai-2.jpg)
+![AI智能回复1](screenshot/pc-msg-ai-1.jpg)
