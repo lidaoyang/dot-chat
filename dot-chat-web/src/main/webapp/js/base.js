@@ -9,9 +9,9 @@ let HOST, BASE_URL, ws_protocol, ws_port; // ws 或 wss;
 switch (env) {
     case "dev":
         ws_protocol = 'wss';
-        ws_port = "443";//9326
+        ws_port = "9326";
         HOST = "dev.dot.cn";
-        BASE_URL = "https://" + HOST + "/";
+        BASE_URL = "https://" + HOST + ":8089/";
         break;
     case "prod":
         ws_protocol = 'wss';
