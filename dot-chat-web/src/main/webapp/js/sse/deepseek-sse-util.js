@@ -134,9 +134,9 @@ function startSSE(messages) {
     });
 
     // 监听自定义事件（需后端指定事件名称）
-    sseClient.addEventListener('customEvent', (event) => {
-        logger.info('Custom Event:', event.data);
-    });
+    // sseClient.addEventListener('customEvent', (event) => {
+    //     logger.info('Custom Event:', event.data);
+    // });
     sseClient.addEventListener('readystatechange', (event) => {
         // logger.info('readystatechange event:', event);
         if (event.readyState === 1) {
@@ -150,6 +150,7 @@ function startSSE(messages) {
             } else {
                 $('.ai-btn').removeAttr('disabled');
             }
+            closeSse();
         }
     });
     // 错误处理
@@ -162,11 +163,16 @@ function startSSE(messages) {
 }
 
 function stopSSE() {
+    closeSse();
+    if (sseClient) {
+        // 关闭服务端sse连接
+        closeServiceSse();
+    }
+}
+function closeSse(){
     if (sseClient) {
         sseClient.close(); // 关闭连接
         sseClient = null;
-        // 关闭服务端sse连接
-        closeServiceSse();
     }
 }
 
