@@ -195,7 +195,7 @@ tio:
 aliyun:
   oss:
     local: true
-    domain: https://172.16.85.134:8443
+    domain: https://dev.dot.cn:8443
 
 mat:
   upload:
