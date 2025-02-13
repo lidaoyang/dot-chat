@@ -129,7 +129,7 @@ function startSSE(messages) {
     // 监听消息事件
     sseClient.addEventListener('message', (event) => {
         const data = event.data;
-        // logger.info('Data: ', data);
+        logger.info('Data: ', data);
         document.getElementById('ai-output').innerHTML += data;
     });
 
@@ -138,7 +138,7 @@ function startSSE(messages) {
     //     logger.info('Custom Event:', event.data);
     // });
     sseClient.addEventListener('readystatechange', (event) => {
-        // logger.info('readystatechange event:', event);
+        logger.info('readystatechange event:', event);
         if (event.readyState === 1) {
             $('.ai-loading').hide();
         }
