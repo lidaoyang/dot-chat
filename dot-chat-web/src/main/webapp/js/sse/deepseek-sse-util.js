@@ -61,29 +61,25 @@ function registerNavAiMsgClick() {
         if (!checkToUser()) {
             return;
         }
+        // 显示AI消息框
         $(".ai-msg-dialog").show();
-        $('.ai-loading').show();
-        let $aiOutput = $("#ai-output");
-        $aiOutput.html('');
 
         // 设置AI消息列表
         let deepSeekAiMsgList = getDeepSeekAiMsgList();
+        // 清空输出内容
+        let $aiOutput = $("#ai-output");
+        $aiOutput.html('');
 
         if (deepSeekAiMsgList.length <= 1) {
             $aiOutput.html('还没有聊天上下文,请先联系对方,等对方回复后,我在参与吧!');
             return;
         }
 
-        /*let data = {
-            messages: [
-                new DSAiMessage('吉祥', '你是当前聊天中的一员,你来帮我继续回答对方的信息吧', 'system'),
-                new DSAiMessage('吉祥', '快来玩王者啊，我邀请你。今天想玩哪个英雄？'),
-                // new DSAiMessage('吉祥', '来了,我玩射手吧!'),
-            ]
-        }*/
         let data = {
             messages: deepSeekAiMsgList
         }
+        // 显示加载中
+        $('.ai-loading').show();
         // 开始sse接收AI数据
         startSSE(data);
         // let text = "等待对方回复后,AI会根据对方回复的内容生成回复消息";
@@ -107,7 +103,6 @@ function registerNavAiMsgClick() {
 let sseClient = null;
 
 function startSSE(messages) {
-
     let requestBody = JSON.stringify(messages);
     let url = `${DEEPSEEK_URL_PREFIX}/completions/stream`;
     let token = $.cookie(TOKEN_KEY);
