@@ -45,7 +45,7 @@ public class DSUtils {
         header.put("Authorization", "Bearer " + getAPIKey());
         DSChatRequestBody requestBody = new DSChatRequestBody();
         requestBody.setMessages(messages);
-        requestBody.setMax_tokens(512);
+        requestBody.setMax_tokens(1024);
         requestBody.setStream(true);
         HttpClientUtil.doPostForStream(url, header, JSONObject.toJSONString(requestBody), userId);
     }
