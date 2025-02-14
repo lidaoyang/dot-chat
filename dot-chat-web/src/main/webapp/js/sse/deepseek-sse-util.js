@@ -17,7 +17,7 @@ function editAiMsg() {
     }
     let $contentInput = $("#content-input");
     $contentInput.val(content);
-    if (mobile){
+    if (mobile) {
         // 触发内容输入框变化的处理函数，以处理输入后的逻辑，如更新界面显示等
         contentInputChange($contentInput);
     }
@@ -63,6 +63,8 @@ function registerNavAiMsgClick() {
         }
         // 显示AI消息框
         $(".ai-msg-dialog").show();
+        // 注册document点击事件
+        registerDocumentClickForAi();
 
         // 设置AI消息列表
         let deepSeekAiMsgList = getDeepSeekAiMsgList();
@@ -82,21 +84,22 @@ function registerNavAiMsgClick() {
         $('.ai-loading').show();
         // 开始sse接收AI数据
         startSSE(data);
-        // let text = "等待对方回复后,AI会根据对方回复的内容生成回复消息";
-
-        $(document).on("click", function (event) {
-            let clsName = event.target.className;
-            if (clsName.startsWith("ai-")) {
-                return;
-            }
-            $(".ai-msg-dialog").hide();
-            $('.ai-btn').attr('disabled', true);
-            // 停止sse
-            stopSSE();
-            // 移除点击事件
-            $(document).off("click");
-        });
         e.stopPropagation();
+    });
+}
+
+function registerDocumentClickForAi() {
+    $(document).on("click", function (event) {
+        let clsName = event.target.className;
+        if (clsName.startsWith("ai-")) {
+            return;
+        }
+        $(".ai-msg-dialog").hide();
+        $('.ai-btn').attr('disabled', true);
+        // 停止sse
+        stopSSE();
+        // 移除点击事件
+        $(document).off("click");
     });
 }
 
@@ -164,7 +167,8 @@ function stopSSE() {
         closeSse();
     }
 }
-function closeSse(){
+
+function closeSse() {
     if (sseClient) {
         sseClient.close(); // 关闭连接
         sseClient = null;
