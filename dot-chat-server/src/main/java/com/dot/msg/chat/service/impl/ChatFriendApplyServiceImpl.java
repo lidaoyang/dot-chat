@@ -16,6 +16,7 @@ import com.dot.msg.chat.dto.ChatFriendApplyDto;
 import com.dot.msg.chat.em.ChatFriendApplyStatusEm;
 import com.dot.msg.chat.em.ChatTypeEm;
 import com.dot.msg.chat.em.ChatSourceEm;
+import com.dot.msg.chat.em.DeviceTypeEm;
 import com.dot.msg.chat.model.ChatFriendApply;
 import com.dot.msg.chat.model.ChatFriendApplyUserRel;
 import com.dot.msg.chat.model.ChatUser;
@@ -430,6 +431,7 @@ public class ChatFriendApplyServiceImpl extends ServiceImpl<ChatFriendApplyDao, 
         message.setChatType(ChatTypeEm.SINGLE);
         message.setToUserId(friendApply.getApplyUserId());
         message.setSendTime(DateUtil.now());
+        message.setDeviceType(DeviceTypeEm.SYS.name());
         return message;
     }
 
