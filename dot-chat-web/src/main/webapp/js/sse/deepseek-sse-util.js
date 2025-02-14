@@ -63,8 +63,6 @@ function registerNavAiMsgClick() {
         }
         // 显示AI消息框
         $(".ai-msg-dialog").show();
-        // 注册document点击事件
-        registerDocumentClickForAi();
 
         // 设置AI消息列表
         let deepSeekAiMsgList = getDeepSeekAiMsgList();
@@ -74,16 +72,17 @@ function registerNavAiMsgClick() {
 
         if (deepSeekAiMsgList.length <= 1) {
             $aiOutput.html('还没有聊天上下文,请先联系对方,等对方回复后,我在参与吧!');
-            return;
+        } else {
+            let data = {
+                messages: deepSeekAiMsgList
+            }
+            // 显示加载中
+            $('.ai-loading').show();
+            // 开始sse接收AI数据
+            startSSE(data);
         }
-
-        let data = {
-            messages: deepSeekAiMsgList
-        }
-        // 显示加载中
-        $('.ai-loading').show();
-        // 开始sse接收AI数据
-        startSSE(data);
+        // 注册document点击事件
+        registerDocumentClickForAi();
         e.stopPropagation();
     });
 }
@@ -91,6 +90,7 @@ function registerNavAiMsgClick() {
 function registerDocumentClickForAi() {
     $(document).on("click", function (event) {
         let clsName = event.target.className;
+        logger.info("className:", clsName);
         if (clsName.startsWith("ai-")) {
             return;
         }
