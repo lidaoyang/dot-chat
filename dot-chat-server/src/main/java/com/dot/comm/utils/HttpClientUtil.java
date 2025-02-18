@@ -502,6 +502,7 @@ public class HttpClientUtil {
 
                 try (CloseableHttpResponse response = client.execute(request);
                      BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
+                    StringBuilder totalContent =  new StringBuilder();
                     String line;
                     while ((line = reader.readLine()) != null) {
                         log.debug("接收到数据: {}", line);
@@ -521,11 +522,13 @@ public class HttpClientUtil {
                         String content = jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content");
                         if (StringUtils.isNotBlank(content)) {
                             emitter.send(content);
+                            totalContent.append(content);
                         }
                     }
                     log.info("流式处理结束");
                     SseEmitter emitter = SseEmitterUtil.get(userId);
                     if (emitter != null) {
+                        SseEmitterUtil.addContent(userId, totalContent.toString());
                         emitter.complete();
                     }
                 }

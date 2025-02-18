@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SseEmitterUtil {
 
     private static final Map<Integer, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
+    private static final Map<Integer, String> contentMap = new ConcurrentHashMap<>();
 
     public static boolean isExist(Integer userId) {
         return sseEmitterMap.containsKey(userId);
@@ -30,5 +31,15 @@ public class SseEmitterUtil {
 
     public static void remove(Integer userId) {
         sseEmitterMap.remove(userId);
+        contentMap.remove(userId);
     }
+
+    public static String getContent(Integer userId) {
+        return contentMap.get(userId);
+    }
+
+    public static void addContent(Integer userId, String content) {
+        contentMap.put(userId, content);
+    }
+
 }
