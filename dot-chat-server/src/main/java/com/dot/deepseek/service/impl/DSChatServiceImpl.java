@@ -38,11 +38,11 @@ public class DSChatServiceImpl implements DSChatService {
 
     @Override
     public SseEmitter generateChatMessageForStream(DSChatRequest request) {
-        Integer userId = tokenManager.getUserId();
+        final Integer userId = tokenManager.getUserId();
         // 创建SseEmitter对象
         SseEmitter sseEmitter = SseEmitterUtil.add(userId, new SseEmitter(60000L * 2));
         // 保存请求记录
-        Integer reqRecordId = saveNewDeepseekReqRecord(request, userId);
+        final Integer reqRecordId = saveNewDeepseekReqRecord(request, userId);
         // 调用接口生成回复消息并发送到客户端
         DSUtils.generateChatMessageForStream(request.getMessages(), userId);
         sseEmitter.onCompletion(() -> {
