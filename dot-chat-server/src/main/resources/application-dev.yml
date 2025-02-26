@@ -43,7 +43,7 @@ spring:
       # 用来检测连接是否有效的sql，要求是一个查询语句
       validation-query: SELECT 1
       # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
-      aop-patterns: 'com.dot.msg.*, com.dot.sys.*'
+      aop-patterns: 'com.dot.msg.*, com.dot.sys.*, com.dot.deepseek.*'
       ########## 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ##########
       stat-view-servlet: #监控页配置
         # 启用StatViewServlet
