@@ -28,7 +28,7 @@ Menu.prototype = {
         let me = this,
             opt = me.options,
             el = me.element;
-        console.log('init', me);
+        // console.log('init', me);
         me.loadData(opt.data);
 
         el.on('click', '.menu-title', function (event) {
