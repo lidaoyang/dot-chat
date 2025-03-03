@@ -243,7 +243,6 @@ public class UploadUtil {
      * 上传
      *
      * @param multipartFile 上传的文件对象，必传
-     * @author Mr.Zhang
      * @since 2020-05-08
      */
     public static UploadResponse file(MultipartFile multipartFile) throws IOException {
