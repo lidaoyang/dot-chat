@@ -98,7 +98,6 @@ public class UploadUtil {
      * 生成文件文件名
      *
      * @param fileName 文件名
-     * @author Mr.Zhang
      * @since 2020-05-08
      */
     public static String getDestPath(String fileName) {
@@ -119,7 +118,6 @@ public class UploadUtil {
     /**
      * 生成文件在的实际的路径
      *
-     * @author Mr.Zhang
      * @since 2020-05-08
      */
     public static String getServerPath() {
