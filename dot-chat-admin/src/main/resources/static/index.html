@@ -57,14 +57,13 @@
 
     <div class="main">
         <div id="mainTabs" class="mini-tabs main-tabs" activeIndex="0" style="height:100%;" plain="false"
-             buttons="#tabsButtons" arrowPosition="side">
+             contextMenu="#tabsMenu" arrowPosition="side">
         </div>
-        <div id="tabsButtons">
-            <a class="tabsBtn"><i class="fa fa-home"></i></a>
-            <a class="tabsBtn"><i class="fa fa-refresh"></i></a>
-            <a class="tabsBtn"><i class="fa fa-remove"></i></a>
-            <a class="tabsBtn"><i class="fa fa-arrows-alt"></i></a>
-        </div>
+
+        <ul id="tabsMenu" class="mini-contextmenu">
+            <li class="menu-refresh" iconCls="icon-reload">刷新标签</li>
+            <li class="menu-close" iconCls="icon-close">关闭其他标签</li>
+        </ul>
     </div>
 
 </div>

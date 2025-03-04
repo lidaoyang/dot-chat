@@ -57,7 +57,22 @@ $(function () {
             // 打开父级菜单
             $menuTitle.parents(".has-children").addClass("open");
         });
+
+        $("#tabsMenu .menu-refresh").on("click", function (e) {
+            tabs.reloadTab(tabs.getActiveTab());
+        });
+
+        $("#tabsMenu .menu-close").on("click", function (e) {
+            let activeTab = tabs.getActiveTab();
+            let tab0 = tabs.getTab(0);
+            let excludeTabs = [activeTab];
+            if (activeTab.name !== tab0.name) {
+                excludeTabs.push(tab0);
+            }
+            tabs.removeAll(excludeTabs);
+        });
     }
+
 
     // 面包屑
     function addBreadcrumb(id, pid) {
