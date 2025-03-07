@@ -1,7 +1,8 @@
 package com.dot.comm.config;
 
-import com.dot.comm.filter.AccessLimitInterceptor;
-import com.dot.comm.filter.AdminTokenInterceptor;
+import com.dot.comm.interceptor.AccessLimitInterceptor;
+import com.dot.comm.interceptor.AdminAuthInterceptor;
+import com.dot.comm.interceptor.AdminTokenInterceptor;
 import com.dot.comm.filter.LogMDCFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,11 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public HandlerInterceptor adminAuthInterceptor() {
+        return new AdminAuthInterceptor();
+    }
+
+    @Bean
     public HandlerInterceptor accessLimitInterceptor() {
         return new AccessLimitInterceptor();
     }
@@ -38,15 +44,26 @@ public class WebConfig implements WebMvcConfigurer {
         // addPathPatterns添加需要拦截的命名空间；
         // excludePathPatterns添加排除拦截命名空间
         // 限流限制拦截器
-        registry.addInterceptor(accessLimitInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(accessLimitInterceptor())
+                .addPathPatterns("/**")
                 .excludePathPatterns(excludePathPatterns);
 
-        // 前端用户登录token
-        registry.addInterceptor(adminTokenInterceptor()).addPathPatterns("/api/sys/**","/api/msg/**")
+        // 用户登录token 拦截器
+        registry.addInterceptor(adminTokenInterceptor())
+                .addPathPatterns("/api/sys/**", "/api/chat/**")
+                .excludePathPatterns(excludePathPatterns)
                 .excludePathPatterns(
-                        "/api/sys/admin/login"
-                )
-                .excludePathPatterns(excludePathPatterns);
+                        "/api/sys/auth/login"
+                );
+
+        // 用户菜单权限拦截器
+        registry.addInterceptor(adminAuthInterceptor())
+                .addPathPatterns("/api/sys/**", "/api/chat/**")
+                .excludePathPatterns(excludePathPatterns)
+                .excludePathPatterns(
+                        "/api/sys/auth/login"
+                );
+
 
     }
 

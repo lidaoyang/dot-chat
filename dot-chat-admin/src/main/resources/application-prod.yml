@@ -120,10 +120,9 @@ springdoc:
     - group: 'default'
       display-name: '星星点点聊天室'
       packages-to-scan:
-        - com.dot.sys.user.controller
+        - com.dot.sys.auth.controller
         - com.dot.sys.upload.controller
-        - com.dot.msg.chat.controller
-        - com.dot.msg.notify.controller
+        - com.dot.chat.controller
         - com.dot.deepseek.controller
 knife4j:
   enable: true
