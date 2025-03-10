@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import java.io.Serial;
@@ -47,7 +48,7 @@ public class SysAdminAddRequest implements Serializable {
      */
     @Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "密码不能为空")
-    @Range(min = 6, max = 20, message = "密码长度在6-20位之间")
+    @Length(min = 6, max = 20, message = "密码长度在6-20位之间")
     private String pwd;
 
     /**

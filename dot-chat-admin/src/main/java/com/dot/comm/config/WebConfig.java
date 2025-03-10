@@ -36,7 +36,11 @@ public class WebConfig implements WebMvcConfigurer {
         return new AccessLimitInterceptor();
     }
 
-    final String[] excludePathPatterns = {"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"};
+    // 静态资源不需要拦截
+    final String[] excludeStaticPathPatterns = {"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"};
+
+    // 不需要拦截的接口
+    final String[] excludeApiPathPatterns = {"/api/sys/auth/login"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -46,23 +50,19 @@ public class WebConfig implements WebMvcConfigurer {
         // 限流限制拦截器
         registry.addInterceptor(accessLimitInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns(excludePathPatterns);
+                .excludePathPatterns(excludeStaticPathPatterns);
 
         // 用户登录token 拦截器
         registry.addInterceptor(adminTokenInterceptor())
                 .addPathPatterns("/api/sys/**", "/api/chat/**")
-                .excludePathPatterns(excludePathPatterns)
-                .excludePathPatterns(
-                        "/api/sys/auth/login"
-                );
+                .excludePathPatterns(excludeStaticPathPatterns)
+                .excludePathPatterns(excludeApiPathPatterns);
 
         // 用户菜单权限拦截器
         registry.addInterceptor(adminAuthInterceptor())
                 .addPathPatterns("/api/sys/**", "/api/chat/**")
-                .excludePathPatterns(excludePathPatterns)
-                .excludePathPatterns(
-                        "/api/sys/auth/login"
-                );
+                .excludePathPatterns(excludeStaticPathPatterns)
+                .excludePathPatterns(excludeApiPathPatterns);
 
 
     }
