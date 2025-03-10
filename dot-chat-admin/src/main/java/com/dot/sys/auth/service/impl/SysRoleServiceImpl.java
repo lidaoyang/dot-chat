@@ -28,6 +28,7 @@ import com.dot.sys.auth.model.SysRoleDetail;
 import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
+import com.dot.sys.auth.response.SysRoleInfoResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 import com.dot.sys.auth.service.SysRoleDetailService;
@@ -307,6 +308,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
             return Collections.emptyList();
         }
         return BeanUtil.copyToList(roleList, SysRoleSimResponse.class);
+    }
+
+    @Override
+    public SysRoleInfoResponse getInfo(Integer roleId) {
+        SysRole role = checkRoleExist(roleId);
+        SysRoleInfoResponse response = new SysRoleInfoResponse();
+        BeanUtil.copyProperties(role, response);
+        response.setMenuIds(sysRoleDetailService.getMenuIdsByRoleId(roleId));
+        return response;
     }
 
     @Override

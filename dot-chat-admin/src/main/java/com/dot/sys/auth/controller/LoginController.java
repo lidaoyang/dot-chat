@@ -68,8 +68,8 @@ public class LoginController {
             @Parameter(name = "oldPwd", description = "旧密码", required = true),
             @Parameter(name = "newPwd", description = "新密码,长度(6-18)", required = true)
     })
-    public ResultBean<Boolean> modifyStatus(@RequestParam @NotBlank(message = "旧密码不能为空") String oldPwd,
-                                            @RequestParam @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 18, message = "新密码长度(6-18)") String newPwd) {
+    public ResultBean<Boolean> modifyStatus(@RequestParam("oldPwd") @NotBlank(message = "旧密码不能为空") String oldPwd,
+                                            @RequestParam("newPwd") @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 18, message = "新密码长度(6-18)") String newPwd) {
         return ResultBean.result(loginService.updatePassword(oldPwd, newPwd));
     }
 

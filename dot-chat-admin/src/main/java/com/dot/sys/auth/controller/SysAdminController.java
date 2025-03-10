@@ -37,7 +37,7 @@ public class SysAdminController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "管理员列表", description = "系统管理员列表，用于总后台展示系统管理员列表")
     @GetMapping(value = "/list")
-    public ResultBean<IPage<SysAdminResponse>> getList(SysAdminSearchRequest request, PageParam pageParam) {
+    public ResultBean<IPage<SysAdminResponse>> getList(@Validated SysAdminSearchRequest request, PageParam pageParam) {
         return ResultBean.success(sysAdminService.getList(request, pageParam));
     }
 
@@ -62,8 +62,8 @@ public class SysAdminController {
             @Parameter(name = "adminId", description = "管理员ID", required = true),
             @Parameter(name = "status", description = "管理员状态", required = true)
     })
-    public ResultBean<Boolean> modifyStatus(@RequestParam @NotNull(message = "管理员ID不能为空") Integer adminId,
-                                            @RequestParam @NotNull(message = "管理员状态不能为空") Boolean status) {
+    public ResultBean<Boolean> modifyStatus(@RequestParam("adminId") @NotNull(message = "管理员ID不能为空") Integer adminId,
+                                            @RequestParam("status") @NotNull(message = "管理员状态不能为空") Boolean status) {
         return ResultBean.result(sysAdminService.updateStatus(adminId, status));
     }
 

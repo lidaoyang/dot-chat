@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dot.comm.entity.PageParam;
 import com.dot.comm.entity.ResultBean;
 import com.dot.sys.auth.request.*;
+import com.dot.sys.auth.response.SysRoleInfoResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 import com.dot.sys.auth.service.SysRoleService;
@@ -40,16 +41,24 @@ public class SysRoleController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "角色列表", description = "系统角色列表，用于总后台展示系统角色列表")
     @GetMapping(value = "/list")
-    public ResultBean<IPage<SysRoleResponse>> getList(SysRoleSearchRequest request, PageParam pageParam) {
+    public ResultBean<IPage<SysRoleResponse>> getList(@Validated SysRoleSearchRequest request, PageParam pageParam) {
         return ResultBean.success(sysRoleService.getList(request, pageParam));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "角色列表(精简)", description = "精简系统角色列表，用于下拉框")
     @GetMapping(value = "/simlist")
-    @Parameter(name = "keyword", description = "关键词搜索(id,name)")
-    public ResultBean<List<SysRoleSimResponse>> getSimList(String keyword) {
-        return ResultBean.success(sysRoleService.getSimList(keyword));
+    @Parameter(name = "keywords", description = "关键词搜索(id,name)")
+    public ResultBean<List<SysRoleSimResponse>> getSimList(@RequestParam(name = "keywords", required = false)String keywords) {
+        return ResultBean.success(sysRoleService.getSimList(keywords));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "角色详情", description = "根据角色ID查询角色详情")
+    @GetMapping(value = "/info")
+    @Parameter(name = "roleId", description = "角色ID", required = true)
+    public ResultBean<SysRoleInfoResponse> getInfo(@RequestParam("roleId") @NotNull(message = "角色ID不能为空") Integer roleId) {
+        return ResultBean.success(sysRoleService.getInfo(roleId));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")

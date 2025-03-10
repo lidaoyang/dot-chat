@@ -7,6 +7,7 @@ import com.dot.sys.auth.model.SysRole;
 import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
+import com.dot.sys.auth.response.SysRoleInfoResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 
@@ -70,6 +71,14 @@ public interface SysRoleService extends IService<SysRole> {
      * @return List<SysRoleSimResponse>
      */
     List<SysRoleSimResponse> getSimList(String keyword);
+
+    /**
+     * 获取角色详情
+     *
+     * @param roleId 角色ID
+     * @return SysRoleInfoResponse
+     */
+    SysRoleInfoResponse getInfo(Integer roleId);
 
     /**
      * 是否存在超级管理员角色
