@@ -51,6 +51,29 @@ public interface SysAdminService extends IService<SysAdmin> {
      */
     IPage<SysAdminResponse> getList(SysAdminSearchRequest request, PageParam pageParam);
 
+    /**
+     * 根据账号获取管理员信息
+     *
+     * @param account 账号
+     * @return SysAdmin
+     */
+    SysAdmin getByAccount(String account);
 
+    /**
+     * 更新管理员最后登录IP和时间
+     *
+     * @param adminId 用户id
+     */
+    void updateLastLoginIpTime(Integer adminId);
+
+    /**
+     * 更新管理员密码
+     *
+     * @param uid      用户id
+     * @param oldPwd   旧密码
+     * @param newPwd   新密码
+     * @return Boolean
+     */
+    Boolean updatePassword(Integer uid, String oldPwd, String newPwd);
 
 }

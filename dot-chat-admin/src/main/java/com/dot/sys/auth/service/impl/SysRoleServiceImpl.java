@@ -373,4 +373,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         }
         return false;
     }
+
+    @Override
+    public Integer getMaxRoleType(List<Integer> roleIds) {
+        if (CollUtil.isEmpty(roleIds)) {
+            return null;
+        }
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.select(SysRole::getId, SysRole::getType);
+        queryWrapper.in(SysRole::getId, roleIds);
+        queryWrapper.eq(SysRole::getStatus, true);//
+        queryWrapper.orderByAsc(SysRole::getType);
+        queryWrapper.last("limit 1");
+        SysRole role = this.getOne(queryWrapper);
+        if (ObjectUtil.isNotNull(role)) {
+            return role.getType();
+        }
+        return null;
+    }
 }

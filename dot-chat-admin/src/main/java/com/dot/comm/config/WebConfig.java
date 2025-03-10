@@ -40,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
     final String[] excludeStaticPathPatterns = {"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"};
 
     // 不需要拦截的接口
-    final String[] excludeApiPathPatterns = {"/api/sys/auth/login"};
+    final String[] excludeApiPathPatterns = {"/api/sys/auth/admin/login"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

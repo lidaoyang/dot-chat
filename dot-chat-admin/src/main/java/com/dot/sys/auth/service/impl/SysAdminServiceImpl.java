@@ -1,6 +1,7 @@
 package com.dot.sys.auth.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -8,15 +9,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dot.chat.model.ChatUser;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.PageParam;
 import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
+import com.dot.comm.utils.AESUtil;
 import com.dot.comm.utils.CommUtil;
 import com.dot.comm.utils.PageUtil;
 import com.dot.sys.auth.dao.SysAdminDao;
+import com.dot.sys.auth.em.RoleTypeEm;
 import com.dot.sys.auth.model.SysAdmin;
+import com.dot.sys.auth.model.SysRole;
 import com.dot.sys.auth.request.SysAdminAddRequest;
 import com.dot.sys.auth.request.SysAdminEditRequest;
 import com.dot.sys.auth.request.SysAdminSearchRequest;
@@ -31,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -52,8 +58,9 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
     @Override
     public Boolean add(SysAdminAddRequest request) {
         checkAccountExist(request.getAccount());
-
+        checkRoleIsDemo(request.getRoles());
         SysAdmin newAdmin = BeanUtil.copyProperties(request, SysAdmin.class);
+        newAdmin.setPwd(AESUtil.encryptCBC(request.getAccount(), request.getPwd()));
         LoginUsername loginUser = tokenManager.getLoginUser();
         if (loginUser.isSuperAdmin()) { // 超级管理员 可以添加任何管理员
             return this.save(newAdmin);
@@ -75,6 +82,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
     @Override
     public Boolean edit(SysAdminEditRequest request) {
         SysAdmin sysAdmin = getAndCheckAdmin(request.getId());
+        checkRoleIsDemo(request.getRoles());
         SysAdmin newAdmin = BeanUtil.copyProperties(request, SysAdmin.class);
         LoginUsername loginUser = tokenManager.getLoginUser();
         if (loginUser.isSuperAdmin()) { // 超级管理员 可以修改任何管理员
@@ -93,6 +101,19 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
             throw new ApiException(ExceptionCodeEm.NOT_FOUND, "管理员不存在");
         }
         return sysAdmin;
+    }
+
+    // 检查角色是否是演示角色
+    private void checkRoleIsDemo(String roles) {
+        List<Integer> roleIdList = CommUtil.stringToArrayInt(roles);
+        if (roleIdList.size() > 1) {
+            List<SysRole> roleList = sysRoleService.getUsableRoleList(roleIdList);
+            Optional<SysRole> first = roleList.stream().filter(role -> role.getType() == RoleTypeEm.DEMO_ADMIN.getCode()).findFirst();
+            if (first.isPresent()) {
+                log.error("演示角色不能和其他角色一起授予管理员,roles:{}", roles);
+                throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "演示角色不能和其他角色一起授予管理员");
+            }
+        }
     }
 
     private void checkIsExistSuperRole(String roles, LoginUsername loginUser) {
@@ -142,4 +163,44 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
         return PageUtil.copyPage(page, responseList);
     }
 
+    @Override
+    public SysAdmin getByAccount(String account) {
+        LambdaQueryWrapper<SysAdmin> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(SysAdmin::getAccount, account);
+        SysAdmin admin = this.getOne(queryWrapper);
+        if (ObjectUtil.isNotNull(admin)) {
+            return admin;
+        }
+        return null;
+    }
+
+    @Override
+    public void updateLastLoginIpTime(Integer adminId) {
+        LambdaUpdateWrapper<SysAdmin> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(SysAdmin::getId, adminId);
+        updateWrapper.set(SysAdmin::getLastIp, CommUtil.getClientIp());
+        updateWrapper.set(SysAdmin::getLastTime, DateUtil.now());
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public Boolean updatePassword(Integer uid, String oldPwd, String newPwd) {
+        SysAdmin admin = getById(uid);
+        checkPwd(admin.getPwd(), oldPwd, newPwd, admin.getAccount());
+        LambdaUpdateWrapper<SysAdmin> lqw = Wrappers.lambdaUpdate();
+        lqw.eq(SysAdmin::getId, uid);
+        lqw.set(SysAdmin::getPwd, AESUtil.encryptCBC(admin.getAccount(), newPwd));
+        return this.update(lqw);
+    }
+
+    private void checkPwd(String pwd, String oldPwd, String newPwd, String account) {
+        if (!pwd.equals(CommUtil.encryptPassword(oldPwd, account))) {
+            log.error("原密码错误,account:{}", account);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "原密码错误");
+        }
+        if (pwd.equals(CommUtil.encryptPassword(newPwd, account))) {
+            log.error("新密码不能与原密码相同,account:{}", account);
+            throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "新密码不能与原密码相同");
+        }
+    }
 }

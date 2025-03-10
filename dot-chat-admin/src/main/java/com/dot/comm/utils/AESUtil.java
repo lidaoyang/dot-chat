@@ -29,8 +29,8 @@ public class AESUtil {
     private static final String SYS_AES_KEY_5_SUFFIX_KEY = "sys_aes_key_5_suffix";
 
     public static void main(String[] args) {
-        String key = "10000000000";
-        String encryptData = encryptCBC(key, "123456.");
+        String key = "15158152796";
+        String encryptData = encryptCBC(key, "123456");
         System.out.println("CBC加密：" + encryptData);
         String decryptData = decryptCBC(key, encryptData);
         System.out.println("CBC解密：" + decryptData);

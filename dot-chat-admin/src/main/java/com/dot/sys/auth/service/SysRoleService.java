@@ -111,4 +111,12 @@ public interface SysRoleService extends IService<SysRole> {
      */
     Boolean checkUrlAccessPermissions(String menuUrl);
 
+    /**
+     * 获取最高权限角色类型
+     *
+     * @param roleIds 角色ID集合
+     * @return Integer
+     */
+    Integer getMaxRoleType(List<Integer> roleIds);
+
 }
