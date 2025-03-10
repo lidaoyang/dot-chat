@@ -6,17 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 移动端手机密码登录请求对象
+ * 手机密码登录请求对象
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(name = "LoginRequest对象", description = "移动端手机密码登录请求对象")
+@Schema(name = "LoginRequest对象", description = "手机密码登录请求对象")
 public class LoginRequest implements Serializable {
 
     @Serial
@@ -27,6 +28,7 @@ public class LoginRequest implements Serializable {
     private String account;
 
     @Schema(description = "密码", example = "1~[6,18]",requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "密码不能为空")
+    @NotBlank(message = "密码不能为空")
+    @Length(min = 6, max = 18, message = "密码长度在6-18位之间")
     private String password;
 }
