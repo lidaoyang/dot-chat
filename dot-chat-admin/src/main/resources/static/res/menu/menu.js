@@ -39,6 +39,7 @@ Menu.prototype = {
                 li.toggleClass('open');
             }
             let item = me.getItemByEvent(event);
+            // console.log('itemclick', item);
             if (opt.itemclick) opt.itemclick.call(me, item);
 
         });

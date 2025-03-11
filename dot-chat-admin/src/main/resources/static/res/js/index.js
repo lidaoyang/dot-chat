@@ -28,8 +28,12 @@ $(function () {
     // 个人信息点击事件
     registerMyInfoClickEvent();
 
+    // 自动刷新token
+    autoRefreshToken();
+
     function activeTab(item) {
-        let tab = tabs.getTab(item.id);
+        // console.log('activeTab', item);
+        let tab = tabs.getTab(item.id.toString());// 获取tab int根据index,String根据name获取
         if (!tab) {
             tab = {name: item.id, pid: item.pid, title: item.text, url: item.url, iconCls: item.iconCls};
             if (!item.home) {
@@ -116,7 +120,21 @@ $(function () {
     }
 
     function loadMenuData() {
-        $.ajax({
+        let url = `${SYS_URL_PREFIX}/auth/role/menu/list`;
+        ajaxRequest(url, "get", {}, null, function (res) {
+            if (res.code !== 200) {
+                console.error("获取菜单失败", dateNow());
+                mini.alert(res.message);
+                return;
+            }
+            let data = mini.decode(res.data);
+            menu.loadData(data);
+
+            data[0].home = true;
+            activeTab(data[0]);
+        });
+
+        /*$.ajax({
             url: "data/menu.txt",
             success: function (text) {
                 let data = mini.decode(text);
@@ -125,7 +143,7 @@ $(function () {
                 data[0].home = true;
                 activeTab(data[0]);
             }
-        });
+        });*/
     }
 
     function registerToggleClickEvent() {
