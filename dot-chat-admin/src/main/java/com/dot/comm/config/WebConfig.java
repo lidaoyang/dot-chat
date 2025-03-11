@@ -36,11 +36,19 @@ public class WebConfig implements WebMvcConfigurer {
         return new AccessLimitInterceptor();
     }
 
-    // 静态资源不需要拦截
+    /**
+     * 不需要拦截的静态资源
+     */
     final String[] excludeStaticPathPatterns = {"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"};
 
-    // 不需要拦截的接口
+    /**
+     * 不需要拦截的接口
+     */
     final String[] excludeApiPathPatterns = {"/api/sys/auth/admin/login"};
+    /**
+     * 不需要校验菜单权限的接口
+     */
+    final String[] excludeApiPathPatterns2 = {"/api/sys/auth/role/menu/list"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -62,6 +70,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(adminAuthInterceptor())
                 .addPathPatterns("/api/sys/**", "/api/chat/**")
                 .excludePathPatterns(excludeStaticPathPatterns)
+                .excludePathPatterns(excludeApiPathPatterns2)
                 .excludePathPatterns(excludeApiPathPatterns);
 
 

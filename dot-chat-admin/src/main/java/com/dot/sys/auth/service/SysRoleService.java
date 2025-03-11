@@ -8,6 +8,7 @@ import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
 import com.dot.sys.auth.response.SysRoleInfoResponse;
+import com.dot.sys.auth.response.SysRoleMenuResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 
@@ -127,5 +128,12 @@ public interface SysRoleService extends IService<SysRole> {
      * @return Integer
      */
     Integer getMaxRoleType(List<Integer> roleIds);
+
+    /**
+     * 获取角色菜单列表(前端页面使用)
+     *
+     * @return List<SysRoleMenuResponse>
+     */
+    List<SysRoleMenuResponse> getRoleMenuList();
 
 }

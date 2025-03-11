@@ -1,4 +1,4 @@
-package com.dot.sys.auth.vo;
+package com.dot.sys.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -16,8 +16,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysRoleMenuVo implements Serializable {
-
+public class SysPermissionDto implements Serializable {
+    
     @Serial
     private static final long serialVersionUID = 4887024225864745865L;
 
@@ -39,25 +39,5 @@ public class SysRoleMenuVo implements Serializable {
     /**
      * 权限链接
      */
-    private String linkUrl;
-
-    /**
-     * 父级ID
-     */
-    private Integer pid;
-
-    /**
-     * 菜单图标CSS类
-     */
-    private String iconCls;
-
-    /**
-     * 菜单类型(1:API菜单(不跳转); 2:页面菜单)
-     */
-    private Integer type;
-
-    /**
-     * 排序编号
-     */
-    private Integer sort;
+    private String url;
 }

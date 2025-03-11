@@ -20,6 +20,7 @@ import com.dot.comm.utils.PageUtil;
 import com.dot.sys.auth.dao.SysAdminDao;
 import com.dot.sys.auth.dao.SysMenuDao;
 import com.dot.sys.auth.dao.SysRoleDao;
+import com.dot.sys.auth.dto.SysRoleMenuDto;
 import com.dot.sys.auth.em.RoleTypeEm;
 import com.dot.sys.auth.model.SysAdmin;
 import com.dot.sys.auth.model.SysMenu;
@@ -29,14 +30,16 @@ import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
 import com.dot.sys.auth.response.SysRoleInfoResponse;
+import com.dot.sys.auth.response.SysRoleMenuResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 import com.dot.sys.auth.service.SysRoleDetailService;
 import com.dot.sys.auth.service.SysRoleService;
-import com.dot.sys.auth.vo.SysMenuUrlVo;
+import com.dot.sys.auth.dto.SysMenuUrlDto;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -78,7 +81,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         // 检查菜单权限
         checkLoginUserRoleAuth(request.getMenuIds(), loginUser);
 
-        List<SysMenuUrlVo> menuUrlVoList = getMenuUrlListByIds(request.getMenuIds());
+        List<SysMenuUrlDto> menuUrlVoList = getMenuUrlListByIds(request.getMenuIds());
         if (CollUtil.isEmpty(menuUrlVoList)) {
             log.error("无系统菜单数据,menuIds:{}", request.getMenuIds());
             throw new ApiException(ExceptionCodeEm.NOT_FOUND, "无系统菜单数据");
@@ -125,7 +128,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         // 删除的菜单ID
         List<Integer> deleteMenuIdList = CollUtil.subtractToList(menuIdList, request.getMenuIds());
 
-        List<SysMenuUrlVo> menuUrlVoList = getMenuUrlListByIds(addMenuIdList);
+        List<SysMenuUrlDto> menuUrlVoList = getMenuUrlListByIds(addMenuIdList);
         if (CollUtil.isEmpty(menuUrlVoList)) {
             log.warn("无新增的系统菜单数据,addMenuIdList:{}", addMenuIdList);
         }
@@ -170,7 +173,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         }
     }
 
-    private List<SysMenuUrlVo> getMenuUrlListByIds(Collection<Integer> menuIdList) {
+    private List<SysMenuUrlDto> getMenuUrlListByIds(Collection<Integer> menuIdList) {
         if (CollUtil.isEmpty(menuIdList)) {
             return CollUtil.newArrayList();
         }
@@ -181,10 +184,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         if (CollUtil.isEmpty(menuList)) {
             return CollUtil.newArrayList();
         }
-        return BeanUtil.copyToList(menuList, SysMenuUrlVo.class);
+        return BeanUtil.copyToList(menuList, SysMenuUrlDto.class);
     }
 
-    private List<SysRoleDetail> getRoleDetails(List<SysMenuUrlVo> menuUrlVoList, Integer roleId) {
+    private List<SysRoleDetail> getRoleDetails(List<SysMenuUrlDto> menuUrlVoList, Integer roleId) {
         List<SysRoleDetail> roleDetails = new ArrayList<>();
         menuUrlVoList.forEach(menuUrlVo -> {
             SysRoleDetail roleDetail = new SysRoleDetail();
@@ -400,5 +403,34 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
             return role.getType();
         }
         return null;
+    }
+
+    @Override
+    public List<SysRoleMenuResponse> getRoleMenuList() {
+        LoginUsername loginUser = tokenManager.getLoginUser();
+        List<SysRoleMenuDto> roleMenuDtoList = sysRoleDetailService.getSysRoleMenuList(loginUser.getRoleList());
+        Map<Integer, SysRoleMenuResponse> menuMap = new LinkedHashMap<>();
+        roleMenuDtoList.forEach(menu -> {
+            SysRoleMenuResponse menuResponse = new SysRoleMenuResponse();
+            BeanUtils.copyProperties(menu, menuResponse);
+            menuMap.put(menu.getId(), menuResponse);
+        });
+        List<SysRoleMenuResponse> responseList = getMenuTreeResponseList(menuMap);
+        CollUtil.sortByProperty(responseList, "sort");
+        CollUtil.reverse(responseList);
+        return responseList;
+    }
+
+    private List<SysRoleMenuResponse> getMenuTreeResponseList(Map<Integer, SysRoleMenuResponse> menuMap) {
+        List<SysRoleMenuResponse> responseList = new ArrayList<>();
+        menuMap.forEach((menuId, menu) -> {
+            if (menu.getPid() != 0 && menuMap.containsKey(menu.getPid())) {
+                SysRoleMenuResponse menuResponse = menuMap.get(menu.getPid());
+                menuResponse.getChildren().add(menu);
+            } else {
+                responseList.add(menu);
+            }
+        });
+        return responseList;
     }
 }

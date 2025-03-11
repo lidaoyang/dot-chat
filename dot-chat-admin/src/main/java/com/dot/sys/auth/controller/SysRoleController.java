@@ -5,6 +5,7 @@ import com.dot.comm.entity.PageParam;
 import com.dot.comm.entity.ResultBean;
 import com.dot.sys.auth.request.*;
 import com.dot.sys.auth.response.SysRoleInfoResponse;
+import com.dot.sys.auth.response.SysRoleMenuResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
 import com.dot.sys.auth.response.SysRoleSimResponse;
 import com.dot.sys.auth.service.SysRoleService;
@@ -51,6 +52,13 @@ public class SysRoleController {
     @Parameter(name = "keywords", description = "关键词搜索(id,name)")
     public ResultBean<List<SysRoleSimResponse>> getSimList(@RequestParam(name = "keywords", required = false)String keywords) {
         return ResultBean.success(sysRoleService.getSimList(keywords));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "角色菜单列表", description = "系统角色菜单列表，用于前端菜单导航页面")
+    @GetMapping(value = "/menu/list")
+    public ResultBean<List<SysRoleMenuResponse>> getRoleMenuList() {
+        return ResultBean.success(sysRoleService.getRoleMenuList());
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")

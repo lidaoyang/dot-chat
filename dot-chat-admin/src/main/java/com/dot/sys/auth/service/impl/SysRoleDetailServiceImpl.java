@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dot.sys.auth.dao.SysRoleDetailDao;
+import com.dot.sys.auth.dto.SysRoleMenuDto;
+import com.dot.sys.auth.em.MenuTypeEm;
 import com.dot.sys.auth.model.SysRoleDetail;
 import com.dot.sys.auth.service.SysRoleDetailService;
-import com.dot.sys.auth.vo.SysPermissionVo;
+import com.dot.sys.auth.dto.SysPermissionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -87,14 +89,14 @@ public class SysRoleDetailServiceImpl extends ServiceImpl<SysRoleDetailDao, SysR
 
     @Override
     public Boolean checkRoleMenu(Collection<Integer> roleIds, Collection<Integer> menuIds) {
-        QueryWrapper<SysPermissionVo> qw = Wrappers.query();
+        QueryWrapper<SysPermissionDto> qw = Wrappers.query();
         if (roleIds.size() == 1) {
             qw.eq("rd.role_id", CollUtil.get(roleIds, 0));
         } else {
             qw.in("rd.role_id", roleIds);
         }
-        List<SysPermissionVo> permissionVos = baseMapper.selectSysPermissionList(qw);
-        List<Integer> menuIdList = permissionVos.stream().map(SysPermissionVo::getId).distinct().collect(Collectors.toList());
+        List<SysPermissionDto> permissionDtos = baseMapper.selectSysPermissionList(qw);
+        List<Integer> menuIdList = permissionDtos.stream().map(SysPermissionDto::getId).distinct().collect(Collectors.toList());
         List<Integer> subMenuIdList = CollUtil.subtractToList(menuIds, menuIdList);
         log.warn("有{}个菜单不属于角色:{},不属于的菜单ID:{}", subMenuIdList.size(), roleIds, subMenuIdList);
         return CollUtil.isEmpty(subMenuIdList);
@@ -111,5 +113,19 @@ public class SysRoleDetailServiceImpl extends ServiceImpl<SysRoleDetailDao, SysR
             return CollUtil.newArrayList();
         }
         return list.stream().map(SysRoleDetail::getRoleId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysRoleMenuDto> getSysRoleMenuList(List<Integer> roleIds) {
+        QueryWrapper<SysRoleMenuDto> qw = Wrappers.query();
+        if (roleIds.size() == 1) {
+            qw.eq("rd.role_id", roleIds.get(0));
+        } else {
+            qw.in("rd.role_id", roleIds);
+        }
+        qw.eq("me.status", true);
+        qw.in("me.type", MenuTypeEm.DIRECTORY.getCode(), MenuTypeEm.PAGE.getCode());// 只返回文件夹和页面菜单
+        qw.orderByDesc("me.sort").orderByAsc("me.id");
+        return baseMapper.selectSysRoleMenuList(qw);
     }
 }

@@ -1,6 +1,7 @@
 package com.dot.sys.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dot.sys.auth.dto.SysRoleMenuDto;
 import com.dot.sys.auth.model.SysRoleDetail;
 
 import java.util.Collection;
@@ -81,4 +82,11 @@ public interface SysRoleDetailService extends IService<SysRoleDetail> {
      */
     List<Integer> getRoleIdByMenuUrl(String menuUrl);
 
+    /**
+     * 根据角色ID列表获取角色菜单列表(首页导航菜单使用)
+     *
+     * @param roleIds 角色ID列表
+     * @return 角色菜单列表
+     */
+    List<SysRoleMenuDto> getSysRoleMenuList(List<Integer> roleIds);
 }

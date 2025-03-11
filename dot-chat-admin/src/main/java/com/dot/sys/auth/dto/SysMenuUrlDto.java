@@ -1,4 +1,4 @@
-package com.dot.sys.auth.vo;
+package com.dot.sys.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,8 +20,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(name = "SysMenuUrlVo", description = "系统菜单URL对象")
-public class SysMenuUrlVo implements Serializable {
+@Schema(name = "SysMenuUrlDto", description = "系统菜单URL对象")
+public class SysMenuUrlDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 7499059458201415701L;
