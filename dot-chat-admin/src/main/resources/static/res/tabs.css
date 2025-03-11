@@ -114,7 +114,7 @@ a:hover.mini-tabs-leftButton,a:hover.mini-tabs-rightButton
 }    
 /** tabs-bodys ******************************************************************/
 .mini-tabs-bodys {
-    border-color:transparent;
+    /*border-color:transparent;*/
     background:transparent;
 }
 
