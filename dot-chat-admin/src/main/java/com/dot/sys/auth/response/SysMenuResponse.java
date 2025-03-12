@@ -1,5 +1,6 @@
 package com.dot.sys.auth.response;
 
+import com.dot.sys.auth.em.MenuTypeEm;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -56,6 +57,11 @@ public class SysMenuResponse implements Serializable {
      */
     @Schema(description = "菜单类型(0:目录菜单,1:API菜单,2:页面菜单)")
     private Integer type;
+    private String typeDesc;
+
+    public String getTypeDesc() {
+        return MenuTypeEm.getDescByCode(this.type);
+    }
 
     /**
      * 链接地址(页面菜单和API菜单的地址,文件夹菜单为空)
@@ -80,6 +86,11 @@ public class SysMenuResponse implements Serializable {
      */
     @Schema(description = "状态(0:隐藏;1:显示),默认1")
     private Integer status;
+    private String statusDesc;
+
+    public String getStatusDesc() {
+        return this.status == 1 ? "显示" : "隐藏";
+    }
 
     /**
      * 排序编号
