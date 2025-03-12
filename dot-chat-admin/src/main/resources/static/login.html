@@ -211,6 +211,8 @@
         ajaxRequestNotAuth(url, 'post', data, 'application/json', function (res) {
             if (res.code !== 200) {
                 alert(res.message);
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
                 return;
             }
             // 保存token
