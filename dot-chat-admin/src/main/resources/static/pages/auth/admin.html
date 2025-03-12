@@ -131,9 +131,9 @@
     // 状态单选按钮数据,为了兼容miniui的radiobuttonlist,防止单选赋值失败问题
     let Status = [{id: true, text: '正常'}, {id: false, text: '禁用'}];
 
-    let header = {Authorization: $.cookie(TOKEN_KEY)};
-
     mini.parse();
+
+    let header = {Authorization: $.cookie(TOKEN_KEY)};
 
     // 角色下拉框
     let roleCombo = mini.get("role-combo");
@@ -141,12 +141,6 @@
         headers: header
     });
     roleCombo.setUrl(`${SYS_URL_PREFIX}/auth/role/simlist`);
-    // 角色下拉框数据,用户添加和编辑对话框
-    // let roleList = [];
-    // ajaxRequest(`${SYS_URL_PREFIX}/auth/role/simlist`,METHOD.GET,null,null,function (res){
-    //     mini.get("role-combo").setData(res.data);
-    //     roleList = res.data;
-    // })
 
 
     // 表格
