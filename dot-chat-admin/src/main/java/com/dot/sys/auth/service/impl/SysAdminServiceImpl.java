@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dot.chat.model.ChatUser;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.PageParam;
@@ -149,7 +148,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
                     .or().like(SysAdmin::getAccount, request.getKeywords());
         });
         queryWrapper.orderByDesc(SysAdmin::getLastTime).orderByDesc(SysAdmin::getId);
-        Page<SysAdmin> page = this.page(Page.of(pageParam.getPage(), pageParam.getLimit()), queryWrapper);
+        Page<SysAdmin> page = this.page(Page.of(pageParam.getPageIndex(), pageParam.getPageSize()), queryWrapper);
         if (page.getRecords().isEmpty()) {
             return PageUtil.copyPage(page, new ArrayList<>());
         }

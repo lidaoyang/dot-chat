@@ -35,7 +35,7 @@ $(function () {
         // console.log('activeTab', item);
         let tab = tabs.getTab(item.id.toString());// 获取tab int根据index,String根据name获取
         if (!tab) {
-            tab = {name: item.id, pid: item.pid, title: item.text, url: item.url, iconCls: item.iconCls};
+            tab = {name: item.id.toString(), pid: item.pid, title: item.text, url: item.url, iconCls: item.iconCls};
             if (!item.home) {
                 tab.showCloseButton = true;
             }

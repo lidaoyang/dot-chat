@@ -44,12 +44,6 @@ public class SysAdminResponse implements Serializable {
     private String name;
 
     /**
-     * 密码
-     */
-    @Schema(description = "密码")
-    private String pwd;
-
-    /**
      * 头像
      */
     @Schema(description = "头像")
@@ -90,11 +84,5 @@ public class SysAdminResponse implements Serializable {
      */
     @Schema(description = "创建时间")
     private String createTime;
-
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private String updateTime;
 
 }

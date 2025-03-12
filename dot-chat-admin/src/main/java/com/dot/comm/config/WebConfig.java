@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer {
     /**
      * 不需要校验菜单权限的接口
      */
-    final String[] excludeApiPathPatterns2 = {"/api/sys/auth/role/menu/list"};
+    final String[] excludeApiPathPatterns2 = {"/api/sys/auth/role/menu/list","/api/sys/auth/admin/refreshToken"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

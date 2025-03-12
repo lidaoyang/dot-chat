@@ -52,12 +52,6 @@ public class SysAdminAddRequest implements Serializable {
     private String pwd;
 
     /**
-     * 头像
-     */
-    @Schema(description = "头像")
-    private String avatar;
-
-    /**
      * 角色ID(多个用逗号分隔)
      */
     @Schema(description = "角色ID(多个用逗号分隔)", requiredMode = Schema.RequiredMode.REQUIRED)

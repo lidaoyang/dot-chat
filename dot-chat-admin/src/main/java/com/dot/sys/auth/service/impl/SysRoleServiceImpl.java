@@ -292,7 +292,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
                     .like(SysRole::getName, request.getKeywords());
         });
         queryWrapper.orderByAsc(SysRole::getId);
-        Page<SysRole> page = this.page(Page.of(pageParam.getPage(), pageParam.getLimit()), queryWrapper);
+        Page<SysRole> page = this.page(Page.of(pageParam.getPageIndex(), pageParam.getPageSize()), queryWrapper);
         List<SysRoleResponse> responseList = BeanUtil.copyToList(page.getRecords(), SysRoleResponse.class);
         return PageUtil.copyPage(page, responseList);
     }

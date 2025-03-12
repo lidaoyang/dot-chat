@@ -28,6 +28,13 @@ const LAST_ACCESS_TIME_KEY = "lastAccessedTime";
 const EXPIRES_IN = "expiresIn";
 const CONTENT_TYPE_JSON = "application/json";
 
+const METHOD = {
+    GET: "GET",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE"
+};
+
 function setCookieDay(name, value, days) {
     let expire = new Date();
     expire.setTime(expire.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -84,6 +91,8 @@ function ajaxRequestNotAuth(url, method, data, contentType, successFn) {
             }
             if (res.code !== 200) {
                 console.error("获取数据失败,data:", data, "res:", res);
+                alertError(err);
+                return;
             }
             successFn(res);
         },
@@ -125,11 +134,14 @@ function ajaxRequest(url, method, data, contentType, successFn) {
             }
             if (res.code !== 200) {
                 console.error("操作失败,data:", data, "res:", res);
+                alertError(res.message);
+                return;
             }
             successFn(res);
         },
         error: function (err) {
             console.error(err);
+            alertError(err);
             // alert("请求错误,请稍后重试,msg:" + err.statusText);
         }
     });
@@ -168,11 +180,14 @@ function ajaxSyncRequest(url, method, data, contentType, successFn) {
             }
             if (res.code !== 200) {
                 console.error("获取数据失败,data:", data, "res:", res);
+                alertError(res.message);
+                return;
             }
             successFn(res);
         },
         error: function (err) {
             console.error(err);
+            alertError(err);
             // alert("请求错误,请稍后重试,msg:" + err.statusText);
         }
     });
@@ -184,7 +199,7 @@ function logout() {
     ajaxRequest(url, "post", {}, null, function (res) {
         if (res.code !== 200) {
             console.error("退出失败", dateNow());
-            mini.alert(res.message);
+            alertError(err);
             return;
         }
         deleteUserCookie();
@@ -229,7 +244,7 @@ function refreshToken() {
     ajaxRequest(url, "post", {}, null, function (res) {
         if (res.code !== 200) {
             console.error("刷新失败", dateNow());
-            mini.alert(res.message);
+            deleteUserCookie();
             return;
         }
         autoRefreshTokenTimer = 0;
@@ -249,4 +264,59 @@ function saveTokenToCookie(data) {
 function dateNow() {
     let date = new Date();
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+}
+
+function alertInfo(msg, tit, callback) {
+    myAlert("info", msg, tit, callback)
+}
+
+function alertWarn(msg, tit, callback) {
+    myAlert("warning", msg, tit ? tit : "警告提示!", callback)
+}
+
+function alertError(msg, tit) {
+    myAlert("error", msg, tit ? tit : "错误提示!")
+}
+
+function myAlert(type, msg, tit, callback) {
+    mini.showMessageBox({
+        showHeader: true,
+        width: 280,
+        title: tit ? tit : "提示!",
+        buttons: ["关闭"],
+        message: msg,
+        iconCls: "mini-messagebox-" + type,
+        callback: function (action) {
+            if (callback) {
+                callback(action);
+            }
+            this.close();
+        }
+    });
+}
+
+function showTipsSuccess(msg) {
+    showTips("success", "成功!", msg)
+}
+
+function showTipsInfo(msg, tit) {
+    showTips("info", tit, msg)
+}
+
+function showTipsWarn(msg, tit) {
+    showTips("warning", tit, msg)
+}
+
+function showTipsDanger(msg, tit) {
+    showTips("danger", tit, msg)
+}
+
+function showTips(state, tit, msg) {
+    mini.showTips({
+        content: `<b>${tit}</b> <br/>${msg}`,
+        state: state,
+        x: "center",
+        y: "top",
+        timeout: 3000
+    });
 }

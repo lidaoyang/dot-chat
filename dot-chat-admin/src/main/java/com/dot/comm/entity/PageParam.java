@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class PageParam {
 
     @Schema(description = "当前页码", defaultValue = "1")
-    private int page = CommConstant.DEFAULT_PAGE;
+    private int pageIndex = CommConstant.DEFAULT_PAGE;
 
     @Schema(description = "每页数量", defaultValue = "20")
-    private int limit = CommConstant.DEFAULT_LIMIT;
+    private int pageSize = CommConstant.DEFAULT_LIMIT;
 
 }
