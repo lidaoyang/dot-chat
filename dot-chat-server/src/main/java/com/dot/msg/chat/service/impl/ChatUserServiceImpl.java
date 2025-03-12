@@ -273,11 +273,11 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     }
 
     private void checkPwd(String pwd, String oldPwd, String newPwd, String account) {
-        if (!pwd.equals(CommUtil.encryptPassword(oldPwd, account))) {
+        if (!pwd.equals(AESUtil.encryptCBC(account, oldPwd))) {
             log.error("原密码错误,account:{}", account);
             throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "原密码错误");
         }
-        if (pwd.equals(CommUtil.encryptPassword(newPwd, account))) {
+        if (pwd.equals(AESUtil.encryptCBC(account, newPwd))) {
             log.error("新密码不能与原密码相同,account:{}", account);
             throw new ApiException(ExceptionCodeEm.VALIDATE_FAILED, "新密码不能与原密码相同");
         }
