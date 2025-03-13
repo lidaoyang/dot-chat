@@ -3,27 +3,116 @@
 <head>
     <title>权限菜单管理</title>
     <script src="../../scripts/boot.js" type="text/javascript"></script>
+
+    <link href="../../scripts/honeySwitch/honeySwitch.css" type="text/css" rel="stylesheet"/>
+    <script src="../../scripts/honeySwitch/honeySwitch.js"></script>
+
+    <style>
+        .form-switch {
+            margin-left: 40px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<div class="mini-fit1">
-    <div id="treegrid1" class="mini-treegrid" style="width:100%;height:400px;"
-         showTreeIcon="true" ajaxType="get"
+<div class="mini-toolbar" style="padding:2px;border-bottom:0;">
+    <table style="width:100%;">
+        <tr>
+            <td style="width:100%;">
+                <a class="mini-button" iconCls="icon-add" plain="true" onclick="openAddDialog()">增加</a>
+                <a class="mini-button" iconCls="icon-edit" plain="true" onclick="openEditDialog()">编辑</a>
+                <a class="mini-button" iconCls="icon-remove" plain="true" onclick="deleteMenu()">删除</a>
+                <a class="mini-button" iconCls="icon-reload" plain="true" onclick="reloadTree()">刷新</a>
+            </td>
+            <td style="white-space:nowrap;">
+                <label for="menu-type-combo">菜单类型: </label>
+                <input id="menu-type-combo" name="role-search" class="mini-combobox" valueField="id" textField="text"
+                       data="MenuType"
+                       showNullItem="true"/>
+            </td>
+            <td style="white-space:nowrap;">
+                <label for="status-combo">状态: </label>
+                <input id="status-combo" class="mini-combobox" data="Status" valueField="id" textField="text"
+                       showNullItem="true"/>
+            </td>
+            <td style="white-space:nowrap;">
+                <label for="keywords">关键词: </label>
+                <input id="keywords" class="mini-textbox" emptyText="ID,名称,链接"
+                       style="width:230px;" onenter="onKeyEnter"/>
+                <a class="mini-button" onclick="search()">查询</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="mini-fit"> <!--撑满页面-->
+    <div id="treegrid1" class="mini-treegrid" style="width:100%;height:100%;"
+         showTreeIcon="true" ajaxType="get" onload="onLoadError"
          treeColumn="name" idField="id" dataField="data"
-         resultAsTree="true" allowResize="true" expandOnLoad="true" >
+         resultAsTree="true" allowResize="true" expandOnLoad="true">
         <div property="columns">
-            <div name="id" field="id" width="30" headerAlign ="center" align="center">ID</div>
+            <div name="id" field="id" width="30" headerAlign="center" align="center">ID</div>
             <div name="name" field="name" width="200">菜单名称</div>
-            <div field="typeDesc" width="60" headerAlign ="center" align="center">菜单类型</div>
+            <div field="typeDesc" width="60" headerAlign="center" align="center">菜单类型</div>
             <div field="linkUrl" width="200">链接地址</div>
-            <div field="level" width="30" headerAlign ="center" align="center">层级</div>
+            <div field="level" width="30" headerAlign="center" align="center">层级</div>
             <div field="path" width="80">路径</div>
-            <div field="statusDesc" width="50" headerAlign ="center" align="center">状态</div>
-            <div field="sort" width="40" headerAlign ="center" align="center">排序</div>
-            <div field="createTime" dateFormat="yyyy-MM-dd HH:mm:ss" width="120" headerAlign ="center" align="center">创建时间</div>
+            <div field="status" width="50" renderer="onStatusRenderer" headerAlign="center" align="center">状态</div>
+            <div field="sort" width="40" headerAlign="center" align="center">排序</div>
+            <div field="createTime" dateFormat="yyyy-MM-dd HH:mm:ss" width="120" headerAlign="center" align="center">
+                创建时间
+            </div>
         </div>
     </div>
 </div>
+
+<div id="add-menu-dialog" class="mini-window" title="添加菜单" style="width:380px;"
+     showModal="true" allowDrag="true">
+    <div id="add-form" class="form">
+        <input class="mini-hidden" name="id"/>
+        <input labelField="true" label="名称：" name="name" class="mini-textbox" required="true"
+               requiredErrorText="名称不能为空"/>
+        <input labelField="true" label="父级：" id="menu-pid" name="pid" class="mini-buttonedit"
+               onbuttonclick="openMenuTreeDialog"
+               value="0"/>
+        <input labelField="true" label="图标CSS类：" name="iconCls" class="mini-textbox"/>
+        <input labelField="true" label="类型：" id="add-type-combo" name="type" class="mini-combobox" data="MenuType2"
+               valueField="id" textField="text" required="true" minLengthErrorText="类型不能为空"/>
+        <input labelField="true" label="链接地址：" name="linkUrl" class="mini-textbox"/>
+        <input labelField="true" label="排序编号：" name="sort" class="mini-spinner" value="0"/>
+        <div class="form-switch">
+            <label>状态：</label>
+            <span name="form-status-sw" class="switch-on" themeColor="#6d9eeb" style="zoom:0.45;">
+                <input class="mini-hidden" name="status" value="true">
+            </span>
+        </div>
+
+        <div class="form-btn-div">
+            <a class="mini-button btn" iconCls="icon-ok" onclick="addOrEditMenu()">保存</a>
+        </div>
+    </div>
+</div>
+<div id="select-pmenu-dialog" class="mini-window" title="选择父级菜单" style="width:270px;height:330px;"
+     showModal="true" allowDrag="true">
+    <div class="mini-fit">
+        <ul id="pmenu-tree1" class="mini-tree" style="width:100%;height:100%;"
+            showTreeIcon="true" ajaxType="get" onload="onLoadError"
+            textField="name" idField="id" dataField="data"
+            resultAsTree="true" expandOnLoad="true" onnodedblclick="selectPmenu"
+            expandOnDblClick="false">
+        </ul>
+    </div>
+    <div class="mini-toolbar" style="text-align:center;padding-top:8px;padding-bottom:8px;"
+         borderStyle="border-left:0;border-bottom:0;border-right:0;">
+        <a class="mini-button" style="width:60px;" onclick="selectPmenu()">确定</a>
+        <span style="display:inline-block;width:25px;"></span>
+        <a class="mini-button" style="width:60px;" onclick="mini.get('select-pmenu-dialog').hide()">取消</a>
+    </div>
+</div>
+
 <script>
+    let Status = [{id: true, text: '显示'}, {id: false, text: '隐藏'}];
+    let MenuType = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页菜单'}];
+    let MenuType2 = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页菜单'}];
     mini.parse();
 
     let header = {Authorization: $.cookie(TOKEN_KEY)};
@@ -32,8 +121,178 @@
     grid.setAjaxOptions({
         headers: header
     });
-    grid.setUrl(`${SYS_URL_PREFIX}/auth/menu/list`);
+    grid.load(`${SYS_URL_PREFIX}/auth/menu/list`);
 
+    //表格渲染完毕后渲染开关控件
+    grid.on("update", function (e) {
+        // 开关控件初始化
+        switchInitForGrid("menu", grid);
+
+    });
+
+    function openAddDialog() {
+        let form = new mini.Form("#add-form");
+        form.reset();
+        showMenuDialog("添加菜单");
+    }
+
+    function showMenuDialog(title) {
+        let dialog = mini.get("add-menu-dialog");
+        dialog.setTitle(title);
+        dialog.show();
+    }
+
+    function openEditDialog() {
+        let row = grid.getSelected();
+        if (!row) {
+            mini.alert("请选择要编辑的行");
+            return;
+        }
+
+        setSwitch("#add-menu-dialog span[name='form-status-sw']", row.status);
+
+        let pNode = grid.getAncestors(row);
+        // console.log(pNode);
+        let mText = "";
+        for (let i = 0; i < pNode.length; i++) {
+            let p = pNode[i];
+            if (i < pNode.length - 1) {
+                mText += p.name + " / ";
+            } else {
+                mText += p.name;
+            }
+        }
+        let menuPid = mini.get("menu-pid");
+        menuPid.setText(mText);
+
+        let form = new mini.Form("#add-form");
+        form.setData(row);
+        console.log(form.getData());
+        showMenuDialog("编辑菜单");
+    }
+
+    function openMenuTreeDialog() {
+        let tree = mini.get("pmenu-tree1");
+        tree.setAjaxOptions({
+            headers: header
+        });
+        tree.load(`${SYS_URL_PREFIX}/auth/menu/dirlist`);
+
+        mini.get("select-pmenu-dialog").show();
+    }
+
+    function selectPmenu() {
+        let tree = mini.get("pmenu-tree1");
+        let node = tree.getSelectedNode();
+        if (!node) {
+            alertWarn("请选择父级菜单")
+            return;
+        }
+        let pNode = tree.getAncestors(node);
+        // console.log(pNode);
+        let mText = "";
+        for (let i = 0; i < pNode.length; i++) {
+            let p = pNode[i];
+            mText += p.name + " / ";
+        }
+        mText = mText + node.name;
+        let menuPid = mini.get("menu-pid");
+        menuPid.setValue(node.id);
+        menuPid.setText(mText);
+        mini.get("select-pmenu-dialog").hide();
+    }
+
+    function addOrEditMenu() {
+        let title = mini.get("add-menu-dialog").getTitle();
+        if (title === "添加菜单") {
+            addMenu();
+        } else {
+            editMenu();
+        }
+    }
+
+    function addMenu() {
+        let form = new mini.Form("#add-form");
+        if (form.validate()) {
+            let url = `${SYS_URL_PREFIX}/auth/menu/add`;
+            let data = mini.encode(form.getData());
+            ajaxRequest(url, METHOD.POST, data, CONTENT_TYPE_JSON, function (res) {
+                showTipsSuccess("添加成功!");
+                mini.get("add-menu-dialog").hide();
+                grid.reload();
+            });
+        }
+    }
+
+    function editMenu() {
+        let form = new mini.Form("#add-form");
+        if (form.validate()) {
+            let url = `${SYS_URL_PREFIX}/auth/menu/edit`;
+            let data = mini.encode(form.getData());
+            ajaxRequest(url, METHOD.PUT, data, CONTENT_TYPE_JSON, function (res) {
+                showTipsSuccess("修改成功!");
+                mini.get("add-menu-dialog").hide();
+                grid.reload()
+            });
+        }
+    }
+
+    function deleteMenu() {
+        let row = grid.getSelected();
+        if (!row) {
+            mini.alert("请选择一条记录");
+            return;
+        }
+        mini.confirm("确定要删除该记录吗？", "确定？", function (action) {
+            if (action === "ok") {
+                let url = `${SYS_URL_PREFIX}/auth/menu/delete?id=${row.id}`;
+                ajaxRequest(url, METHOD.DELETE, null, null, function (res) {
+                    showTipsSuccess("删除成功!");
+                    grid.reload()
+                });
+            }
+        })
+    }
+
+    function reloadTree() {
+        grid.clearFilter();
+        grid.reload();
+    }
+
+    function search() {
+        let keywords = mini.get("keywords").getValue();
+        let status = mini.get("status-combo").getValue();
+        let menuType = mini.get("menu-type-combo").getValue();
+        console.log(keywords, status, menuType);
+        if (keywords === "" && status === "" && menuType === "") {
+            grid.clearFilter();
+            return;
+        }
+        keywords = keywords.toLowerCase();
+        grid.filter(function (node) {
+            if (keywords !== "" && node.name.indexOf(keywords) !== -1) {
+                console.log("name", node);
+                return true;
+            }
+            if (status !== "" && node.status.toString() === status) {
+                console.log("status", node);
+                return true;
+            }
+            if (menuType !== "" && node.type.toString() === menuType) {
+                console.log("type", node);
+                return true;
+            }
+        });
+
+    }
+
+    function onKeyEnter(e) {
+        search();
+    }
+
+    $(function () {
+        switchInitForForm();
+    });
 
 </script>
 </body>

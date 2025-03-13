@@ -76,5 +76,11 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<SysMenuSimResponse> getSimList(SysMenuSearchRequest request);
 
-
+    /**
+     * 获取系统菜单目录列表(用户创建菜单选择父级)
+     *
+     * @param request 请求参数
+     * @return List<SysMenuSimResponse>
+     */
+    List<SysMenuSimResponse> getDirSimList(SysMenuSearchRequest request);
 }

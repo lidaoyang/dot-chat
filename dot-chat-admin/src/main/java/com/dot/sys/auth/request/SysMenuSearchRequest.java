@@ -1,5 +1,6 @@
 package com.dot.sys.auth.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统菜单搜索请求对象
@@ -44,9 +46,16 @@ public class SysMenuSearchRequest implements Serializable {
     private Integer level;
 
     /**
-     * 菜单类型(0:目录菜单,1:API菜单,2:页面菜单)
+     * 菜单类型面(0:目录菜单,1:API菜单,2:页菜单)
      */
     @Schema(description = "菜单类型(0:目录菜单,1:API菜单,2:页面菜单)", allowableValues = {"0", "1", "2"})
     private Integer type;
+
+    /**
+     * 菜单类型面(0:目录菜单,1:API菜单,2:页菜单)
+     */
+    @JsonIgnore
+    @Schema(description = "菜单类型(0:目录菜单,1:API菜单,2:页面菜单)", allowableValues = {"0", "1", "2"}, hidden = true)
+    private List<Integer> types;
 
 }

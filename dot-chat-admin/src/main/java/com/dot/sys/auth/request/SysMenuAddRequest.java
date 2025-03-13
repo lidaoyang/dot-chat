@@ -65,7 +65,7 @@ public class SysMenuAddRequest implements Serializable {
      */
     @Schema(description = "状态(0:隐藏;1:显示),默认1", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "状态不能为空")
-    private Integer status;
+    private Boolean status;
 
     /**
      * 排序编号

@@ -52,6 +52,13 @@ public class SysMenuController {
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "获取目录菜单列表(精简)", description = "获取目录菜单列表，设置选择父级菜单时使用")
+    @GetMapping(value = "/dirlist")
+    public ResultBean<List<SysMenuSimResponse>> getDirSimList(@Validated SysMenuSearchRequest request) {
+        return ResultBean.success(sysMenuService.getDirSimList(request));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "添加系统菜单")
     @PostMapping(value = "/add")
     public ResultBean<Boolean> add(@RequestBody @Validated SysMenuAddRequest request) {
@@ -68,23 +75,23 @@ public class SysMenuController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "删除系统菜单", description = "根据菜单ID删除菜单")
     @DeleteMapping(value = "/delete")
-    @Parameter(name = "menuId", description = "菜单ID", required = true)
-    public ResultBean<Boolean> delete(@RequestParam("menuId") @NotNull(message = "菜单ID不能为空") Integer menuId) {
-        return ResultBean.result(sysMenuService.delete(menuId));
+    @Parameter(name = "id", description = "菜单ID", required = true)
+    public ResultBean<Boolean> delete(@RequestParam("id") @NotNull(message = "菜单ID不能为空") Integer id) {
+        return ResultBean.result(sysMenuService.delete(id));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "修改菜单状态")
     @PutMapping(value = "/modifyStatus")
     @Parameters({
-            @Parameter(name = "menuId", description = "菜单ID", required = true),
+            @Parameter(name = "id", description = "菜单ID", required = true),
             @Parameter(name = "status", description = "菜单状态", required = true),
             @Parameter(name = "updateChild", description = "是否修改子集(默认false)")
     })
-    public ResultBean<Boolean> modifyStatus(@RequestParam("menuId") @NotNull(message = "菜单ID不能为空") Integer menuId,
+    public ResultBean<Boolean> modifyStatus(@RequestParam("id") @NotNull(message = "菜单ID不能为空") Integer id,
                                             @RequestParam("status") @NotNull(message = "菜单状态不能为空") Boolean status,
                                             @RequestParam(name = "updateChild", required = false, defaultValue = "false") Boolean updateChild) {
-        return ResultBean.result(sysMenuService.updateStatus(menuId, status, updateChild));
+        return ResultBean.result(sysMenuService.updateStatus(id, status, updateChild));
     }
 
 }

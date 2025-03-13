@@ -215,7 +215,11 @@ function deleteUserCookie() {
 }
 
 function toLogin() {
-    location.href = "../login.html";
+    if (window.parent !== window) {
+        window.parent.location.href = "/login.html";
+    } else {
+        location.href = "/login.html";
+    }
 }
 
 let autoRefreshTokenTimer = 0;
@@ -319,4 +323,77 @@ function showTips(state, tit, msg) {
         y: "top",
         timeout: 3000
     });
+}
+
+/**
+ * 状态开关渲染器
+ * @param e
+ * @returns {string}
+ */
+function onStatusRenderer(e) {
+    if (e.value) {
+        return `<span id="${e.record.id}" name="grid-status-sw" class="switch-on" themeColor="#6d9eeb" style="zoom:0.45;"></span>`
+    }
+    return `<span id="${e.record.id}" name="grid-status-sw" class="switch-off" themeColor="#6d9eeb" style="zoom:0.45;"></span>`
+}
+
+function switchInitForGrid(apiType, grid) {
+    honeySwitch.init("span[name='grid-status-sw']");
+    // console.log("switchInit");
+    switchEvent("span[name='grid-status-sw']",
+        function (ele) {
+            // console.log("on", $(ele).attr("id"));
+            updateStatus($(ele).attr("id"), true);
+        },
+        function (ele) {
+            // console.log("off", $(ele).attr("id"));
+            updateStatus($(ele).attr("id"), false);
+        });
+
+    function updateStatus(id, status) {
+        let url = `${SYS_URL_PREFIX}/auth/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        ajaxRequest(url, METHOD.PUT, null, null, function (res) {
+            showTipsSuccess("修改成功!");
+            grid.reload();
+        });
+    }
+}
+
+function switchInitForForm() {
+    honeySwitch.init("span[name='form-status-sw']");
+
+    switchEvent("span[name='form-status-sw']",
+        function (ele) {
+            // $(ele).children("input").val(true);
+            mini.getChildControls(ele)[0].setValue(true);
+        },
+        function (ele) {
+            // $(ele).children("input").val(false);
+            mini.getChildControls(ele)[0].setValue(false);
+        });
+}
+
+function setSwitch(idName, status) {
+    if (status === true) {
+        honeySwitch.showOn(idName)
+    } else {
+        honeySwitch.showOff(idName)
+    }
+}
+
+/**
+ * 表格加载失败触发方法
+ * @param e
+ */
+function onLoadError(e) {
+    // console.log("load",e);
+    if (e.result.code === 401) {
+        console.error("token过期", dateNow());
+        deleteUserCookie();
+        return;
+    }
+    if (e.result.code !== 200) {
+        console.error("获取数据失败", "result:", e.result);
+        alertError(e.result.message);
+    }
 }

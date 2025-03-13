@@ -59,12 +59,12 @@ public class SysAdminController {
     @Operation(summary = "修改管理员状态")
     @PutMapping(value = "/modifyStatus")
     @Parameters({
-            @Parameter(name = "adminId", description = "管理员ID", required = true),
+            @Parameter(name = "id", description = "管理员ID", required = true),
             @Parameter(name = "status", description = "管理员状态", required = true)
     })
-    public ResultBean<Boolean> modifyStatus(@RequestParam("adminId") @NotNull(message = "管理员ID不能为空") Integer adminId,
+    public ResultBean<Boolean> modifyStatus(@RequestParam("id") @NotNull(message = "管理员ID不能为空") Integer id,
                                             @RequestParam("status") @NotNull(message = "管理员状态不能为空") Boolean status) {
-        return ResultBean.result(sysAdminService.updateStatus(adminId, status));
+        return ResultBean.result(sysAdminService.updateStatus(id, status));
     }
 
 }

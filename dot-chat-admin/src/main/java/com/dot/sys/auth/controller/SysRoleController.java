@@ -86,21 +86,21 @@ public class SysRoleController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "删除角色", description = "根据角色ID删除角色")
     @DeleteMapping(value = "/delete")
-    @Parameter(name = "roleId", description = "角色ID", required = true)
-    public ResultBean<Boolean> delete(@RequestParam @NotNull(message = "角色ID不能为空") Integer roleId) {
-        return ResultBean.result(sysRoleService.delete(roleId));
+    @Parameter(name = "id", description = "角色ID", required = true)
+    public ResultBean<Boolean> delete(@RequestParam("id") @NotNull(message = "角色ID不能为空") Integer id) {
+        return ResultBean.result(sysRoleService.delete(id));
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "修改角色状态")
     @PutMapping(value = "/modifyStatus")
     @Parameters({
-            @Parameter(name = "roleId", description = "角色ID", required = true),
+            @Parameter(name = "id", description = "角色ID", required = true),
             @Parameter(name = "status", description = "角色状态", required = true)
     })
-    public ResultBean<Boolean> modifyStatus(@RequestParam @NotNull(message = "角色ID不能为空") Integer roleId,
-                                            @RequestParam @NotNull(message = "角色状态不能为空") Boolean status) {
-        return ResultBean.result(sysRoleService.updateStatus(roleId, status));
+    public ResultBean<Boolean> modifyStatus(@RequestParam("id") @NotNull(message = "角色ID不能为空") Integer id,
+                                            @RequestParam("status") @NotNull(message = "角色状态不能为空") Boolean status) {
+        return ResultBean.result(sysRoleService.updateStatus(id, status));
     }
 
 }

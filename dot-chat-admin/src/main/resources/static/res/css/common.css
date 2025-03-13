@@ -1,8 +1,41 @@
-﻿
-.mini-tabs-bodys{
-    /*padding:0 !important;*/
+﻿/*撑满页面需要下面样式*/
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
-body{
-    /*background: #ffffff !important;*/
+.mini-window .form {
+    padding-left: 20px;
+}
+
+.mini-labelfield-label {
+    width: 80px !important;
+    text-align: right;
+}
+
+body .mini-labelfield {
+    width: 280px !important;
+    margin-top: 5px;
+}
+
+.mini-labelfield .mini-corner-all {
+    margin-left: 75px !important;
+}
+
+.form-btn-div {
+    text-align: right;
+    padding: 15px;
+}
+
+.form-btn-div .btn {
+    width: 80px;
+}
+
+.form-switch {
+    margin-left: 40px;
+    margin-top: 10px;
 }

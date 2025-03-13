@@ -46,6 +46,12 @@ public class SysMenuSimResponse implements Serializable {
     private Integer pid;
 
     /**
+     * 菜单图标CSS类
+     */
+    @Schema(description = "菜单图标CSS类")
+    private String iconCls;
+
+    /**
      * 排序编号
      */
     @Schema(description = "排序编号")

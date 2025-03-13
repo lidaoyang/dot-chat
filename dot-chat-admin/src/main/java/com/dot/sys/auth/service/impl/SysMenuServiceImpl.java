@@ -247,6 +247,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         if (CollUtil.isEmpty(menuList)) {
             return CollUtil.newArrayList();
         }
+        return getSysMenuSimResponseList(menuList);
+    }
+
+    private List<SysMenuSimResponse> getSysMenuSimResponseList(List<SysMenu> menuList) {
         Map<Integer, SysMenuSimResponse> menuMap = new LinkedHashMap<>();
         menuList.forEach(menu -> {
             SysMenuSimResponse menuResponse = new SysMenuSimResponse();
@@ -267,6 +271,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         return responseList;
     }
 
+    @Override
+    public List<SysMenuSimResponse> getDirSimList(SysMenuSearchRequest request) {
+        request.setTypes(CollUtil.newArrayList(MenuTypeEm.DIRECTORY.getCode(), MenuTypeEm.PAGE.getCode()));
+        List<SysMenu> menuList = getSysMenuList(request);
+        if (CollUtil.isEmpty(menuList)) {
+            return CollUtil.newArrayList();
+        }
+        return getSysMenuSimResponseList(menuList);
+    }
 
     private List<SysMenu> getSysMenuList(SysMenuSearchRequest request) {
         LoginUsername loginUser = tokenManager.getLoginUser();
@@ -290,6 +303,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         queryWrapper.eq(ObjectUtil.isNotNull(request.getStatus()), SysMenu::getStatus, request.getStatus());
         queryWrapper.eq(ObjectUtil.isNotNull(request.getType()), SysMenu::getType, request.getType());
         queryWrapper.eq(ObjectUtil.isNotNull(request.getLevel()), SysMenu::getLevel, request.getLevel());
+        queryWrapper.in(CollUtil.isNotEmpty(request.getTypes()), SysMenu::getType, request.getTypes());
         queryWrapper.in(CollUtil.isNotEmpty(menuIdList), SysMenu::getId, menuIdList);
         queryWrapper.and(StringUtils.isNotBlank(request.getKeywords()), wrapper -> {
             wrapper.eq(SysMenu::getId, request.getKeywords()).or().like(SysMenu::getName, request.getKeywords()).or()

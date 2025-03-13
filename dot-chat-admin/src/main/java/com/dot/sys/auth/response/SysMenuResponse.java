@@ -82,14 +82,14 @@ public class SysMenuResponse implements Serializable {
     private String path;
 
     /**
-     * 状态(0:隐藏;1:显示),默认1
+     * 状态(false:隐藏;true:显示),默认true
      */
-    @Schema(description = "状态(0:隐藏;1:显示),默认1")
-    private Integer status;
+    @Schema(description = "状态(false:隐藏;true:显示),默认true")
+    private Boolean status;
     private String statusDesc;
 
     public String getStatusDesc() {
-        return this.status == 1 ? "显示" : "隐藏";
+        return this.status ? "显示" : "隐藏";
     }
 
     /**
