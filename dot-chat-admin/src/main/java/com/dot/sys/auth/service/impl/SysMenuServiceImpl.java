@@ -60,9 +60,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         return this.save(newMenu);
     }
 
-    private SysMenu getNewSysMenu(SysMenuAddRequest addRequest) {
+    private SysMenu getNewSysMenu(SysMenuAddRequest request) {
+        if (request.getType() == MenuTypeEm.API.getCode()) {
+            if (StringUtils.isBlank(request.getLinkUrl())) {
+                throw new ApiException(ExceptionCodeEm.PRAM_NOT_MATCH, "API菜单的链接地址不能为空");
+            }
+        }
         SysMenu menu = new SysMenu();
-        BeanUtils.copyProperties(addRequest, menu);
+        BeanUtils.copyProperties(request, menu);
         if (menu.getPid() == null || menu.getPid() == 0) {
             menu.setLevel(1);
             menu.setPath("");
@@ -312,7 +317,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         queryWrapper.orderByDesc(SysMenu::getSort).orderByAsc(SysMenu::getId);
         return this.list(queryWrapper);
     }
-
 
 
 }

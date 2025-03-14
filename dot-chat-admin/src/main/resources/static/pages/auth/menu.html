@@ -19,7 +19,8 @@
     <table style="width:100%;">
         <tr>
             <td style="width:100%;">
-                <a class="mini-button" iconCls="icon-add" plain="true" onclick="openAddDialog()">增加</a>
+                <a class="mini-button" iconCls="icon-add" plain="true" onclick="openAddDialog('false')">增加</a>
+                <a class="mini-button" iconCls="icon-add" plain="true" onclick="openAddDialog('true')">增加子菜单</a>
                 <a class="mini-button" iconCls="icon-edit" plain="true" onclick="openEditDialog()">编辑</a>
                 <a class="mini-button" iconCls="icon-remove" plain="true" onclick="deleteMenu()">删除</a>
                 <a class="mini-button" iconCls="icon-reload" plain="true" onclick="reloadTree()">刷新</a>
@@ -130,9 +131,25 @@
 
     });
 
-    function openAddDialog() {
+    function openAddDialog(isChild) {
         let form = new mini.Form("#add-form");
         form.reset();
+        if (isChild === 'true') {
+            let row = grid.getSelected();
+            if (!row) {
+                alertWarn("请选择父级菜单行");
+                return;
+            }
+            let mText = getPidAndPtext(row);
+            let menuPid = mini.get("menu-pid")
+            if (row.type === 1) {
+                menuPid.setText(mText);
+                menuPid.setValue(grid.getAncestors(row)[0].id);
+            } else {
+                menuPid.setText(mText + " / " + row.name);
+                menuPid.setValue(row.id);
+            }
+        }
         showMenuDialog("添加菜单");
     }
 
@@ -142,15 +159,7 @@
         dialog.show();
     }
 
-    function openEditDialog() {
-        let row = grid.getSelected();
-        if (!row) {
-            mini.alert("请选择要编辑的行");
-            return;
-        }
-
-        setSwitch("#add-menu-dialog span[name='form-status-sw']", row.status);
-
+    function getPidAndPtext(row) {
         let pNode = grid.getAncestors(row);
         // console.log(pNode);
         let mText = "";
@@ -162,8 +171,19 @@
                 mText += p.name;
             }
         }
-        let menuPid = mini.get("menu-pid");
-        menuPid.setText(mText);
+        return mText;
+    }
+
+    function openEditDialog() {
+        let row = grid.getSelected();
+        if (!row) {
+            alertWarn("请选择要编辑的行");
+            return;
+        }
+        let mText = getPidAndPtext(row);
+        mini.get("menu-pid").setText(mText);
+
+        setSwitch("#add-menu-dialog span[name='form-status-sw']", row.status);
 
         let form = new mini.Form("#add-form");
         form.setData(row);
