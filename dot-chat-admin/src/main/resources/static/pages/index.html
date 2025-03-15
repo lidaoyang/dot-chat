@@ -2,13 +2,52 @@
 <html lang="zh-CN">
 <head>
     <title>首页</title>
-    <script src="../scripts/boot.js" type="text/javascript"></script>
+        <script src="../scripts/boot.js" type="text/javascript"></script>
+    <style>
+        .container {
+            display: block;
+            text-align: center;
+        }
+
+        .commonright {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .container .title {
+            color: #508ffb;
+            font-size: 40px;
+            text-align: center;
+            line-height: 1;
+            padding: 5vh 0 6vh;
+        }
+
+        p {
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        .container .home {
+            height: 57vh;
+        }
+
+        fieldset, img {
+            border: none;
+            display: inline-block;
+        }
+
+        a, button, img, input, label, select {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-tap-highlight-color: transparent;
+            outline: medium none;
+        }
+    </style>
 </head>
 <body>
-<h1>首页</h1>
-<div id="time"></div>
+<div class="commonright container">
+    <p class="title">
+        欢迎使用DotAdmin后台管理系统！
+    </p>
+    <img src="../res/images/home-bg.png" class="home"></div>
 </body>
 </html>
-<script>
-    document.getElementById("time").innerHTML = new Date();
-</script>
