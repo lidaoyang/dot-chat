@@ -144,7 +144,8 @@
             let menuPid = mini.get("menu-pid")
             if (row.type === 1) {
                 menuPid.setText(mText);
-                menuPid.setValue(grid.getAncestors(row)[0].id);
+                let pNodes = grid.getAncestors(row);
+                menuPid.setValue(pNodes[pNodes.length - 1].id);
             } else {
                 menuPid.setText(mText + " / " + row.name);
                 menuPid.setValue(row.id);
@@ -160,12 +161,12 @@
     }
 
     function getPidAndPtext(row) {
-        let pNode = grid.getAncestors(row);
-        // console.log(pNode);
+        let pNodes = grid.getAncestors(row);
+        // console.log(pNodes);
         let mText = "";
-        for (let i = 0; i < pNode.length; i++) {
-            let p = pNode[i];
-            if (i < pNode.length - 1) {
+        for (let i = 0; i < pNodes.length; i++) {
+            let p = pNodes[i];
+            if (i < pNodes.length - 1) {
                 mText += p.name + " / ";
             } else {
                 mText += p.name;
@@ -187,7 +188,7 @@
 
         let form = new mini.Form("#add-form");
         form.setData(row);
-        console.log(form.getData());
+        // console.log(form.getData());
         showMenuDialog("编辑菜单");
     }
 
@@ -197,7 +198,11 @@
             headers: header
         });
         tree.load(`${SYS_URL_PREFIX}/auth/menu/dirlist`);
-
+        let pid = mini.get("menu-pid").getValue();
+        // console.log("pid", pid);
+        if (pid) {
+            tree.selectNode(pid.toString());
+        }
         mini.get("select-pmenu-dialog").show();
     }
 
