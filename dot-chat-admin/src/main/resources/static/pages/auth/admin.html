@@ -146,6 +146,8 @@
             headers: header
         });
         rCombo.setUrl(`${SYS_URL_PREFIX}/auth/role/simlist`);
+
+        setSwitch("#add-admin-dialog span[name='form-status-sw']", true);
         mini.get("add-admin-dialog").show();
     }
 

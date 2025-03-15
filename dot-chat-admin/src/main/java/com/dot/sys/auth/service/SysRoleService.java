@@ -7,6 +7,7 @@ import com.dot.sys.auth.model.SysRole;
 import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
+import com.dot.sys.auth.request.SysRoleUpdateMenuRequest;
 import com.dot.sys.auth.response.SysRoleInfoResponse;
 import com.dot.sys.auth.response.SysRoleMenuResponse;
 import com.dot.sys.auth.response.SysRoleResponse;
@@ -38,6 +39,14 @@ public interface SysRoleService extends IService<SysRole> {
      * @return boolean
      */
     Boolean edit(SysRoleEditRequest request);
+
+    /**
+     * 更新角色菜单
+     *
+     * @param request 请求对象
+     * @return boolean
+     */
+    Boolean updateRoleMenu(SysRoleUpdateMenuRequest request);
 
     /**
      * 更新角色状态
@@ -80,6 +89,14 @@ public interface SysRoleService extends IService<SysRole> {
      * @return SysRoleInfoResponse
      */
     SysRoleInfoResponse getInfo(Integer roleId);
+
+    /**
+     * 获取角色菜单ID字符串,不包含有子集的菜单ID,用于角色页面权限回填
+     *
+     * @param roleId 角色ID
+     * @return String 逗号分隔的菜单ID字符串
+     */
+    String getRoleMenuIds(Integer roleId);
 
     /**
      * 是否存在超级管理员角色

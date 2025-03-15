@@ -89,4 +89,12 @@ public interface SysRoleDetailService extends IService<SysRoleDetail> {
      * @return 角色菜单列表
      */
     List<SysRoleMenuDto> getSysRoleMenuList(List<Integer> roleIds);
+
+    /**
+     * 根据角色ID列表获取菜单ID列表-包含ID-pid
+     *
+     * @param roleIds 角色ID列表
+     * @return 菜单ID列表
+     */
+    List<SysRoleMenuDto> getSysMenuIdList(List<Integer> roleIds);
 }

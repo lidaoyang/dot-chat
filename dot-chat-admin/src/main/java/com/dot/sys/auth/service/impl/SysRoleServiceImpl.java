@@ -29,16 +29,15 @@ import com.dot.sys.auth.model.SysRoleDetail;
 import com.dot.sys.auth.request.SysRoleAddRequest;
 import com.dot.sys.auth.request.SysRoleEditRequest;
 import com.dot.sys.auth.request.SysRoleSearchRequest;
-import com.dot.sys.auth.response.SysRoleInfoResponse;
-import com.dot.sys.auth.response.SysRoleMenuResponse;
-import com.dot.sys.auth.response.SysRoleResponse;
-import com.dot.sys.auth.response.SysRoleSimResponse;
+import com.dot.sys.auth.request.SysRoleUpdateMenuRequest;
+import com.dot.sys.auth.response.*;
 import com.dot.sys.auth.service.SysRoleDetailService;
 import com.dot.sys.auth.service.SysRoleService;
 import com.dot.sys.auth.dto.SysMenuUrlDto;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -78,29 +77,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         // 检查是否是超级管理员
         checkIsSuperAdmin(loginUser, request.getType());
 
-        // 检查菜单权限
-        checkLoginUserRoleAuth(request.getMenuIds(), loginUser);
-
-        List<SysMenuUrlDto> menuUrlVoList = getMenuUrlListByIds(request.getMenuIds());
-        if (CollUtil.isEmpty(menuUrlVoList)) {
-            log.error("无系统菜单数据,menuIds:{}", request.getMenuIds());
-            throw new ApiException(ExceptionCodeEm.NOT_FOUND, "无系统菜单数据");
-        }
         SysRole newSysRole = getNewSysRole(request);
-        return transactionTemplate.execute(t -> {
-            boolean ret = this.save(newSysRole);
-            if (!ret) {
-                log.error("角色信息保存失败,role:{}", JSON.toJSONString(newSysRole));
-                throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "角色信息保存失败");
-            }
-            List<SysRoleDetail> roleDetails = getRoleDetails(menuUrlVoList, newSysRole.getId());
-            boolean rt = sysRoleDetailService.saveBatch(roleDetails);
-            if (!rt) {
-                log.error("角色明细保存失败,roleDetails:{}", JSON.toJSONString(roleDetails));
-                throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "角色明细保存失败");
-            }
-            return true;
-        });
+        boolean ret = this.save(newSysRole);
+        if (!ret) {
+            log.error("角色信息保存失败,role:{}", JSON.toJSONString(newSysRole));
+            throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "角色信息保存失败");
+        }
+        return true;
     }
 
     private SysRole getNewSysRole(SysRoleAddRequest request) {
@@ -116,36 +99,46 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         LoginUsername loginUser = tokenManager.getLoginUser();
         // 检查角色是否存在和是否有操作权限
         checkLoginUserRoleAuth(request.getId(), loginUser);
+
+        SysRole newSysRole = getNewSysRole(request);
+        newSysRole.setId(request.getId());
+        boolean ret = this.updateById(newSysRole);
+        if (!ret) {
+            log.error("角色信息更新失败,role:{}", JSON.toJSONString(newSysRole));
+            throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "角色信息更新失败");
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean updateRoleMenu(SysRoleUpdateMenuRequest request) {
+        LoginUsername loginUser = tokenManager.getLoginUser();
         // 旧的菜单ID列表
         List<Integer> menuIdList = sysRoleDetailService.getMenuIdsByRoleId(request.getId());
 
+        List<Integer> menuIds = CommUtil.stringToArrayInt(request.getMenuIds());
+
         // 检查菜单权限
         checkLoginUserRoleAuth(menuIdList, loginUser);
+        checkLoginUserRoleAuth(menuIds, loginUser);
 
         // 新增的菜单ID列表
-        List<Integer> addMenuIdList = CollUtil.subtractToList(request.getMenuIds(), menuIdList);
+        List<Integer> addMenuIdList = CollUtil.subtractToList(menuIds, menuIdList);
 
         // 删除的菜单ID
-        List<Integer> deleteMenuIdList = CollUtil.subtractToList(menuIdList, request.getMenuIds());
+        List<Integer> deleteMenuIdList = CollUtil.subtractToList(menuIdList, menuIds);
 
-        List<SysMenuUrlDto> menuUrlVoList = getMenuUrlListByIds(addMenuIdList);
-        if (CollUtil.isEmpty(menuUrlVoList)) {
+        List<SysMenuUrlDto> addMenuUrlVoList = getMenuUrlListByIds(addMenuIdList);
+        if (CollUtil.isEmpty(addMenuUrlVoList)) {
             log.warn("无新增的系统菜单数据,addMenuIdList:{}", addMenuIdList);
         }
-        SysRole newSysRole = getNewSysRole(request);
-        newSysRole.setId(request.getId());
         return transactionTemplate.execute(t -> {
             Boolean ret1 = sysRoleDetailService.deleteDetailByMRoleId(request.getId(), deleteMenuIdList);
             if (!ret1) {
-                log.warn("没有权限菜单数据被删除,role:{},deleteMenuIdList:{}", request.getName(), deleteMenuIdList);
+                log.warn("没有权限菜单数据被删除,roleId:{},deleteMenuIdList:{}", request.getId(), deleteMenuIdList);
             }
-            boolean ret = this.updateById(newSysRole);
-            if (!ret) {
-                log.error("角色信息保存失败,role:{}", JSON.toJSONString(newSysRole));
-                throw new ApiException(ExceptionCodeEm.SYSTEM_ERROR, "角色信息保存失败");
-            }
-            if (CollUtil.isNotEmpty(menuUrlVoList)) {
-                List<SysRoleDetail> roleDetails = getRoleDetails(menuUrlVoList, request.getId());
+            if (CollUtil.isNotEmpty(addMenuUrlVoList)) {
+                List<SysRoleDetail> roleDetails = getRoleDetails(addMenuUrlVoList, request.getId());
                 boolean rt = sysRoleDetailService.saveBatch(roleDetails);
                 if (!rt) {
                     log.error("角色明细保存失败,roleDetails:{}", JSON.toJSONString(roleDetails));
@@ -155,7 +148,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
             return true;
         });
     }
-
 
     private void checkLoginUserRoleAuth(Collection<Integer> menuIdList, LoginUsername loginUser) {
         if (loginUser.isSuperAdmin()) {// 超级管理员拥有所有权限
@@ -320,6 +312,32 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         BeanUtil.copyProperties(role, response);
         response.setMenuIds(sysRoleDetailService.getMenuIdsByRoleId(roleId));
         return response;
+    }
+
+    @Override
+    public String getRoleMenuIds(Integer roleId) {
+        List<SysRoleMenuDto> menuList = sysRoleDetailService.getSysMenuIdList(CollUtil.newArrayList(roleId));
+        Map<Integer, SysMenuSimResponse> menuMap = new HashMap<>();
+        menuList.forEach(menu -> {
+            SysMenuSimResponse menuResponse = new SysMenuSimResponse();
+            menuResponse.setId(menu.getId());
+            menuResponse.setPid(menu.getPid());
+            menuMap.put(menu.getId(), menuResponse);
+        });
+        menuMap.forEach((menuId, menu) -> {
+            if (menu.getPid() != 0 && menuMap.containsKey(menu.getPid())) {
+                SysMenuSimResponse menuResponse = menuMap.get(menu.getPid());
+                menuResponse.getChildren().add(menu);
+            }
+        });
+
+        List<Integer> menuIds = new ArrayList<>();
+        menuMap.forEach((menuId, menu) -> {
+            if (menu.getChildren().isEmpty()) {
+                menuIds.add(menuId);
+            }
+        });
+        return CollUtil.join(menuIds, ",");
     }
 
     @Override

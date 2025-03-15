@@ -52,10 +52,4 @@ public class SysRoleAddRequest implements Serializable {
     @Range(min = 0, max = 2, message = "角色类型只能为0或1")
     private Integer type;
 
-    /**
-     * 菜单ID集合
-     */
-    @Schema(description = "菜单ID集合", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotEmpty(message = "菜单ID集合不能为空")
-    private Set<Integer> menuIds;
 }

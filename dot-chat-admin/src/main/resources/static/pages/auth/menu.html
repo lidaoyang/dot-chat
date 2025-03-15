@@ -7,12 +7,6 @@
     <link href="../../scripts/honeySwitch/honeySwitch.css" type="text/css" rel="stylesheet"/>
     <script src="../../scripts/honeySwitch/honeySwitch.js"></script>
 
-    <style>
-        .form-switch {
-            margin-left: 40px;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
 <div class="mini-toolbar" style="padding:2px;border-bottom:0;">
@@ -151,6 +145,7 @@
                 menuPid.setValue(row.id);
             }
         }
+        setSwitch("#add-menu-dialog span[name='form-status-sw']", true);
         showMenuDialog("添加菜单");
     }
 

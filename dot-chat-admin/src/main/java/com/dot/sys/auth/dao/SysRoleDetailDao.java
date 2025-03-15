@@ -31,4 +31,10 @@ public interface SysRoleDetailDao extends BaseMapper<SysRoleDetail> {
             + "${ew.customSqlSegment} ")
     List<SysRoleMenuDto> selectSysRoleMenuList(@Param(Constants.WRAPPER) QueryWrapper<SysRoleMenuDto> queryWrapper);
 
+    @Select("select me.id,me.pid,rd.role_id "
+            + "from sys_role_detail rd "
+            + "inner join sys_menu me on me.id=rd.menu_id "
+            + "${ew.customSqlSegment} ")
+    List<SysRoleMenuDto> selectMenuIdList(@Param(Constants.WRAPPER) QueryWrapper<SysRoleMenuDto> queryWrapper);
+
 }

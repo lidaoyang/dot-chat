@@ -128,4 +128,16 @@ public class SysRoleDetailServiceImpl extends ServiceImpl<SysRoleDetailDao, SysR
         qw.orderByDesc("me.sort").orderByAsc("me.id");
         return baseMapper.selectSysRoleMenuList(qw);
     }
+
+    @Override
+    public List<SysRoleMenuDto> getSysMenuIdList(List<Integer> roleIds) {
+        QueryWrapper<SysRoleMenuDto> qw = Wrappers.query();
+        if (roleIds.size() == 1) {
+            qw.eq("rd.role_id", roleIds.get(0));
+        } else {
+            qw.in("rd.role_id", roleIds);
+        }
+        qw.orderByDesc("me.sort").orderByAsc("me.id");
+        return baseMapper.selectMenuIdList(qw);
+    }
 }

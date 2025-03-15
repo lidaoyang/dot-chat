@@ -70,6 +70,14 @@ public class SysRoleController {
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "角色菜单Ids", description = "根据角色ID查询角色的菜单ID集合,用逗号分割,用于角色菜单true")
+    @GetMapping(value = "/menuIds")
+    @Parameter(name = "roleId", description = "角色ID", required = true)
+    public ResultBean<String> getRoleMenuIds(@RequestParam("roleId") @NotNull(message = "角色ID不能为空") Integer roleId) {
+        return ResultBean.success(sysRoleService.getRoleMenuIds(roleId),"获取成功");
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "添加角色")
     @PostMapping(value = "/add")
     public ResultBean<Boolean> add(@RequestBody @Validated SysRoleAddRequest request) {
@@ -101,6 +109,13 @@ public class SysRoleController {
     public ResultBean<Boolean> modifyStatus(@RequestParam("id") @NotNull(message = "角色ID不能为空") Integer id,
                                             @RequestParam("status") @NotNull(message = "角色状态不能为空") Boolean status) {
         return ResultBean.result(sysRoleService.updateStatus(id, status));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "修改角色权限菜单")
+    @PutMapping(value = "/modifyMenu")
+    public ResultBean<Boolean> modifyMenu(@RequestBody @Validated SysRoleUpdateMenuRequest request) {
+        return ResultBean.result(sysRoleService.updateRoleMenu(request));
     }
 
 }
