@@ -44,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
     /**
      * 不需要拦截的接口
      */
-    final String[] excludeApiPathPatterns = {"/api/sys/auth/admin/login"};
+    final String[] excludeApiPathPatterns = {"/api/sys/auth/admin/login","/api/sys/auth/admin/logout"};
     /**
      * 不需要校验菜单权限的接口
      */

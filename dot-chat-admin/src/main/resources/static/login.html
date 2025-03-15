@@ -171,6 +171,7 @@
         }
         return isValid;
     }
+
     // 表单验证
     function validateForm2() {
         let isValid = true;
@@ -208,11 +209,12 @@
             account: usernameInput.value,
             password: passwordInput.value
         });
-        ajaxRequestNotAuth(url, 'post', data, 'application/json', function (res) {
+        ajaxRequestNotAuth(url, METHOD.POST, data, CONTENT_TYPE_JSON, function (res) {
             if (res.code !== 200) {
-                alert(res.message);
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('loading');
+                showError(passwordInput, 'passwordError', res.message);
+                console.error("获取数据失败,res:", res);
                 return;
             }
             // 保存token

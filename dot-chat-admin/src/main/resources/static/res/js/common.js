@@ -89,11 +89,6 @@ function ajaxRequestNotAuth(url, method, data, contentType, successFn) {
                 deleteUserCookie();
                 return;
             }
-            if (res.code !== 200) {
-                console.error("获取数据失败,data:", data, "res:", res);
-                alertError(err);
-                return;
-            }
             successFn(res);
         },
         error: function (err) {
@@ -196,10 +191,10 @@ function ajaxSyncRequest(url, method, data, contentType, successFn) {
 
 function logout() {
     let url = `${SYS_URL_PREFIX}/auth/admin/logout`;
-    ajaxRequest(url, "post", {}, null, function (res) {
+    ajaxRequest(url, METHOD.GET, null, null, function (res) {
         if (res.code !== 200) {
             console.error("退出失败", dateNow());
-            alertError(err);
+            alertError(res.message);
             return;
         }
         deleteUserCookie();

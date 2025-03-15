@@ -57,8 +57,9 @@ public class LoginController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "退出登录")
     @GetMapping(value = "/logout")
-    public void logout() {
+    public ResultBean<Boolean> logout() {
         loginService.logout();
+        return ResultBean.success();
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
