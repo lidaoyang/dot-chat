@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室和用户关联表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_room_user_rel")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatRoomUserRel implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  1163480997563153986L;
+	private static final long serialVersionUID =  6760881947561221331L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -70,28 +70,28 @@ public class ChatRoomUserRel implements Serializable {
 	private Integer offlineMsgCount;
 
 	/**
-	 * 最新一条消息id
+	 * 最新消息ID
 	 */
-	@Schema(description = "最新一条消息id")
+	@Schema(description = "最新消息ID")
 	private Integer lastMsgId;
 
 	/**
-	 * 最新一条信息(LatestMsg),如果消息类型是图片,显示(“图片”),商品显示“商品”
+	 * 最新消息
 	 */
-	@Schema(description = "最新一条信息(LatestMsg),如果消息类型是图片,显示(“图片”),商品显示“商品”")
+	@Schema(description = "最新消息")
 	private String lastMsg;
 
 	/**
-	 * 最后消息发送时间
+	 * 最新消息发送时间
 	 */
-	@Schema(description = "最后消息发送时间")
+	@Schema(description = "最新消息发送时间")
 	private String lastTime;
 
 	/**
 	 * 时间戳
 	 */
 	@Schema(description = "时间戳")
-	private Long timestamp;
+	private Integer timestamp;
 
 	/**
 	 * 创建时间

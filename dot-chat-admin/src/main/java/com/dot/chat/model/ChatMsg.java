@@ -13,10 +13,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 聊天室消息记录表
+ * 聊天室消息记录表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_msg")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatMsg implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  1725781086462862292L;
+	private static final long serialVersionUID =  6032304632563448233L;
 
 	/**
 	 * 消息id
@@ -55,15 +55,15 @@ public class ChatMsg implements Serializable {
 	private Integer groupId;
 
 	/**
-	 * 发送信息的用户ID
+	 * 发送用户ID
 	 */
-	@Schema(description = "发送信息的用户ID")
+	@Schema(description = "发送用户ID")
 	private Integer sendUserId;
 
 	/**
-	 * 消息接收用户ID(群消息时为群ID)
+	 * 接收用户ID
 	 */
-	@Schema(description = "消息接收用户ID(群消息时为群ID)")
+	@Schema(description = "接收用户ID")
 	private Integer toUserId;
 
 	/**
@@ -88,7 +88,7 @@ public class ChatMsg implements Serializable {
 	 * 时间戳
 	 */
 	@Schema(description = "时间戳")
-	private Long timestamp;
+	private Integer timestamp;
 
 	/**
 	 * 设备类型(PC,MOBILE)

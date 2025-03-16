@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室邀请入群申请表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_group_apply")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatGroupApply implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  7333381879202267827L;
+	private static final long serialVersionUID =  4857968372916930043L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -61,7 +61,7 @@ public class ChatGroupApply implements Serializable {
 	 * 申请状态(0:申请中;1:同意;)
 	 */
 	@Schema(description = "申请状态(0:申请中;1:同意;)")
-	private Integer status;
+	private Boolean status;
 
 	/**
 	 * 来源

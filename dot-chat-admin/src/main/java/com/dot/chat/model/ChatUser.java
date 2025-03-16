@@ -13,21 +13,21 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 聊天室用户表(关联管理员表和企业用户表)实体
+ * 聊天室用户实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_user")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(name = "ChatUser", description="聊天室用户表(关联管理员表和企业用户表)")
+@Schema(name = "ChatUser", description="聊天室用户表")
 public class ChatUser implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  9191778674935372365L;
+	private static final long serialVersionUID =  4652645602672005928L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -46,9 +46,9 @@ public class ChatUser implements Serializable {
 	private String phone;
 
 	/**
-	 * 登录密码
+	 * 密码
 	 */
-	@Schema(description = "登录密码")
+	@Schema(description = "密码")
 	private String pwd;
 
 	/**
@@ -67,7 +67,7 @@ public class ChatUser implements Serializable {
 	 * 性别(0:保密,1:男,2:女)
 	 */
 	@Schema(description = "性别(0:保密,1:男,2:女)")
-	private Integer sex;
+	private Boolean sex;
 
 	/**
 	 * 用户状态(1:正常,0:禁用)
@@ -104,6 +104,12 @@ public class ChatUser implements Serializable {
 	 */
 	@Schema(description = "最后登录IP")
 	private String lastIp;
+
+	/**
+	 * 创建日期
+	 */
+	@Schema(description = "创建日期")
+	private String createDate;
 
 	/**
 	 * 创建时间

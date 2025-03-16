@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 用户聊天室表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_room")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatRoom implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  7934754433847447124L;
+	private static final long serialVersionUID =  3548666185715971218L;
 
 	/**
 	 * 主键ID
@@ -58,7 +58,7 @@ public class ChatRoom implements Serializable {
 	 * 时间戳
 	 */
 	@Schema(description = "时间戳")
-	private Long timestamp;
+	private Integer timestamp;
 
 	/**
 	 * 创建时间

@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天信息和用户关联表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_msg_user_rel")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatMsgUserRel implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  8475713011413443591L;
+	private static final long serialVersionUID =  1479422366339638039L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -73,7 +73,7 @@ public class ChatMsgUserRel implements Serializable {
 	 * 发送/接收时间戳
 	 */
 	@Schema(description = "发送/接收时间戳")
-	private Long sendTimeStamp;
+	private Integer sendTimeStamp;
 
 	/**
 	 * 创建时间

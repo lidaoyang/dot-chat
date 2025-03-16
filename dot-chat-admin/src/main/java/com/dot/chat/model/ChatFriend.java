@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室好友表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_friend")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatFriend implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  5539115298435028331L;
+	private static final long serialVersionUID =  2260203042217053334L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)

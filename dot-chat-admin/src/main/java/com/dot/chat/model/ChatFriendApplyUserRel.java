@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室新好友申请和用户关联表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_friend_apply_user_rel")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatFriendApplyUserRel implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  2218004342616840095L;
+	private static final long serialVersionUID =  3120996051508292491L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -58,16 +58,16 @@ public class ChatFriendApplyUserRel implements Serializable {
 	private String remark;
 
 	/**
-	 * 标签(多个标签用英文逗号分割)
+	 * 标签
 	 */
-	@Schema(description = "标签(多个标签用英文逗号分割)")
+	@Schema(description = "标签")
 	private String label;
 
 	/**
 	 * 未读数
 	 */
 	@Schema(description = "未读数")
-	private Integer unreadCount;
+	private Boolean unreadCount;
 
 	/**
 	 * 创建时间

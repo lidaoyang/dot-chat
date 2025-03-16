@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室邀请好友进群申请和用户关联表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_group_apply_user_rel")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatGroupApplyUserRel implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  6788892504330602120L;
+	private static final long serialVersionUID =  7606371072005438063L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)

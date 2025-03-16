@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室用户黑名单表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_user_blacklist")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatUserBlacklist implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  7898850670731898510L;
+	private static final long serialVersionUID =  8948771309896956414L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)

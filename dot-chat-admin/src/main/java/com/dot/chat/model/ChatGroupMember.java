@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 聊天室群成员表实体
  * 
  * @author Dao-yang
- * @date: 2024-01-10 09:56:44
+ * @date: 2025-03-16 09:44:04
  */
 @Data
 @TableName("chat_group_member")
@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class ChatGroupMember implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID =  3667689834847666711L;
+	private static final long serialVersionUID =  4516317429181083880L;
 
 	@Schema(description = "id")
 	@TableId(value = "id", type = IdType.AUTO)
@@ -64,9 +64,9 @@ public class ChatGroupMember implements Serializable {
 	private Boolean isGroupManager;
 
 	/**
-	 * 邀请人用户ID
+	 * 邀请人用户ID(邀请入群时有值)
 	 */
-	@Schema(description = "邀请人用户ID")
+	@Schema(description = "邀请人用户ID(邀请入群时有值)")
 	private Integer inviteUserId;
 
 	/**
