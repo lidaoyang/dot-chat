@@ -1,6 +1,7 @@
 package com.dot.chat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -25,8 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 聊天室用户表(关联管理员表和企业用户表)服务接口实现
@@ -79,9 +81,27 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     @Override
     public List<ChatUserSimResponse> getUserSimList(String date) {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.select(ChatUser::getId, ChatUser::getPhone, ChatUser::getNickname, ChatUser::getAvatar);
         queryWrapper.eq(StringUtils.isNotBlank(date), ChatUser::getCreateDate, date);
         queryWrapper.orderByDesc(ChatUser::getId);
         List<ChatUser> chatUserList = this.list(queryWrapper);
         return BeanUtil.copyToList(chatUserList, ChatUserSimResponse.class);
+    }
+
+    @Override
+    public Map<Integer, ChatUserSimResponse> getUserSimMap(Collection<Integer> uidList) {
+        if (CollUtil.isEmpty(uidList)) {
+            return Map.of();
+        }
+        LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.select(ChatUser::getId, ChatUser::getPhone, ChatUser::getNickname, ChatUser::getAvatar);
+        queryWrapper.in(ChatUser::getId, uidList);
+        List<ChatUser> chatUserList = this.list(queryWrapper);
+        if (CollUtil.isEmpty(chatUserList)) {
+            return Map.of();
+        }
+        List<ChatUserSimResponse> responseList = BeanUtil.copyToList(chatUserList, ChatUserSimResponse.class);
+
+        return responseList.stream().collect(Collectors.toMap(ChatUserSimResponse::getId, Function.identity()));
     }
 }

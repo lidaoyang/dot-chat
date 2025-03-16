@@ -9,7 +9,9 @@ import com.dot.chat.response.ChatUserResponse;
 import com.dot.chat.response.ChatUserSimResponse;
 import com.dot.comm.entity.PageParam;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 聊天室用户表(关联管理员表和企业用户表)服务接口
@@ -51,4 +53,12 @@ public interface ChatUserService extends IService<ChatUser> {
      * @return 用户列表
      */
     List<ChatUserSimResponse> getUserSimList(String date);
+
+    /**
+     * 获取用户Map
+     *
+     * @param uidList 用户id列表
+     * @return 用户列表
+     */
+    Map<Integer, ChatUserSimResponse> getUserSimMap(Collection<Integer> uidList);
 }

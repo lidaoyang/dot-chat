@@ -1,0 +1,44 @@
+package com.dot.chat.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 用户聊天室单聊返回对象
+ * 
+ * @author Dao-yang
+ * @date: 2025-03-16 09:44:04
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(name = "ChatRoomSingleResponse", description="用户聊天室单聊返回对象")
+public class ChatRoomSingleResponse implements Serializable {
+
+	@Serial
+	private static final long serialVersionUID =  3548666185715971218L;
+
+	/**
+	 * 聊天室id uid1_uid2
+	 */
+	@Schema(description = "聊天室id")
+	private String chatId;
+
+	@Schema(description = "聊天室用户1")
+	private ChatUserSimResponse user1;
+
+	@Schema(description = "聊天室用户2")
+	private ChatUserSimResponse user2;
+
+	@Schema(description = "聊天室消息列表,")
+    private List<ChatMsgResponse> msgList;
+
+}
