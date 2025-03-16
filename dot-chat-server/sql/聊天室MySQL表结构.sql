@@ -334,6 +334,13 @@ create table chat_user
 )
     comment '聊天室用户表(关联管理员表和企业用户表)';
 
+alter table chat_user
+    add create_date date null comment '创建日期' after last_ip;
+
+create index create_date_index
+    on chat_user (create_date desc);
+
+
 create table chat_user_blacklist
 (
     id            int auto_increment

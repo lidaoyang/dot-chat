@@ -106,6 +106,12 @@ public class ChatUser implements Serializable {
 	private String lastIp;
 
 	/**
+	 * 创建日期
+	 */
+	@Schema(description = "创建日期")
+	private String createDate;
+
+	/**
 	 * 创建时间
 	 */
 	@Schema(description = "创建时间")

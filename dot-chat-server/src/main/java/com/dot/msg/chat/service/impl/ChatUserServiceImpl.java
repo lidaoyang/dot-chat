@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -303,6 +304,7 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
         newUser.setPhone(phone);
         newUser.setPwd(AESUtil.encryptCBC(phone, password));
         newUser.setAvatar(CommConstant.DEFAULT_AVATAR);
+        newUser.setCreateDate(LocalDate.now().toString());
         boolean saved = this.save(newUser);
         if (!saved) {
             log.error("注册失败,newUser:{}", newUser);
