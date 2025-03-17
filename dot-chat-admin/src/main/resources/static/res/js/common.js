@@ -346,7 +346,7 @@ function switchInitForGrid(apiType, grid) {
         });
 
     function updateStatus(id, status) {
-        let url = `${SYS_URL_PREFIX}/auth/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        let url = `${SYS_URL_PREFIX}/${apiType}/modifyStatus?id=${id}&status=${status}`;
         ajaxRequest(url, METHOD.PUT, null, null, function (res) {
             showTipsSuccess("修改成功!");
             grid.reload();
