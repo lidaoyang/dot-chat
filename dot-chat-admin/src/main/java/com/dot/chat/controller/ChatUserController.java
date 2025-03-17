@@ -70,8 +70,9 @@ public class ChatUserController {
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "每日用户列表", description = "按日期获取用户列表,用户注册统计查询每日用户")
+    @Parameter(name = "date", description = "注册日期", required = true)
     @GetMapping(value = "/listbydate")
-    public ResultBean<List<ChatUserSimResponse>> getUserSimList(String date) {
+    public ResultBean<List<ChatUserSimResponse>> getUserSimList(@RequestParam("date") @NotBlank(message = "注册日期不能为空") String date) {
         return ResultBean.success(chatUserService.getUserSimList(date));
     }
 
