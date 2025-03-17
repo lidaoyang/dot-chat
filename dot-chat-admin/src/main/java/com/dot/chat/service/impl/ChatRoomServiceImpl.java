@@ -73,7 +73,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
             List<Integer> chatUids = getChatUserIdsByChatId(chatRoom.getChatId());
             response.setUser1(userSimMap.get(chatUids.get(0)));
             response.setUser2(userSimMap.get(chatUids.get(1)));
-            response.setMsgList(msgUserListMap.get(chatRoom.getChatId()));
+            response.setMsgList(msgUserListMap.getOrDefault(chatRoom.getChatId(), new ArrayList<>()));
             responseList.add(response);
         });
 
@@ -100,7 +100,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
             ChatRoomGroupResponse response = new ChatRoomGroupResponse();
             response.setChatId(chatRoom.getChatId());
             response.setGroup(groupMap.get(chatRoom.getGroupId()));
-            response.setMsgList(msgUserListMap.get(response.getChatId()));
+            response.setMsgList(msgUserListMap.getOrDefault(chatRoom.getChatId(), new ArrayList<>()));
         });
 
         return PageUtil.copyPage(page, responseList);

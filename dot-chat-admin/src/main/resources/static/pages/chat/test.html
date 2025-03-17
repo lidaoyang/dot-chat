@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        .groupitem {
+            float: left;
+            margin-right: 12px;
+            width: calc(33.33% - 8px);
+            height: 316px;
+            background: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .groupitem:nth-child(3n) {
+            margin-right: 0;
+        }
+
+        .groupitem:hover {
+            box-shadow: 0 0 16px rgba(162, 193, 233, .56);
+        }
+
+        @media screen and (min-width: 1701px) {
+            .groupitem:nth-child(3n) {
+                margin-right: 12px;
+            }
+        }
+
+        .groupitem .item-top {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f3f3;
+            margin: 0 10px;
+        }
+
+        .frienditem .user-left, .frienditem .user-right {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .frienditem .user-left .group-avatar, .frienditem .user-right .group-avatar {
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .groupitem .item-top .group-avatar {
+            width: 44px;
+            height: 44px;
+            margin-right: 7px;
+            flex-shrink: 0;
+        }
+
+        .frienditem .private-avatar {
+            cursor: pointer;
+        }
+
+        .el-image {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .el-image__inner {
+            vertical-align: top;
+        }
+
+        .el-image__error, .el-image__inner, .el-image__placeholder {
+            width: 100%;
+            height: 100%;
+        }
+
+        .groupitem .item-top .groupinfo {
+            flex: 1;
+            padding-right: 8px;
+        }
+
+        .frienditem .friendinfo {
+            overflow: hidden;
+        }
+
+        .frienditem .friendinfo .friend-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 20px;
+            margin: 3px 0 2px;
+            font-weight: 600;
+        }
+
+        .frienditem .friendinfo .friend-uid {
+            color: #909090;
+            font-size: 12px;
+        }
+
+        .groupitem .item-top .groupsee {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            line-height: 24px;
+            color: #2769db;
+            cursor: pointer;
+        }
+
+        .frienditem .groupsee {
+            padding-right: 12px;
+        }
+
+        .frienditem .user-right {
+            flex-flow: row-reverse;
+            text-align: right;
+        }
+
+
+        .frienditem .item-bottom {
+            overflow: auto;
+        }
+
+        .groupitem .item-bottom {
+            height: 251px;
+            overflow: hidden;
+            padding: 0 10px;
+        }
+
+        .groupitem .msg-col {
+            margin-top: 0;
+        }
+
+        .container .msg-col {
+            display: flex;
+            margin-top: 2px;
+            padding: 7px 0;
+        }
+
+        .groupitem .msg-col .msg-right {
+            flex: 1;
+            padding-left: 10px;
+        }
+
+        .frienditem .msg-right-col {
+            text-align: right;
+            position: relative;
+        }
+
+        .container .msg-col .msg-right {
+            padding-left: 16px;
+        }
+
+        .groupitem .msg-col .msg-right .msg-top {
+            margin-bottom: 0;
+        }
+
+        .msg-col .msg-right .msg-top {
+            font-size: 12px;
+            color: #909090;
+            line-height: 17px;
+            margin-bottom: 2px;
+        }
+
+        .frienditem .msg-top .msg-time {
+            margin-left: 0;
+        }
+
+        .msg-col .msg-right .msg-top .msg-time {
+            margin-left: 8px;
+            color: #c4c4c4;
+        }
+
+        .groupitem .msg-col .msg-right .msg-content {
+            height: 19px;
+        }
+
+        .overell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media screen and (min-width: 1701px) {
+            .groupitem {
+                width: calc(25% - 9px);
+            }
+        }
+
+        p {
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        fieldset, img {
+            border: none;
+            display: inline-block;
+        }
+
+        a, button, img, input, label, select {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-tap-highlight-color: transparent;
+            outline: medium none;
+        }
+
+        a, abbr, address, article, aside, audio, big, body, button, canvas, caption, dd, details, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, input, label, li, mark, menu, nav, object, ol, output, p, q, section, select, small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, ul, var, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="groupitem frienditem">
+    <div class="item-top">
+        <div class="user-left">
+            <div class="el-image group-avatar private-avatar">
+                <img src="http://61.136.232.37:9328/user/base/avatar/2025030516/1743501897221504572203008.png"
+                     class="el-image__inner">
+            </div>
+            <div class="groupinfo friendinfo">
+                <p class="group-name friend-name">测测测</p>
+                <p class="group-id friend-uid">UID:100038</p></div>
+        </div>
+        <div class="groupsee">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAB7UlEQVRIS+2UQWsTQRTH39uNNqWpJBA221KwgojaSw+2zeYTFERoT15b9GBFMIeqya6gRXbTUIoK4sVKyM1v0B4C9aDdgAg52F7joUZ3G2iIbmM1zpNtXLzoTkjaW+f4GH6/ef83MwhHvPCI+XAs4CbMj+jheiDx4+JtIhpGQQgxou+IVGs4jWzpyZkaz+AvaMFzPwGX3xlSyYNN3N0eEgMnH+3vN++8Xx6s+kl8BUramm8iFjx4QrU1EqhqBrZejjkj0cAJljINOdm5QLWemUbs1rhWuYQgnhYBVgAgTIRJ05CeKpq1VN/Fhc3n0rf/SXw7SGh2bkOXZhXNziBQyoUwolcIGDSN2HRcq9yAX7hWXBz42J0gVZlEUVz1IF4HcfXzDDB43bXABStpawoFvMwA3hR1Ke/WDlXwrwji6pfrwKjQcQfKnyG3OqicRxSvMoJCMRN7e1DT7EzDcXzfg++Q46r1ABjLuyccnikHZTkof62LVffWjNy0Q6citGTqsbmOr6kL6Q/DC0Rh3tSjnzxQq84eAyPdLx53P/erGE2Ww719vfeAsJ8AdhAoAoA9xFiWB29LcJD1ffsaNRmSCB+ACRcEgZ0zdTnN+4faF6TtdUT6+5gQzu45e1e6/+zaOSJnD3cG3TqOBdwEfwOGt9gZU4H0jwAAAABJRU5ErkJggg=="
+                 style="">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAB0ElEQVRIS+2Uv2sUQRSA38y6uHA7RwQLC0ELEe3u4O3BldsJIpgqrYKggmCKSCIWIiIhBBHBzkhI53+gRWAsItzuvQEL/wAbK68I7BXHzd2+MOEOUujOcWe6bDk7fN/7OQJO+ROnzIczgbfC3hJprc8ppZ4y81UhRAwAAwA4LIpiK03TQ5+hUuDgcRzvMvPbVqv1YwrrdDqXwzB8zczPELFXJakUENFaWZb7U7gx5kVZlr1+v/+pVqtdlFJuIOLq3IJut/shSZInWZahlPKKEGIHAJYAYBUR3xPRdlEUr9I07f9L4stgFxHvE9EmAGw4iBDiMzNHiLhMRI+stV/b7favhQR5nt+SUn45ATnOIM/ze+Px+NvCAgcmorsAcBsADhBxz539V8HfSpBl2QM3BHNnMG3yJIMbQogVB0yS5PvkbNO3D5VNNsa8HA6Hey5CrXUURdGlwWDQc1OjtY6VUtuI+HjuMXWQer3+MQiCtUaj8XsKmsDfWWvfVJXneOp8q661XlJKrQshFAD8YeYLAHDeWrvlg88kcJeMMQ+ZeTwajX6GYXiTma8j4nNfcDMLiEgDwMlluhYEwZ1ms7nYYzdLhL473h74AL7/ZwJfheAIUbjaGQvtUQgAAAAASUVORK5CYII="
+                 style="display: none;"> 查看会话
+        </div>
+        <div class="user-right">
+            <div class="el-image group-avatar private-avatar"><img
+                    src="http://61.136.232.37:9328/202503/user/avatar/87/5437/1196133/88174186/74541387554/57/173743/1897219965925335040_sm.jpg"
+                    class="el-image__inner">
+            </div>
+            <div class="groupinfo friendinfo">
+                <p class="group-name friend-name">晓</p>
+                <p class="group-id friend-uid">UID:100006</p></div>
+        </div>
+    </div>
+    <div id="item-bottom67" class="item-bottom">
+        <div id="itemscroll67" class="itemscroll">
+            <div class="msg-col">
+                <div class="msg-right overell msg-right-col">
+                    <p class="msg-top">
+                        <span class="msg-time">2025-03-05 17:57:16</span>
+                    </p>
+                    <div class="msg-content">
+                        <div class="overell">我通过了你的朋友验证请求，现在我们可以开始聊天了</div>
+                    </div>
+                </div>
+            </div>
+            <div class="msg-col">
+                <div class="msg-right overell msg-left-col">
+                    <p class="msg-top">
+                        <span class="msg-time">2025-03-05 17:57:16</span>
+                    </p>
+                    <div class="msg-content">
+                        <div class="overell">我是 测测测</div>
+                    </div>
+                </div>
+            </div>
+            <div class="msg-col">
+                <div class="msg-right overell msg-right-col">
+                    <p class="msg-top">
+                        <span class="msg-time">2025-03-14 11:54:30</span>
+                    </p>
+                    <div class="msg-content">
+                        <div class="imgcol"> 图片消息</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

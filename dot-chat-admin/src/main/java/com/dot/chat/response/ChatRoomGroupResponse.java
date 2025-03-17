@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 用户聊天室群聊返回对象
- * 
+ *
  * @author Dao-yang
  * @date: 2025-03-16 09:44:04
  */
@@ -20,22 +20,22 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(name = "ChatRoomGroupResponse", description="用户聊天室群聊返回对象")
+@Schema(name = "ChatRoomGroupResponse", description = "用户聊天室群聊返回对象")
 public class ChatRoomGroupResponse implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID =  3548666185715971218L;
+    @Serial
+    private static final long serialVersionUID = 3548666185715971218L;
 
-	/**
-	 * 聊天室id uid1_uid2
-	 */
-	@Schema(description = "聊天室id")
-	private String chatId;
+    /**
+     * 聊天室id uid1_uid2
+     */
+    @Schema(description = "聊天室id")
+    private String chatId;
 
-	@Schema(description = "聊天室群组信息")
-	private ChatGroupResponse group;
+    @Schema(description = "聊天室群组信息")
+    private ChatGroupResponse group;
 
-	@Schema(description = "聊天室消息列表,")
+    @Schema(description = "聊天室消息列表,")
     private List<ChatMsgUserResponse> msgList;
 
 }

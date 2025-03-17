@@ -240,7 +240,7 @@ function autoRefreshToken() {
 function refreshToken() {
     console.info("刷新token", dateNow());
     let url = `${SYS_URL_PREFIX}/auth/admin/refreshToken`;
-    ajaxRequest(url, "post", {}, null, function (res) {
+    ajaxRequest(url, METHOD.PUT, {}, null, function (res) {
         if (res.code !== 200) {
             console.error("刷新失败", dateNow());
             deleteUserCookie();
