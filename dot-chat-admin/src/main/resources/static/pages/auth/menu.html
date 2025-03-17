@@ -106,8 +106,8 @@
 
 <script>
     let Status = [{id: true, text: '显示'}, {id: false, text: '隐藏'}];
-    let MenuType = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页菜单'}];
-    let MenuType2 = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页菜单'}];
+    let MenuType = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页面菜单'}];
+    let MenuType2 = [{id: 0, text: '目录菜单'}, {id: 1, text: 'API菜单'}, {id: 2, text: '页面菜单'}];
     mini.parse();
 
     let header = {Authorization: $.cookie(TOKEN_KEY)};
@@ -120,10 +120,22 @@
 
     //表格渲染完毕后渲染开关控件
     grid.on("update", function (e) {
+        // console.log("update");
         // 开关控件初始化
-        switchInitForGrid("auth/menu", grid);
+        switchInitForGrid("menu", grid);
 
     });
+    grid.on("expand", function (e) {
+        // console.log("expand");
+        // 开关控件初始化
+        switchInitForGrid("menu", grid);
+    });
+    //折叠节点后初始化无效,节点渲染在折叠后发生
+    /*grid.on("collapse", function (e) {
+        console.log("collapse");
+        // 开关控件初始化
+        switchInitForGrid("menu", grid);
+    });*/
 
     function openAddDialog(isChild) {
         let form = new mini.Form("#add-form");
@@ -136,12 +148,17 @@
             }
             let mText = getPidAndPtext(row);
             let menuPid = mini.get("menu-pid")
-            if (row.type === 1) {
-                menuPid.setText(mText);
-                let pNodes = grid.getAncestors(row);
-                menuPid.setValue(pNodes[pNodes.length - 1].id);
+            if (mText) {
+                if (row.type === 1) {
+                    menuPid.setText(mText);
+                    let pNodes = grid.getAncestors(row);
+                    menuPid.setValue(pNodes[pNodes.length - 1].id);
+                } else {
+                    menuPid.setText(mText + " / " + row.name);
+                    menuPid.setValue(row.id);
+                }
             } else {
-                menuPid.setText(mText + " / " + row.name);
+                menuPid.setText(row.name);
                 menuPid.setValue(row.id);
             }
         }

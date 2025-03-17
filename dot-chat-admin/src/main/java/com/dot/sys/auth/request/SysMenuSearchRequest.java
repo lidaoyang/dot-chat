@@ -46,13 +46,13 @@ public class SysMenuSearchRequest implements Serializable {
     private Integer level;
 
     /**
-     * 菜单类型面(0:目录菜单,1:API菜单,2:页菜单)
+     * 菜单类型面(0:目录菜单,1:API菜单,2:页面菜单)
      */
     @Schema(description = "菜单类型(0:目录菜单,1:API菜单,2:页面菜单)", allowableValues = {"0", "1", "2"})
     private Integer type;
 
     /**
-     * 菜单类型面(0:目录菜单,1:API菜单,2:页菜单)
+     * 菜单类型面(0:目录菜单,1:API菜单,2:页面菜单)
      */
     @JsonIgnore
     @Schema(description = "菜单类型(0:目录菜单,1:API菜单,2:页面菜单)", allowableValues = {"0", "1", "2"}, hidden = true)

@@ -241,8 +241,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
                 responseList.add(menu);
             }
         });
-        CollUtil.sortByProperty(responseList, "sort");
-        CollUtil.reverse(responseList);
+        // CollUtil.sortByProperty(responseList, "sort");
+        // CollUtil.reverse(responseList);
         return responseList;
     }
 

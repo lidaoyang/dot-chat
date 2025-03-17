@@ -3,6 +3,8 @@ honeySwitch.themeColor = "rgb(100, 189, 99)";
 honeySwitch.init = function(ele) {
 	let s = "<span class='slider'></span>";
 	let $switch = $(ele);
+	$switch.off("click");
+	$switch.find(".slider").remove();
 	$switch.append(s);
 	$switch.click(function() {
 		if ($(this).hasClass("switch-disabled")) {
@@ -67,6 +69,7 @@ honeySwitch.init = function(ele) {
 	if ($('[themeColor]').length > 0) {
 		$('[themeColor]').each(function() {
 			let c = $(this).attr('themeColor') || honeySwitch.themeColor;
+			// console.log(this);
 			if ($(this).hasClass("switch-on")) {
 				$(this).css({
 					'border-color' : c,

@@ -50,7 +50,25 @@ public class ChatUserResponse implements Serializable {
      * 性别(0:保密,1:男,2:女)
      */
     @Schema(description = "性别(0:保密,1:男,2:女)")
-    private Boolean sex;
+    private Integer sex;
+    private String sexDesc;
+
+    public String getSexDesc() {
+        switch (sex) {
+            case 0:
+                sexDesc = "保密";
+                break;
+            case 1:
+                sexDesc = "男";
+                break;
+            case 2:
+                sexDesc = "女";
+                break;
+            default:
+                sexDesc = "未知";
+        }
+        return sexDesc;
+    }
 
     /**
      * 用户状态(1:正常,0:禁用)
@@ -63,12 +81,12 @@ public class ChatUserResponse implements Serializable {
      */
     @Schema(description = "是否在线")
     private Boolean isOnline;
+    private String onlineDesc;
 
-    /**
-     * 个性签名
-     */
-    @Schema(description = "个性签名")
-    private String signature;
+    public String getOnlineDesc() {
+        onlineDesc = isOnline ? "在线" : "离线";
+        return onlineDesc;
+    }
 
     /**
      * 最后登录时间

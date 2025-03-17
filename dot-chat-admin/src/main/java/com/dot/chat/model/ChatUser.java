@@ -67,7 +67,7 @@ public class ChatUser implements Serializable {
 	 * 性别(0:保密,1:男,2:女)
 	 */
 	@Schema(description = "性别(0:保密,1:男,2:女)")
-	private Boolean sex;
+	private Integer sex;
 
 	/**
 	 * 用户状态(1:正常,0:禁用)

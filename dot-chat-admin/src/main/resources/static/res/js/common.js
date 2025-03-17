@@ -19,7 +19,7 @@ switch (env) {
 }
 // 定义常量对象
 const SYS_API_PREFIX = "api/sys"; // 接口前缀
-const MSG_API_PREFIX = "api/msg"; // 接口前缀
+const MSG_API_PREFIX = "api/chat"; // 接口前缀
 const SYS_URL_PREFIX = BASE_URL + SYS_API_PREFIX; // url前缀
 const MSG_URL_PREFIX = BASE_URL + MSG_API_PREFIX; // url前缀
 const TOKEN_KEY = "Authorization";
@@ -326,10 +326,23 @@ function showTips(state, tit, msg) {
  * @returns {string}
  */
 function onStatusRenderer(e) {
+    // console.log("onStatusRenderer", e);
     if (e.value) {
         return `<span id="${e.record.id}" name="grid-status-sw" class="switch-on" themeColor="#6d9eeb" style="zoom:0.45;"></span>`
     }
     return `<span id="${e.record.id}" name="grid-status-sw" class="switch-off" themeColor="#6d9eeb" style="zoom:0.45;"></span>`
+}
+
+/**
+ * 头像渲染器
+ * @param e
+ * @returns {string}
+ */
+function onAvatarRenderer(e) {
+    if (e.value) {
+        return `<img id="${e.record.id}" class="grid-avatar" src="${e.value}" alt="头像"/>`
+    }
+    return `<img id="${e.record.id}" class="grid-avatar" src="../images/user.jpg" alt="默认头像" />`
 }
 
 function switchInitForGrid(apiType, grid) {
@@ -346,7 +359,29 @@ function switchInitForGrid(apiType, grid) {
         });
 
     function updateStatus(id, status) {
-        let url = `${SYS_URL_PREFIX}/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        let url = `${SYS_URL_PREFIX}/auth/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        ajaxRequest(url, METHOD.PUT, null, null, function (res) {
+            showTipsSuccess("修改成功!");
+            grid.reload();
+        });
+    }
+}
+
+function switchInitForChatGrid(apiType, grid) {
+    honeySwitch.init("span[name='grid-status-sw']");
+    // console.log("switchInit");
+    switchEvent("span[name='grid-status-sw']",
+        function (ele) {
+            // console.log("on", $(ele).attr("id"));
+            updateStatus($(ele).attr("id"), true);
+        },
+        function (ele) {
+            // console.log("off", $(ele).attr("id"));
+            updateStatus($(ele).attr("id"), false);
+        });
+
+    function updateStatus(id, status) {
+        let url = `${MSG_URL_PREFIX}/${apiType}/modifyStatus?id=${id}&status=${status}`;
         ajaxRequest(url, METHOD.PUT, null, null, function (res) {
             showTipsSuccess("修改成功!");
             grid.reload();
