@@ -189,7 +189,7 @@ body, html {
 }
 
 .item-bottom ul li .msg .msg-video-play-icon {
-    background-image: url(../../res/icon/play.png);
+    background-image: url(../icon/play.png);
     background-size: 55%;
     background-repeat: no-repeat;
     background-position: center;
@@ -499,62 +499,62 @@ body, html {
 }
 
 .call-video-msg-icon-left {
-    background-image: url("../../res/icon/call_video_left_msg.png");
+    background-image: url("../icon/call_video_left_msg.png");
     margin-right: 1px;
 }
 
 .call-video-msg-icon-right {
-    background-image: url("../../res/icon/call_video_right_msg.png");
+    background-image: url("../icon/call_video_right_msg.png");
     margin-left: 1px;
 }
 
 .call-audio-msg-icon {
-    background-image: url("../../res/icon/call_audio_msg.png");
+    background-image: url("../icon/call_audio_msg.png");
 }
 
 /* 文件类型图标-start */
 .msg-file-ico-pdf {
-    background-image: url("../../res/icon/file-ext/pdf.png");
+    background-image: url("../icon/file-ext/pdf.png");
 }
 
 .msg-file-ico-doc {
-    background-image: url("../../res/icon/file-ext/doc.png");
+    background-image: url("../icon/file-ext/doc.png");
 }
 
 .msg-file-ico-xls {
-    background-image: url("../../res/icon/file-ext/xls.png");
+    background-image: url("../icon/file-ext/xls.png");
 }
 
 .msg-file-ico-ppt {
-    background-image: url("../../res/icon/file-ext/ppt.png");
+    background-image: url("../icon/file-ext/ppt.png");
 }
 
 .msg-file-ico-txt {
-    background-image: url("../../res/icon/file-ext/txt.png");
+    background-image: url("../icon/file-ext/txt.png");
 }
 
 .msg-file-ico-xml {
-    background-image: url("../../res/icon/file-ext/xml.png");
+    background-image: url("../icon/file-ext/xml.png");
 }
 
 .msg-file-ico-html {
-    background-image: url("../../res/icon/file-ext/html.png");
+    background-image: url("../icon/file-ext/html.png");
 }
 
 .msg-file-ico-zip {
-    background-image: url("../../res/icon/file-ext/压缩包.png");
+    background-image: url("../icon/file-ext/压缩包.png");
 }
 
 .msg-file-ico-audio {
-    background-image: url("../../res/icon/file-ext/音频文件.png");
+    background-image: url("../icon/file-ext/音频文件.png");
 }
 
 .msg-file-ico-video {
-    background-image: url("../../res/icon/file-ext/视频文件.png");
+    background-image: url("../icon/file-ext/视频文件.png");
 }
 
 .msg-file-ico-unknown {
-    background-image: url("../../res/icon/file-ext/未知文件.png");
+    background-image: url("../icon/file-ext/未知文件.png");
 }
 
 /*文件类型图标-end*/
