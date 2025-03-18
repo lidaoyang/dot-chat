@@ -41,6 +41,9 @@
         headers: header
     });
     grid.load();
+    grid.on("update", function (e) {
+        addGroupItemWheel();
+    });
 
     function itemRenderer(record, rowIndex, meta, grid) {
         meta.rowCls = "item";
@@ -71,8 +74,8 @@
                             <p class="group-id friend-uid">UID:${record.user2.id}</p></div>
                     </div>
                 </div>
-                <div id="item-bottom67" class="item-bottom">
-                    <ul id="itemscroll67" class="itemscroll">
+                <div  class="item-bottom">
+                    <ul class="itemscroll">
                         ${msgDom}
                     </ul>
                 </div>

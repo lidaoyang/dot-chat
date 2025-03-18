@@ -37,7 +37,7 @@ function generateChatMsgDom(user1, user2, chatMsg) {
         return "";
     }
     let user = user2;
-    if (chatMsg.sendUserId === user1.id){
+    if (chatMsg.sendUserId === user1.id) {
         user = user1;
     }
     return `
@@ -413,4 +413,26 @@ function getFileIcoClass(extName) {
         default:
             return "msg-file-ico-unknown";
     }
+}
+
+function addGroupItemWheel() {
+    $(".groupitem .item-bottom").on("wheel", function (e) {
+        const deltaY = e.originalEvent.deltaY;
+        let canScroll = false;
+        // console.log(this.scrollHeight,this.clientHeight,this.scrollTop);
+        // 判断滚动方向
+        if (deltaY > 0) {
+            // 向下滚动：检查是否还能向下滚动
+            canScroll = this.scrollTop < (this.scrollHeight - this.clientHeight);
+        } else if (deltaY < 0) {
+            // 向上滚动：检查是否还能向上滚动
+            canScroll = this.scrollTop > 0;
+        }
+        // console.log("deltaY:", deltaY, "canScroll:", canScroll);
+        // 当内层可以滚动时阻止事件冒泡
+        if (canScroll) {
+            e.stopPropagation();
+        }
+    });
+
 }
