@@ -1,12 +1,12 @@
 
-cd /home/app || exit
+cd /home/app/admin || exit
 
 echo "当前目录："$PWD
 
 #jar包文件名称
-APP_NAME=./dot-chat.jar
+APP_NAME=./dot-chat-admin.jar
 
-echo "开始停止 Dot-Chat 项目进程"
+echo "开始停止 Dot-Chat-Admin 项目进程"
 #查询进程，并杀掉当前jar/java程序
 
 pid=`ps -ef|grep $APP_NAME | grep -v grep | awk '{print $2}'`

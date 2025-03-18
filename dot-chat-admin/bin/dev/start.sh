@@ -8,12 +8,12 @@ JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 
-cd /home/app || exit
+cd /home/app/admin || exit
 
 echo "当前目录："$PWD
 
 #jar包文件名称
-APP_NAME=./dot-chat.jar
+APP_NAME=./dot-chat-admin.jar
 
 #创建日志目录
 mkdir -p logs
@@ -49,7 +49,7 @@ if test -e $APP_NAME;then
   #通过检测日志来判断
   while [ -f $LOG_FILE ]
   do
-      success=`grep "Started DotChatApplication in " $LOG_FILE`
+      success=`grep "Started DotChatAdminApplication in " $LOG_FILE`
       if [[ "$success" != "" ]]
       then
           echo "dot-chat Started Success"
@@ -66,7 +66,7 @@ if test -e $APP_NAME;then
           echo "项目启动失败"
           exit 1 #执行错误命令终止部署
       else
-          echo "dot-chat Running ......."
+          echo "dot-chat-admin Running ......."
           sleep 1s
       fi
 

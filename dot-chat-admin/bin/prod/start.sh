@@ -8,12 +8,12 @@ echo "开始时间："$startTime
 JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
-cd /home/app || exit
+cd /home/app/admin || exit
 
 echo "当前目录："$PWD
 
 #jar包文件名称
-APP_NAME=./dot-chat.jar
+APP_NAME=./dot-chat-admin.jar
 
 #创建日志目录
 mkdir -p logs
@@ -35,7 +35,7 @@ rm -rf $LOG_FILE
 # 创建日志文件
 touch $LOG_FILE
 
-echo "开始停止 Dot-Chat 项目进程"
+echo "开始停止 Dot-Chat-Admin 项目进程"
 #停止进程
 sh ./stop.sh
 
@@ -55,7 +55,7 @@ if test -e $APP_NAME;then
   #通过检测日志来判断
   while [ -f $LOG_FILE ]
   do
-      success=`grep "Started MessageCenterApplication in " $LOG_FILE`
+      success=`grep "Started DotChatAdminApplication in " $LOG_FILE`
       if [[ "$success" != "" ]]
       then
           echo "dot-chat Started Success"

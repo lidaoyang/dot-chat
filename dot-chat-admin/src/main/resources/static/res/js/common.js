@@ -1,16 +1,16 @@
 ﻿let env = "dev";// dev:开发环境,test:测试环境,prod:生产环境
-if (location.host !== "dot-chat.jrmall.cn") {
+if (location.host !== "dot-admin.jrmall.cn") {
     env = "local"
 }
 
 let HOST, BASE_URL;
 switch (env) {
     case "dev":
-        HOST = "dot-chat.jrmall.cn";
+        HOST = "dot-admin.jrmall.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
     case "prod":
-        HOST = "dot-chat.jrmall.cn";
+        HOST = "dot-admin.dot.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
     default:
