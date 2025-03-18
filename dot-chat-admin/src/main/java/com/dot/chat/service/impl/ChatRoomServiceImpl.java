@@ -101,6 +101,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
             response.setChatId(chatRoom.getChatId());
             response.setGroup(groupMap.get(chatRoom.getGroupId()));
             response.setMsgList(msgUserListMap.getOrDefault(chatRoom.getChatId(), new ArrayList<>()));
+            responseList.add(response);
         });
 
         return PageUtil.copyPage(page, responseList);

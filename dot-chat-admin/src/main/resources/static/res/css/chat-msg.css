@@ -140,7 +140,7 @@ body, html {
 
 .item-bottom ul li {
     margin: 6px;
-    min-height: 60px;
+    min-height: 50px;
     position: relative;
     display: block;
     clear: both;
@@ -164,8 +164,8 @@ body, html {
 
 .item-bottom ul li .msg {
     top: -10px;
-    margin: -2px 8px 8px;
-    min-height: 60px;
+    margin: -2px 6px 6px;
+    min-height: 50px;
 }
 
 .item-bottom ul li .msg .msg-img {

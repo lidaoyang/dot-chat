@@ -63,7 +63,8 @@
                         </div>
                         <div class="groupinfo friendinfo">
                             <p class="group-name friend-name">${record.user1.nickname}</p>
-                            <p class="group-id friend-uid">UID:${record.user1.id}</p></div>
+                            <p class="group-id friend-uid">UID:${record.user1.id}</p>
+                        </div>
                     </div>
                     <div class="user-right">
                         <div class="el-image group-avatar private-avatar">
@@ -71,7 +72,8 @@
                         </div>
                         <div class="groupinfo friendinfo">
                             <p class="group-name friend-name">${record.user2.nickname}</p>
-                            <p class="group-id friend-uid">UID:${record.user2.id}</p></div>
+                            <p class="group-id friend-uid">UID:${record.user2.id}</p>
+                        </div>
                     </div>
                 </div>
                 <div  class="item-bottom">
@@ -82,17 +84,6 @@
             </div>
         `;
         return html;
-    }
-
-    // 搜索
-    function search() {
-        let keywords = mini.get("keywords").getValue();
-        grid.load({keywords: keywords, status: status, isOnline: online});
-    }
-
-    // 回车搜索
-    function onKeyEnter(e) {
-        search();
     }
 
 </script>
