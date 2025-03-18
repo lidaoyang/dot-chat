@@ -31,6 +31,49 @@
 
 - HTML + CSS + JavaScript + jQuery
 
+## 安装和部署
+
+### 1. 配置下列环境变量或在启动参数中添加
+```
+    DB_HOST=127.0.0.1;
+    MYSQL_DB_NAME=dot_chat;
+    MYSQL_PASSWORD=****;
+    MYSQL_USERNAME=dot_chat;
+    REDIS_PASSWORD=****
+    DEEP_SEEK_API_KEY=key****(dot-chat-server需要)
+    
+```
+### 2. 配置文件上传路径和域名
+```
+    配置前缀:mat.upload
+    本地上传参考 application-dev.yml
+    阿里云oss上传参考 application-prod.yml
+```
+### 3. NGINX 部署
+
+1. dot-chat-admin 部署只需要转发端口即可,注意resources/static/res/js目录下的common.js文件，需要修改为自己的域名
+2. dot-chat-server 部署需要配置nginx转发api的端口(8089)和websocket端口(9326)
+```
+参考下面配置:
+     location / {
+    	proxy_redirect off;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:8089; 
+    }
+    location /websocket/  {
+       proxy_pass http://127.0.0.1:9326/;
+       proxy_http_version 1.1;    
+       proxy_set_header Upgrade $http_upgrade;    
+       proxy_set_header Connection "Upgrade";    
+       proxy_set_header X-real-ip $remote_addr;
+       proxy_set_header X-Forwarded-For $remote_addr;
+     }
+```
+3. dot-chat-web 部署只需要把webapp目录下文件复制到Nginx的部署目录即可,注意js目录中的接口域名需要修改为自己的
+
+
 ## 页面截图
 
 ### 登录注册
