@@ -31,7 +31,7 @@
 
 - HTML + CSS + JavaScript + jQuery
 
-## 安装和部署
+## 部署
 
 ### 1. 配置下列环境变量或在启动参数中添加
 ```
@@ -52,7 +52,7 @@
 ### 3. NGINX 部署
 
 1. dot-chat-admin 部署只需要转发端口即可,注意resources/static/res/js目录下的common.js文件，需要修改为自己的域名
-2. dot-chat-server 部署需要配置nginx转发api的端口(8089)和websocket端口(9326)
+2. dot-chat-server 部署需要配置nginx转发api的端口(8089)和websocket端口(9326),注意:这个服务Maven打包时间需要注意,由于依赖了ffmpeg全包太大,只依赖了mac系统和Linux系统的,根据自己的系统自己修改pom文件,不依赖会影响上传视频功能
 ```
 参考下面配置:
      location / {
