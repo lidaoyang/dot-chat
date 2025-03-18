@@ -19,6 +19,37 @@
     <link href="res/index.css" rel="stylesheet" type="text/css"/>
     <script src="res/js/index.js" type="text/javascript"></script>
 
+    <style type="text/css">
+        .asLabel .mini-textbox-border,
+        .asLabel .mini-textbox-input,
+        .asLabel .mini-buttonedit-border,
+        .asLabel .mini-buttonedit-input,
+        .asLabel .mini-textboxlist-border {
+            border: 0;
+            background: none;
+            cursor: default;
+        }
+
+        .asLabel .mini-buttonedit-buttons,
+        .asLabel .mini-buttonedit-button,
+        .asLabel .mini-textboxlist-close {
+            display: none;
+        }
+
+        .asLabel .mini-textboxlist-item {
+            padding-right: 8px;
+        }
+
+        .form-avatar-div {
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
 
@@ -41,7 +72,7 @@
                 <img class="user-img" src="res/images/admin-avatar.jpg"/>个人资料<i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu pull-right">
-                <li onclick="userInfo()"><a href="#"><i class="fa fa-eye "></i> 用户信息</a></li>
+                <li onclick="openUserInfoDialog()"><a href="#"><i class="fa fa-eye "></i> 用户信息</a></li>
                 <li onclick="logout()"><a href="#"><i class="fa fa-user"></i> 退出登录</a></li>
             </ul>
         </li>
@@ -78,6 +109,19 @@
         <div class="form-btn-div">
             <a class="mini-button btn" iconCls="icon-ok" onclick="modifyPwd()">保存</a>
         </div>
+    </div>
+</div>
+
+<div id="user-info-dialog" class="mini-window" title="个人信息" style="width:380px;"
+     showModal="true" allowDrag="true">
+    <div id="user-info-form" class="form">
+        <div class="form-avatar-div">
+            <img class="user-avatar" src="#"/>
+        </div>
+        <input type="hidden" name="avatar"/>
+        <input labelField="true" label="ID：" name="id" class="mini-textbox" readOnly="true"/>
+        <input labelField="true" label="账号：" name="account" class="mini-textbox" readOnly="true"/>
+        <input labelField="true" label="名称：" name="name" class="mini-textbox" readOnly="true"/>
     </div>
 </div>
 

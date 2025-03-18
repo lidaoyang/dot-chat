@@ -181,11 +181,16 @@ function registerMyInfoClickEvent() {
 
 function setUserAvatar() {
     let user = JSON.parse(localStorage.getItem("user"));
-    let avatar = "res/images/admin-avatar.jpg"
-    if (user.avatar) {
-        avatar = user.avatar;
-    }
+    let avatar = getUserAvatarOrDefault(user.avatar)
     $(".userinfo .user-img").attr("src", avatar);
+}
+
+function getUserAvatarOrDefault(avatar) {
+    let defAvatar = "res/images/admin-avatar.jpg"
+    if (avatar) {
+        return avatar;
+    }
+    return defAvatar;
 }
 
 function registerModifyPwdClickEvent() {
@@ -233,4 +238,17 @@ function modifyPwd() {
             }
         );
     });
+}
+
+function openUserInfoDialog() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    let avatar = getUserAvatarOrDefault(user.avatar)
+    let form = new mini.Form("#user-info-form");
+    form.setData({
+        id: user.id,
+        name: user.name,
+        account: user.account
+    });
+    $("#user-info-form .user-avatar").attr("src", avatar);
+    mini.get("user-info-dialog").show();
 }
