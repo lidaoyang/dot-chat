@@ -31,13 +31,4 @@ public interface LoginService {
      */
     void logout();
 
-    /**
-     * 更新密码
-     *
-     * @param oldPwd 旧密码
-     * @param newPwd 新密码
-     * @return 更新结果
-     */
-    Boolean updatePassword(String oldPwd, String newPwd);
-
 }

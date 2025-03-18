@@ -67,6 +67,15 @@ public interface SysAdminService extends IService<SysAdmin> {
     void updateLastLoginIpTime(Integer adminId);
 
     /**
+     * 更新密码
+     *
+     * @param oldPwd 旧密码
+     * @param newPwd 新密码
+     * @return 更新结果
+     */
+    Boolean updatePassword(String oldPwd, String newPwd);
+
+    /**
      * 更新管理员密码
      *
      * @param uid      用户id

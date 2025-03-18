@@ -112,10 +112,4 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
-    @Override
-    public Boolean updatePassword(String oldPwd, String newPwd) {
-        LoginUsername loginUser = tokenManager.getLoginUser();
-        return adminService.updatePassword(loginUser.getUid(), oldPwd, newPwd);
-    }
-
 }

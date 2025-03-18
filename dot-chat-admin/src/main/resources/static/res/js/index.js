@@ -30,6 +30,10 @@ $(function () {
 
     // 自动刷新token
     autoRefreshToken();
+    // 设置用户头像
+    setUserAvatar();
+    // 修改密码点击事件
+    registerModifyPwdClickEvent();
 
     function activeTab(item) {
         // console.log('activeTab', item);
@@ -146,29 +150,87 @@ $(function () {
         });*/
     }
 
-    function registerToggleClickEvent() {
-        $("#toggle").click(function () {
-            let $body = $('body');
-            $body.toggleClass('compact');
-            if ($body.hasClass('compact')) { // 切换为隐藏
-                $("#toggle span").removeClass("fa-dedent").addClass("fa-indent");
-            } else { // 切换为显示
-                $("#toggle span").removeClass("fa-indent").addClass("fa-dedent");
-            }
-            // 重绘
-            mini.layout();
-        });
-    }
-
-    function registerMyInfoClickEvent() {
-        $(".dropdown-toggle").click(function (event) {
-            $(this).parent().addClass("open");
-            return false;
-        });
-
-        $(document).click(function (event) {
-            $(".dropdown").removeClass("open");
-        });
-    }
 
 });
+
+
+function registerToggleClickEvent() {
+    $("#toggle").click(function () {
+        let $body = $('body');
+        $body.toggleClass('compact');
+        if ($body.hasClass('compact')) { // 切换为隐藏
+            $("#toggle span").removeClass("fa-dedent").addClass("fa-indent");
+        } else { // 切换为显示
+            $("#toggle span").removeClass("fa-indent").addClass("fa-dedent");
+        }
+        // 重绘
+        mini.layout();
+    });
+}
+
+function registerMyInfoClickEvent() {
+    $(".dropdown-toggle").click(function (event) {
+        $(this).parent().addClass("open");
+        return false;
+    });
+
+    $(document).click(function (event) {
+        $(".dropdown").removeClass("open");
+    });
+}
+
+function setUserAvatar() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    let avatar = "res/images/admin-avatar.jpg"
+    if (user.avatar) {
+        avatar = user.avatar;
+    }
+    $(".userinfo .user-img").attr("src", avatar);
+}
+
+function registerModifyPwdClickEvent() {
+    $("#modify-pwd").click(function () {
+        openModifyPwdDialog();
+    });
+}
+
+function openModifyPwdDialog() {
+    let form = new mini.Form("#edit-form");
+    form.clear();
+    mini.get("modify-pwd-dialog").show();
+}
+
+function modifyPwd() {
+    let form = new mini.Form("#edit-form");
+    if (!form.validate()) {
+        alertWarn(form.getErrorTexts()[0]);
+        return;
+    }
+    let oldPwd = mini.get("old-pwd").getValue();
+    let newPwd = mini.get("new-pwd").getValue();
+    let reNewPwd = mini.get("re-new-pwd").getValue();
+    if (oldPwd === newPwd) {
+        alertWarn("新旧密码不能相同");
+        return;
+    }
+    if (newPwd !== reNewPwd) {
+        alertWarn("两次密码不一致");
+        return;
+    }
+    let url = `${SYS_URL_PREFIX}/auth/admin/modifyPwd`;
+    ajaxRequest(url, METHOD.PUT, {
+        oldPwd: oldPwd,
+        newPwd: newPwd
+    }, null, function (res) {
+        showTipsSuccess("密码修改成功!");
+        mini.confirm("密码修改成功,是否重新登录？", "重新登录？",
+            function (action) {
+                if (action === "ok") {
+                    logout();
+                } else {
+                    mini.get("modify-pwd-dialog").hide();
+                }
+            }
+        );
+    });
+}

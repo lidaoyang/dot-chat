@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +67,18 @@ public class SysAdminController {
     public ResultBean<Boolean> modifyStatus(@RequestParam("id") @NotNull(message = "管理员ID不能为空") Integer id,
                                             @RequestParam("status") @NotNull(message = "管理员状态不能为空") Boolean status) {
         return ResultBean.result(sysAdminService.updateStatus(id, status));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "修改密码")
+    @PutMapping(value = "/modifyPwd")
+    @Parameters({
+            @Parameter(name = "oldPwd", description = "旧密码", required = true),
+            @Parameter(name = "newPwd", description = "新密码,长度(6-18)", required = true)
+    })
+    public ResultBean<Boolean> modifyStatus(@RequestParam("oldPwd") @NotBlank(message = "旧密码不能为空") String oldPwd,
+                                            @RequestParam("newPwd") @NotBlank(message = "新密码不能为空") @Length(min = 6, max = 18, message = "新密码长度(6-18)") String newPwd) {
+        return ResultBean.result(sysAdminService.updatePassword(oldPwd, newPwd));
     }
 
 }

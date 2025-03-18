@@ -35,11 +35,10 @@
         </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><i class="fa fa-paper-plane"></i> 代办事项</a></li>
-        <li><a href="#"><i class="fa fa-pencil-square-o"></i> 修改密码</a></li>
+        <li id="modify-pwd"><a href="#"><i class="fa fa-pencil-square-o"></i> 修改密码</a></li>
         <li class="dropdown">
             <a class="dropdown-toggle userinfo">
-                <img class="user-img" src="res/images/user.jpg"/>个人资料<i class="fa fa-angle-down"></i>
+                <img class="user-img" src="res/images/admin-avatar.jpg"/>个人资料<i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu pull-right">
                 <li onclick="userInfo()"><a href="#"><i class="fa fa-eye "></i> 用户信息</a></li>
@@ -65,9 +64,22 @@
             <li class="menu-close" iconCls="icon-close">关闭其他标签</li>
         </ul>
     </div>
-
 </div>
 
+<div id="modify-pwd-dialog" class="mini-window" title="修改密码" style="width:380px;"
+     showModal="true" allowDrag="true">
+    <div id="edit-form" class="form">
+        <input labelField="true" label="旧密码：" id="old-pwd" class="mini-password" required="true" vtype="minLength:6"
+               minLengthErrorText="密码不能少于6个字符"/>
+        <input labelField="true" label="新密码：" id="new-pwd" class="mini-password" required="true" vtype="minLength:6"
+               minLengthErrorText="密码不能少于6个字符"/>
+        <input labelField="true" label="确认新密码：" id="re-new-pwd" class="mini-password" required="true"
+               vtype="minLength:6" minLengthErrorText="密码不能少于6个字符"/>
+        <div class="form-btn-div">
+            <a class="mini-button btn" iconCls="icon-ok" onclick="modifyPwd()">保存</a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
