@@ -95,7 +95,7 @@
 
     // 表格
     let grid = mini.get("datagrid1");
-    grid.setUrl(`${SYS_URL_PREFIX}/auth/role/list`);
+    grid.setUrl(`${SYS_API_PREFIX}/auth/role/list`);
     grid.setAjaxOptions({
         headers: header
     });
@@ -124,7 +124,7 @@
     tree.setAjaxOptions({
         headers: header
     });
-    tree.load(`${SYS_URL_PREFIX}/auth/menu/simlist`);
+    tree.load(`${SYS_API_PREFIX}/auth/menu/simlist`);
 
 
     function onSelectionChanged() {
@@ -132,7 +132,7 @@
         // console.log("row", row);
         if (row) {
             $("#role-name-text").text(row.name);
-            let url = `${SYS_URL_PREFIX}/auth/role/menuIds?roleId=${row.id}`;
+            let url = `${SYS_API_PREFIX}/auth/role/menuIds?roleId=${row.id}`;
             ajaxRequest(url, METHOD.GET, null, null, function (res) {
                 tree.setValue(res.data);
             });
@@ -180,7 +180,7 @@
     function addMenu() {
         let form = new mini.Form("#add-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/role/add`;
+            let url = `${SYS_API_PREFIX}/auth/role/add`;
             let data = mini.encode(form.getData());
             ajaxRequest(url, METHOD.POST, data, CONTENT_TYPE_JSON, function (res) {
                 showTipsSuccess("添加成功!");
@@ -193,7 +193,7 @@
     function editRole() {
         let form = new mini.Form("#add-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/role/edit`;
+            let url = `${SYS_API_PREFIX}/auth/role/edit`;
             let data = mini.encode(form.getData());
             ajaxRequest(url, METHOD.PUT, data, CONTENT_TYPE_JSON, function (res) {
                 showTipsSuccess("修改成功!");
@@ -211,7 +211,7 @@
         }
         mini.confirm("确定要删除该记录吗？", "确定？", function (action) {
             if (action === "ok") {
-                let url = `${SYS_URL_PREFIX}/auth/role/delete?id=${row.id}`;
+                let url = `${SYS_API_PREFIX}/auth/role/delete?id=${row.id}`;
                 ajaxRequest(url, METHOD.DELETE, null, null, function (res) {
                     showTipsSuccess("删除成功!");
                     grid.reload()
@@ -231,7 +231,7 @@
             alertWarn("请勾选权限菜单");
             return;
         }
-        let url = `${SYS_URL_PREFIX}/auth/role/modifyMenu`;
+        let url = `${SYS_API_PREFIX}/auth/role/modifyMenu`;
         let data = {
             id: row.id,
             menuIds: menuIds

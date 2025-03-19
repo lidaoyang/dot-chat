@@ -124,7 +124,7 @@ $(function () {
     }
 
     function loadMenuData() {
-        let url = `${SYS_URL_PREFIX}/auth/role/menu/list`;
+        let url = `${SYS_API_PREFIX}/auth/role/menu/list`;
         ajaxRequest(url, "get", {}, null, function (res) {
             if (res.code !== 200) {
                 console.error("获取菜单失败", dateNow());
@@ -222,7 +222,7 @@ function modifyPwd() {
         alertWarn("两次密码不一致");
         return;
     }
-    let url = `${SYS_URL_PREFIX}/auth/admin/modifyPwd`;
+    let url = `${SYS_API_PREFIX}/auth/admin/modifyPwd`;
     ajaxRequest(url, METHOD.PUT, {
         oldPwd: oldPwd,
         newPwd: newPwd

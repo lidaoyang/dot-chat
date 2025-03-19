@@ -204,7 +204,7 @@
      * 登录
      */
     function login() {
-        let url = `${SYS_URL_PREFIX}/auth/admin/login`;
+        let url = `${SYS_API_PREFIX}/auth/admin/login`;
         let data = JSON.stringify({
             account: usernameInput.value,
             password: passwordInput.value

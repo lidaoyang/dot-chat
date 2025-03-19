@@ -111,12 +111,12 @@
     roleCombo.setAjaxOptions({
         headers: header
     });
-    roleCombo.setUrl(`${SYS_URL_PREFIX}/auth/role/simlist`);
+    roleCombo.setUrl(`${SYS_API_PREFIX}/auth/role/simlist`);
 
 
     // 表格
     let grid = mini.get("datagrid1");
-    grid.setUrl(`${SYS_URL_PREFIX}/auth/admin/list`);
+    grid.setUrl(`${SYS_API_PREFIX}/auth/admin/list`);
     grid.setAjaxOptions({
         headers: header
     });
@@ -145,7 +145,7 @@
         rCombo.setAjaxOptions({
             headers: header
         });
-        rCombo.setUrl(`${SYS_URL_PREFIX}/auth/role/simlist`);
+        rCombo.setUrl(`${SYS_API_PREFIX}/auth/role/simlist`);
 
         setSwitch("#add-admin-dialog span[name='form-status-sw']", true);
         mini.get("add-admin-dialog").show();
@@ -161,7 +161,7 @@
         rCombo.setAjaxOptions({
             headers: header
         });
-        rCombo.setUrl(`${SYS_URL_PREFIX}/auth/role/simlist`);
+        rCombo.setUrl(`${SYS_API_PREFIX}/auth/role/simlist`);
 
         setSwitch("#edit-admin-dialog span[name='form-status-sw']", row.status);
 
@@ -173,7 +173,7 @@
     function addAdmin() {
         let form = new mini.Form("#add-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/admin/add`;
+            let url = `${SYS_API_PREFIX}/auth/admin/add`;
             let data = mini.encode(form.getData());
             ajaxRequest(url, METHOD.POST, data, CONTENT_TYPE_JSON, function (res) {
                 showTipsSuccess("添加成功!");
@@ -186,7 +186,7 @@
     function editAdmin() {
         let form = new mini.Form("#edit-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/admin/edit`;
+            let url = `${SYS_API_PREFIX}/auth/admin/edit`;
             let data = mini.encode(form.getData());
             console.log(form.getData());
             ajaxRequest(url, METHOD.PUT, data, CONTENT_TYPE_JSON, function (res) {

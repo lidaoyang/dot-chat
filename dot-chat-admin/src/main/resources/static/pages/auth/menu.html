@@ -116,7 +116,7 @@
     grid.setAjaxOptions({
         headers: header
     });
-    grid.load(`${SYS_URL_PREFIX}/auth/menu/list`);
+    grid.load(`${SYS_API_PREFIX}/auth/menu/list`);
 
     //表格渲染完毕后渲染开关控件
     grid.on("update", function (e) {
@@ -209,7 +209,7 @@
         tree.setAjaxOptions({
             headers: header
         });
-        tree.load(`${SYS_URL_PREFIX}/auth/menu/dirlist`);
+        tree.load(`${SYS_API_PREFIX}/auth/menu/dirlist`);
         let pid = mini.get("menu-pid").getValue();
         // console.log("pid", pid);
         if (pid) {
@@ -251,7 +251,7 @@
     function addMenu() {
         let form = new mini.Form("#add-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/menu/add`;
+            let url = `${SYS_API_PREFIX}/auth/menu/add`;
             let data = mini.encode(form.getData());
             ajaxRequest(url, METHOD.POST, data, CONTENT_TYPE_JSON, function (res) {
                 showTipsSuccess("添加成功!");
@@ -264,7 +264,7 @@
     function editMenu() {
         let form = new mini.Form("#add-form");
         if (form.validate()) {
-            let url = `${SYS_URL_PREFIX}/auth/menu/edit`;
+            let url = `${SYS_API_PREFIX}/auth/menu/edit`;
             let data = mini.encode(form.getData());
             ajaxRequest(url, METHOD.PUT, data, CONTENT_TYPE_JSON, function (res) {
                 showTipsSuccess("修改成功!");
@@ -282,7 +282,7 @@
         }
         mini.confirm("确定要删除该记录吗？", "确定？", function (action) {
             if (action === "ok") {
-                let url = `${SYS_URL_PREFIX}/auth/menu/delete?id=${row.id}`;
+                let url = `${SYS_API_PREFIX}/auth/menu/delete?id=${row.id}`;
                 ajaxRequest(url, METHOD.DELETE, null, null, function (res) {
                     showTipsSuccess("删除成功!");
                     grid.reload()

@@ -42,7 +42,7 @@
 
     // 表格
     let grid1 = mini.get("datagrid1");
-    grid1.setUrl(`${MSG_URL_PREFIX}/user/registerCount`);
+    grid1.setUrl(`${MSG_API_PREFIX}/user/registerCount`);
     grid1.setAjaxOptions({
         headers: header
     });
@@ -61,7 +61,7 @@
         if (row) {
             let grid2 = mini.get("datagrid2");
             grid2.setTitle(`注册用户(${row.date})`);
-            grid2.setUrl(`${MSG_URL_PREFIX}/user/listbydate?date=${row.date}`);
+            grid2.setUrl(`${MSG_API_PREFIX}/user/listbydate?date=${row.date}`);
             grid2.setAjaxOptions({
                 headers: header
             });

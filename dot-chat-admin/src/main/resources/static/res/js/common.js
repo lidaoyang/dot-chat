@@ -1,27 +1,7 @@
-﻿let env = "dev";// dev:开发环境,test:测试环境,prod:生产环境
-if (location.host !== "dot-admin.jrmall.cn") {
-    env = "local"
-}
-
-let HOST, BASE_URL;
-switch (env) {
-    case "dev":
-        HOST = "dot-admin.jrmall.cn";
-        BASE_URL = "https://" + HOST + "/";
-        break;
-    case "prod":
-        HOST = "dot-admin.dot.cn";
-        BASE_URL = "https://" + HOST + "/";
-        break;
-    default:
-        HOST = "dev.dot.cn";
-        BASE_URL = "https://" + HOST + ":9089/";
-}
+﻿
 // 定义常量对象
-const SYS_API_PREFIX = "api/sys"; // 接口前缀
-const MSG_API_PREFIX = "api/chat"; // 接口前缀
-const SYS_URL_PREFIX = BASE_URL + SYS_API_PREFIX; // url前缀
-const MSG_URL_PREFIX = BASE_URL + MSG_API_PREFIX; // url前缀
+const SYS_API_PREFIX = "/api/sys"; // 接口前缀
+const MSG_API_PREFIX = "/api/chat"; // 接口前缀
 const TOKEN_KEY = "Authorization";
 const USER_KEY = "user";
 const LAST_ACCESS_TIME_KEY = "lastAccessedTime";
@@ -108,7 +88,7 @@ function ajaxRequestNotAuth(url, method, data, contentType, successFn) {
  */
 function ajaxRequest(url, method, data, contentType, successFn) {
     let token = $.cookie(TOKEN_KEY);
-    if (!token && url !== `${SYS_URL_PREFIX}/auth/admin/login`) {
+    if (!token && url !== `${SYS_API_PREFIX}/auth/admin/login`) {
         console.error("token过期", dateNow());
         deleteUserCookie();
         return;
@@ -153,7 +133,7 @@ function ajaxRequest(url, method, data, contentType, successFn) {
  */
 function ajaxSyncRequest(url, method, data, contentType, successFn) {
     let token = $.cookie(TOKEN_KEY);
-    if (!token && url !== `${SYS_URL_PREFIX}/auth/admin/login`) {
+    if (!token && url !== `${SYS_API_PREFIX}/auth/admin/login`) {
         console.error("token过期", dateNow());
         deleteUserCookie();
         return;
@@ -190,7 +170,7 @@ function ajaxSyncRequest(url, method, data, contentType, successFn) {
 
 
 function logout() {
-    let url = `${SYS_URL_PREFIX}/auth/admin/logout`;
+    let url = `${SYS_API_PREFIX}/auth/admin/logout`;
     ajaxRequest(url, METHOD.GET, null, null, function (res) {
         if (res.code !== 200) {
             console.error("退出失败", dateNow());
@@ -239,7 +219,7 @@ function autoRefreshToken() {
 
 function refreshToken() {
     console.info("刷新token", dateNow());
-    let url = `${SYS_URL_PREFIX}/auth/admin/refreshToken`;
+    let url = `${SYS_API_PREFIX}/auth/admin/refreshToken`;
     ajaxRequest(url, METHOD.PUT, {}, null, function (res) {
         if (res.code !== 200) {
             console.error("刷新失败", dateNow());
@@ -359,7 +339,7 @@ function switchInitForGrid(apiType, grid) {
         });
 
     function updateStatus(id, status) {
-        let url = `${SYS_URL_PREFIX}/auth/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        let url = `${SYS_API_PREFIX}/auth/${apiType}/modifyStatus?id=${id}&status=${status}`;
         ajaxRequest(url, METHOD.PUT, null, null, function (res) {
             showTipsSuccess("修改成功!");
             grid.reload();
@@ -381,7 +361,7 @@ function switchInitForChatGrid(apiType, grid) {
         });
 
     function updateStatus(id, status) {
-        let url = `${MSG_URL_PREFIX}/${apiType}/modifyStatus?id=${id}&status=${status}`;
+        let url = `${MSG_API_PREFIX}/${apiType}/modifyStatus?id=${id}&status=${status}`;
         ajaxRequest(url, METHOD.PUT, null, null, function (res) {
             showTipsSuccess("修改成功!");
             grid.reload();
