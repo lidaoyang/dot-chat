@@ -10,13 +10,13 @@ switch (env) {
     case "dev":
         ws_protocol = 'wss';
         ws_port = "443";
-        HOST = "dot-chat.jrmall.cn";
+        HOST = "dot-chat.api.jrmall.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
     case "prod":
         ws_protocol = 'wss';
         ws_port = "443";
-        HOST = "dot-chat.jrmall.cn";
+        HOST = "dot-chat.api.jrmall.cn";
         BASE_URL = "https://" + HOST + "/";
         break;
     default:
