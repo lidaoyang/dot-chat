@@ -3,6 +3,7 @@ package com.dot.sys.auth.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -155,9 +156,13 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminDao, SysAdmin> impl
         List<Integer> roleIds = page.getRecords().stream().map(SysAdmin::getRoles).flatMap(roles -> CommUtil.stringToArrayInt(roles).stream()).distinct().toList();
         Map<Integer, String> roleNameMap = sysRoleService.getRoleNameMap(roleIds);
         List<SysAdminResponse> responseList = BeanUtil.copyToList(page.getRecords(), SysAdminResponse.class);
+        LoginUsername loginUser = tokenManager.getLoginUser();
         responseList.forEach(response -> {
             List<Integer> roles = CommUtil.stringToArrayInt(response.getRoles());
             response.setRoleNames(roles.stream().filter(roleNameMap::containsKey).map(roleNameMap::get).collect(Collectors.joining(",")));
+            if (loginUser.isDemoAdmin()) {
+                response.setAccount(StrUtil.hide(response.getAccount(), 3, 7));
+            }
         });
         return PageUtil.copyPage(page, responseList);
     }

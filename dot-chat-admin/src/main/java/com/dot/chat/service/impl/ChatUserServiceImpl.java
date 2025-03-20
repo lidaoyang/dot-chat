@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -19,9 +20,12 @@ import com.dot.chat.response.ChatUserResponse;
 import com.dot.chat.response.ChatUserSimResponse;
 import com.dot.chat.service.ChatUserService;
 import com.dot.comm.em.ExceptionCodeEm;
+import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.PageParam;
 import com.dot.comm.exception.ApiException;
+import com.dot.comm.manager.TokenManager;
 import com.dot.comm.utils.PageUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -40,6 +44,9 @@ import java.util.stream.Collectors;
 @Service
 public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> implements ChatUserService {
 
+    @Resource
+    private TokenManager tokenManager;
+
     @Override
     public IPage<ChatUserResponse> getList(ChatUserSearchRequest request, PageParam pageParam) {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
@@ -56,6 +63,12 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
             return PageUtil.copyPage(page, new ArrayList<>());
         }
         List<ChatUserResponse> responseList = BeanUtil.copyToList(page.getRecords(), ChatUserResponse.class);
+        LoginUsername loginUser = tokenManager.getLoginUser();
+        if (loginUser.isDemoAdmin()){
+            responseList.forEach(item -> {
+                item.setPhone(StrUtil.hide(item.getPhone(), 3, 7));
+            });
+        }
         return PageUtil.copyPage(page, responseList);
     }
 
@@ -85,7 +98,17 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
         queryWrapper.eq(StringUtils.isNotBlank(date), ChatUser::getCreateDate, date);
         queryWrapper.orderByDesc(ChatUser::getId);
         List<ChatUser> chatUserList = this.list(queryWrapper);
-        return BeanUtil.copyToList(chatUserList, ChatUserSimResponse.class);
+        List<ChatUserSimResponse> responseList = BeanUtil.copyToList(chatUserList, ChatUserSimResponse.class);
+        if (CollUtil.isNotEmpty(chatUserList)) {
+            LoginUsername loginUser = tokenManager.getLoginUser();
+            if (loginUser.isDemoAdmin()){
+                responseList.forEach(item -> {
+                    item.setPhone(StrUtil.hide(item.getPhone(), 3, 7));
+                });
+            }
+            return responseList;
+        }
+        return responseList;
     }
 
     @Override
