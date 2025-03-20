@@ -50,7 +50,7 @@ spring:
       # 用来检测连接是否有效的sql，要求是一个查询语句
       validation-query: SELECT 1
       # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
-      aop-patterns: 'com.dot.msg.*, com.dot.sys.*'
+      aop-patterns: 'com.dot.chat.*, com.dot.sys.*'
       ########## 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ##########
       stat-view-servlet: #监控页配置
         # 启用StatViewServlet
@@ -153,7 +153,7 @@ knife4j:
     enable-search: true
     enable-footer: true
     enable-footer-custom: true
-    footer-custom-content: Apache License 2.0 | Copyright  2019-[浙江聚如信息技术有限公司](https://www.dot.cn)
+    footer-custom-content: Apache License 2.0 | Copyright  2019-[DaoYang](https://www.dot1.chat)
     enable-dynamic-parameter: true
     enable-debug: true
     enable-open-api: true
@@ -171,9 +171,9 @@ swagger:
     title: '星星点点接口文档'
     description: '主要功能：聊天、消息推送、消息通知'
     version: '1.0.0'
-    terms-of-service: 'https://www.dot.cn'
+    terms-of-service: 'https://www.dot1.chat'
     license-name: 'Apache License 2.0'
-    license-url: 'https://www.dot.cn'
+    license-url: 'https://www.dot1.chat'
 
 # tio配置
 tio:

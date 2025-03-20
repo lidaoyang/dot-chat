@@ -18,6 +18,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,8 +71,12 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgDao, ChatMsg> impleme
         LambdaQueryWrapper<ChatMsg> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(ChatMsg::getChatId, ChatMsg::getId, ChatMsg::getSendUserId, ChatMsg::getMsgType, ChatMsg::getMsg, ChatMsg::getSendTime, ChatMsg::getDeviceType);
         queryWrapper.in(ChatMsg::getChatId, chatIds);
-        queryWrapper.orderByAsc(ChatMsg::getId);
+        queryWrapper.orderByDesc(ChatMsg::getId);
         queryWrapper.last("limit 50");
-        return this.list(queryWrapper);
+        List<ChatMsg> list = this.list(queryWrapper);
+        if (CollUtil.isNotEmpty(list)) {
+            Collections.reverse(list);
+        }
+        return list;
     }
 }
