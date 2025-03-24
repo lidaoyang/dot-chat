@@ -27,6 +27,7 @@ import com.dot.msg.chat.response.ChatUserInfoResponse;
 import com.dot.msg.chat.response.ChatUserResponse;
 import com.dot.msg.chat.response.ChatUserSearchResponse;
 import com.dot.msg.chat.service.ChatUserService;
+import com.dot.msg.chat.tio.util.TioUtil;
 import com.dot.sys.upload.response.UploadResponse;
 import com.dot.sys.upload.service.UploadService;
 import jakarta.annotation.Resource;
@@ -60,8 +61,6 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
 
     @Resource
     private TokenManager tokenManager;
-
-    private final Lock lock = new ReentrantLock();
 
     @Override
     public List<ChatUser> getList(List<Integer> userIds) {
@@ -312,4 +311,5 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
         }
         return newUser;
     }
+
 }

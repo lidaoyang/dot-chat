@@ -58,7 +58,8 @@ public class UserController {
     @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "退出登录")
     @PostMapping(value = "/logout")
-    public ResultBean<Boolean> login() {
+    public ResultBean<Boolean> logout() {
+        userService.logout();
         return ResultBean.success();
     }
 
