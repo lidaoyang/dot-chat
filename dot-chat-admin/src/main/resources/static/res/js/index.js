@@ -138,16 +138,6 @@ $(function () {
             activeTab(data[0]);
         });
 
-        /*$.ajax({
-            url: "data/menu.txt",
-            success: function (text) {
-                let data = mini.decode(text);
-                menu.loadData(data);
-
-                data[0].home = true;
-                activeTab(data[0]);
-            }
-        });*/
     }
 
 
