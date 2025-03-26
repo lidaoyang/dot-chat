@@ -21,7 +21,7 @@ public interface ChatRoomDao extends BaseMapper<ChatRoom> {
 
     @Select("""
             select cr.id,cr.chat_id,cr.group_id,crur.last_time from chat_room cr
-            left join(select distinct chat_id,user_id,last_time from chat_room_user_rel) crur on crur.chat_id=cr.chat_id
+            left join(select chat_id,user_id,last_time from chat_room_user_rel group by chat_id) crur on crur.chat_id=cr.chat_id
             ${ew.customSqlSegment}
             """)
     IPage<ChatRoomDto> selectChatRoomList(Page<ChatRoom> page, @Param(Constants.WRAPPER) QueryWrapper<ChatRoom> queryWrapper);

@@ -105,6 +105,9 @@
     font-size: 12px;
 }
 
+.frienditem .user-center {
+    text-align: center;
+}
 .frienditem .user-right {
     flex-flow: row-reverse;
     text-align: right;

@@ -103,6 +103,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomDao, ChatRoom> impl
         records.forEach(chatRoom -> {
             ChatRoomGroupResponse response = new ChatRoomGroupResponse();
             response.setChatId(chatRoom.getChatId());
+            response.setLastTime(chatRoom.getLastTime());
             response.setGroup(groupMap.get(chatRoom.getGroupId()));
             response.setMsgList(msgUserListMap.getOrDefault(chatRoom.getChatId(), new ArrayList<>()));
             responseList.add(response);
