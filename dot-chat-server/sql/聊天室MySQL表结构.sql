@@ -311,6 +311,9 @@ create index is_top_idx
 create index user_id_idx
     on chat_room_user_rel (user_id);
 
+create index last_time_index
+    on chat_room_user_rel (last_time);
+
 create table chat_user
 (
     id              int unsigned auto_increment
