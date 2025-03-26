@@ -37,6 +37,12 @@ public class DeepseekReqRecord implements Serializable {
     private Integer id;
 
     /**
+     * 会话id
+     */
+    @Schema(description = "会话id")
+    private String chatId;
+
+    /**
      * 访问用户ID
      */
     @Schema(description = "访问用户ID")

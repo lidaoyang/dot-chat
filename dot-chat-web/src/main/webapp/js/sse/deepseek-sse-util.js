@@ -74,6 +74,7 @@ function registerNavAiMsgClick() {
             $aiOutput.html('还没有聊天上下文,请先联系对方,等对方回复后,我在参与吧!');
         } else {
             let data = {
+                chatId: chatToUser.chatId,
                 messages: deepSeekAiMsgList
             }
             // 显示加载中

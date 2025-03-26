@@ -358,18 +358,24 @@ create index user_id_idx
     on chat_user_blacklist (user_id);
 
 
-create table deepseek_req_record
+create table dot_chat.deepseek_req_record
 (
     id       int auto_increment comment 'ID'
         primary key,
-    user_id  int      not null comment '访问用户ID',
-    req_msg  text     null comment '请求信息',
-    req_time datetime null comment '请求时间',
-    res_msg  text     null comment '返回信息',
-    res_time datetime null comment '返回时间'
+    chat_id  varchar(16) null comment '会话id',
+    user_id  int         not null comment '访问用户ID',
+    req_msg  text        null comment '请求信息',
+    req_time datetime    null comment '请求时间',
+    res_msg  text        null comment '返回信息',
+    res_time datetime    null comment '返回时间'
 )
     comment 'DeepSeek AI 请求记录';
 
+create index chat_id_index
+    on dot_chat.deepseek_req_record (chat_id);
+
 create index user_id_index
-    on deepseek_req_record (user_id);
+    on dot_chat.deepseek_req_record (user_id);
+
+
 

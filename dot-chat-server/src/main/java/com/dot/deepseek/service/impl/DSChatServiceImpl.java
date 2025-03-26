@@ -73,6 +73,7 @@ public class DSChatServiceImpl implements DSChatService {
     private Integer saveNewDeepseekReqRecord(DSChatRequest request, Integer userId) {
         DeepseekReqRecord reqRecord = new DeepseekReqRecord();
         reqRecord.setUserId(userId);
+        reqRecord.setChatId(request.getChatId());
         reqRecord.setReqMsg(JSON.toJSONString(request.getMessages()));
         reqRecord.setReqTime(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.NORM_DATETIME_PATTERN));
         deepseekReqRecordService.save(reqRecord);
