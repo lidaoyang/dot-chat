@@ -32,6 +32,12 @@ public class ChatRoomSingleResponse implements Serializable {
     @Schema(description = "聊天室id")
     private String chatId;
 
+    /**
+     * 最新消息发送时间
+     */
+    @Schema(description = "最新消息发送时间")
+    private String lastTime;
+
     @Schema(description = "聊天室用户1")
     private ChatUserSimResponse user1;
 

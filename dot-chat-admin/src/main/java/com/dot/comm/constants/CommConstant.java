@@ -12,7 +12,7 @@ public interface CommConstant {
      */
     String TRACE_ID = "traceId";
 
-    int DEFAULT_PAGE = 1;
+    int DEFAULT_PAGE = 0;
 
     int DEFAULT_LIMIT = 20;
 

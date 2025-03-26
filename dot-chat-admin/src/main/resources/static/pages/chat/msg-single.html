@@ -10,6 +10,29 @@
 
 </head>
 <body>
+<div class="mini-toolbar" style="padding:2px;border-bottom:0;">
+    <table style="width:100%;">
+        <tr>
+            <td style="width:100%;"></td>
+            <td style="white-space:nowrap;">
+                <label for="user-id-auto">聊天用户: </label>
+                <input id="user-id-auto" name="user-id" class="mini-autocomplete" style="width:150px;"
+                       emptyText="请输入用户ID,名称"
+                       ajaxType="get" valueField="id" textField="nickname" searchField="keywords"/>
+                <span class="separator"></span>
+            </td>
+            <td style="white-space:nowrap;">
+                <label for="start-date">聊天时间: </label>
+                <input id="start-date" class="mini-datepicker" style="width:120px;"/> 至
+                <input id="end-date" class="mini-datepicker" style="width:120px;"/>
+                <span class="separator"></span>
+            </td>
+            <td style="white-space:nowrap;">
+                <a class="mini-button" onclick="search()">查询</a>
+            </td>
+        </tr>
+    </table>
+</div>
 <div class="mini-fit">
     <div id="datagrid1" class="mini-datagrid" style="width:100%;height:100%;"
          ajaxType="get" idField="id" onload="onLoadError"
@@ -25,7 +48,8 @@
     <div class="ui-widget-overlay ui-front video-mask"></div>
     <div class="video-play">
         <video id="video" src="" preload="auto" controls="controls" autoplay="autoplay"></video>
-        <img onclick="closeVideo()" class="video-close" src="../../res/icon/x-red.png" width="25" height="25" alt="关闭"/>
+        <img onclick="closeVideo()" class="video-close" src="../../res/icon/x-red.png" width="25" height="25"
+             alt="关闭"/>
     </div>
 </div>
 
@@ -86,6 +110,20 @@
         return html;
     }
 
+    // 自动补全
+    let autoTextBox = mini.get("user-id-auto");
+    autoTextBox.setUrl(`${MSG_API_PREFIX}/user/simlist`);
+    autoTextBox.setAjaxOptions({
+        headers: header
+    });
+
+    // 搜索
+    function search() {
+        let userId = autoTextBox.getValue();
+        let startDate = mini.get("start-date").getFormValue();
+        let endDate = mini.get("end-date").getFormValue();
+        grid.load({userId: userId, startDate: startDate, endDate: endDate});
+    }
 </script>
 </body>
 </html>

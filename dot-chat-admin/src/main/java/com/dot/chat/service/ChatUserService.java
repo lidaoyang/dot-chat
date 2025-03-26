@@ -31,6 +31,13 @@ public interface ChatUserService extends IService<ChatUser> {
     IPage<ChatUserResponse> getList(ChatUserSearchRequest request, PageParam pageParam);
 
     /**
+     * 获取聊天室用户列表
+     *
+     * @param request 请求参数
+     * @return 分页结果
+     */
+    List<ChatUserSimResponse> getSimList(ChatUserSearchRequest request);
+    /**
      * 更新用户状态
      *
      * @param id     用户id

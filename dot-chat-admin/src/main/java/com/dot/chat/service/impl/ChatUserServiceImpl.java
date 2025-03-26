@@ -50,14 +50,7 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
     @Override
     public IPage<ChatUserResponse> getList(ChatUserSearchRequest request, PageParam pageParam) {
         LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(ObjectUtil.isNotNull(request.getStatus()), ChatUser::getStatus, request.getStatus());
-        queryWrapper.eq(ObjectUtil.isNotNull(request.getIsOnline()), ChatUser::getIsOnline, request.getIsOnline());
-        queryWrapper.and(StringUtils.isNotBlank(request.getKeywords()), wrapper -> {
-            wrapper.eq(NumberUtil.isNumber(request.getKeywords()), ChatUser::getId, request.getKeywords())
-                    .or().like(ChatUser::getNickname, request.getKeywords())
-                    .or().like(ChatUser::getPhone, request.getKeywords());
-        });
-        queryWrapper.orderByDesc(ChatUser::getLastLoginTime).orderByDesc(ChatUser::getId);
+        setWhereSql(request, queryWrapper);
         IPage<ChatUser> page = this.page(Page.of(pageParam.getPageIndex(), pageParam.getPageSize()), queryWrapper);
         if (page.getRecords().isEmpty()) {
             return PageUtil.copyPage(page, new ArrayList<>());
@@ -70,6 +63,27 @@ public class ChatUserServiceImpl extends ServiceImpl<ChatUserDao, ChatUser> impl
             });
         }
         return PageUtil.copyPage(page, responseList);
+    }
+
+    @Override
+    public List<ChatUserSimResponse> getSimList(ChatUserSearchRequest request) {
+        LambdaQueryWrapper<ChatUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.select(ChatUser::getId, ChatUser::getNickname, ChatUser::getAvatar);
+        setWhereSql(request, queryWrapper);
+        queryWrapper.last("limit 15");
+        List<ChatUser> chatUserList = this.list(queryWrapper);
+        return BeanUtil.copyToList(chatUserList, ChatUserSimResponse.class);
+    }
+
+    private void setWhereSql(ChatUserSearchRequest request, LambdaQueryWrapper<ChatUser> queryWrapper) {
+        queryWrapper.eq(ObjectUtil.isNotNull(request.getStatus()), ChatUser::getStatus, request.getStatus());
+        queryWrapper.eq(ObjectUtil.isNotNull(request.getIsOnline()), ChatUser::getIsOnline, request.getIsOnline());
+        queryWrapper.and(StringUtils.isNotBlank(request.getKeywords()), wrapper -> {
+            wrapper.eq(NumberUtil.isNumber(request.getKeywords()), ChatUser::getId, request.getKeywords())
+                    .or().like(ChatUser::getNickname, request.getKeywords())
+                    .or().like(ChatUser::getPhone, request.getKeywords());
+        });
+        queryWrapper.orderByDesc(ChatUser::getLastLoginTime).orderByDesc(ChatUser::getId);
     }
 
     @Override

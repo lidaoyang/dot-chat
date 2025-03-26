@@ -28,6 +28,12 @@ public class ChatRoomSearchRequest implements Serializable {
     /**
      * 开始日期
      */
+    @Schema(description = "参与用户ID")
+    private Integer userId;
+
+    /**
+     * 开始日期
+     */
     @Schema(description = "开始日期")
     private String startDate;
 

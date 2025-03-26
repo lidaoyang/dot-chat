@@ -50,6 +50,13 @@ public class ChatUserController {
     }
 
     @ApiOperationSupport(author = "daoyang@dot.cn")
+    @Operation(summary = "用户列表-精简", description = "用户下拉框")
+    @GetMapping(value = "/simlist")
+    public ResultBean<List<ChatUserSimResponse>> getSimList(@Validated ChatUserSearchRequest request) {
+        return ResultBean.success(chatUserService.getSimList(request));
+    }
+
+    @ApiOperationSupport(author = "daoyang@dot.cn")
     @Operation(summary = "修改状态")
     @PutMapping(value = "/modifyStatus")
     @Parameters({

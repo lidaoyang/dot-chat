@@ -32,6 +32,12 @@ public class ChatRoomGroupResponse implements Serializable {
     @Schema(description = "聊天室id")
     private String chatId;
 
+    /**
+     * 最新消息发送时间
+     */
+    @Schema(description = "最新消息发送时间")
+    private String lastTime;
+
     @Schema(description = "聊天室群组信息")
     private ChatGroupResponse group;
 

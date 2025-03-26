@@ -19,6 +19,11 @@ public class PageParam {
     @Schema(description = "当前页码,前端从0开始", defaultValue = "0")
     private int pageIndex = CommConstant.DEFAULT_PAGE;
 
+    /**
+     * 获取当前页码,查询数据时,页码从1开始
+     *
+     * @return 当前页码
+     */
     public int getPageIndex() {
         return pageIndex + 1;
     }
