@@ -16,7 +16,7 @@
 
 ## 聊天室体验地址  https://dot-chat.jrmall.cn
 ## 管理后台登录地址  https://dot-admin.jrmall.cn/ 
-`体验账号: 13000000000 密码: 888888`
+   `体验账号: 13000000000 密码: 888888`
 
 ## 框架
 
@@ -55,6 +55,7 @@
 2. dot-chat-server 部署需要配置nginx转发api的端口(8089)和websocket端口(9326),注意:这个服务Maven打包时间需要注意,由于依赖了ffmpeg全包太大,只依赖了mac系统和Linux系统的,根据自己的系统自己修改pom文件,不依赖会影响上传视频功能
 ```
 参考下面配置:
+    # 所有 api 接口转发配置
      location / {
     	proxy_redirect off;
     	proxy_set_header Host $host;
@@ -62,6 +63,16 @@
     	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_pass http://127.0.0.1:8089; 
     }
+    # deepseek api 流式响应转发配置
+    location /api/deepseek/chat/completions/stream {
+        proxy_pass http://127.0.0.1:8089;  # 后端服务地址
+        proxy_http_version 1.1;            # 必须使用 HTTP 1.1
+        proxy_set_header Connection "";    # 清除 Connection 头
+        proxy_buffering off;               # 关键：关闭代理缓冲
+        proxy_cache off;                   # 关闭缓存
+        proxy_read_timeout 100s;          # 设置长连接超时（按需调整）
+    }
+    # websocket转发配置
     location /websocket/  {
        proxy_pass http://127.0.0.1:9326/;
        proxy_http_version 1.1;    
