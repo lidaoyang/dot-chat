@@ -48,8 +48,6 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             seconds = accessLimit.seconds();
             maxCount = accessLimit.maxCount();
         }
-        // 多缓存5秒
-        seconds = seconds + 5;
         String key = getKey(request);
         boolean tried = redisUtil.tryAcquire(key, maxCount, seconds);
         if (!tried) {
