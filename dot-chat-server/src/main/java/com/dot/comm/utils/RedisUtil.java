@@ -5,6 +5,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -21,9 +23,54 @@ public class RedisUtil {
 
     private final StringRedisTemplate redisTemplate;
 
+
+    private final RedisScript<Long> rateLimitScript;
+
+    /**
+     * 获取分布式锁脚本
+     */
+    private static final String RATE_LIMIT_SCRIPT =
+            """
+                          local key = KEYS[1]
+                          local limit = tonumber(ARGV[1])
+                          local expireTime = tonumber(ARGV[2])
+                          local current = tonumber(redis.call('GET', key) or "0")
+                    
+                          if current + 1 > limit then
+                              return 0
+                          else
+                              redis.call('INCR', key)
+                              if current == 0 then
+                                  redis.call('EXPIRE', key, expireTime)
+                              end
+                              return 1
+                          end
+                    """;
+
+
     public RedisUtil(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
+        this.rateLimitScript = new DefaultRedisScript<>(RATE_LIMIT_SCRIPT, Long.class);
     }
+
+    /**
+     * 尝试获取分布式锁
+     *
+     * @param key        锁的key
+     * @param limit      获取锁的次数
+     * @param expireTime 过期时间(单位:秒)
+     * @return 是否获取成功
+     */
+    public boolean tryAcquire(String key, int limit, long expireTime) {
+        Long result = redisTemplate.execute(
+                rateLimitScript,
+                Collections.singletonList(key),
+                String.valueOf(limit),
+                String.valueOf(expireTime)
+        );
+        return result != null && result == 1;
+    }
+
 
     /**
      * 写入缓存

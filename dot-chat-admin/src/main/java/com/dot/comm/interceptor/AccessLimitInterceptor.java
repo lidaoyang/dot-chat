@@ -16,7 +16,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: Dao-yang.
@@ -33,58 +32,33 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             throws Exception {
         // 判断请求是否属于方法的请求
         if (handler instanceof HandlerMethod method) {
-            // 默认1秒的访问最大次数为6次
-            long seconds = 1;
-            int maxCount = 6;
-            // 获取方法中的注解,看是否有该注解
-            AccessLimit accessLimit = method.getMethodAnnotation(AccessLimit.class);
-            if (accessLimit != null) {
-                seconds = accessLimit.seconds();
-                maxCount = accessLimit.maxCount();
-            }
-            // 多缓存5秒
-            seconds = seconds + 5;
-            String key = getKey(request);
-
-            // 从redis中获取用户访问的次数
-            String strVal = redisUtil.get(key);
-            long nowTime = System.currentTimeMillis();
-            if (StringUtils.isBlank(strVal)) {
-                log.info("第一次访问，key:{}", key);
-                // 第一次访问 设置访问次数1  seconds秒释放
-                String val = nowTime + ":" + 1;
-                redisUtil.set(key, val, seconds, TimeUnit.SECONDS);
-            } else {
-                String[] vals = strVal.split(":");
-                long time = Long.parseLong(vals[0]);
-                int count = Integer.parseInt(vals[1]);
-                if (time == 0) {
-                    accessToLimitedRenderResponse(response, key, count);
-                    return false;
-                }
-                if ((nowTime - time) > (seconds - 5) * 1000) {
-                    redisUtil.remove(key);
-                } else if (count < maxCount) {
-                    count = count + 1;
-                    String val = time + ":" + count;
-                    redisUtil.set(key, val, seconds, TimeUnit.SECONDS);
-                } else {
-                    // 超出访问次数,超出接口时间段内允许访问的次数，直接返回错误信息,同时设置过期时间 15s自动剔除
-                    String val = "0:" + count;
-                    redisUtil.set(key, val, 15L, TimeUnit.SECONDS);
-                    accessToLimitedRenderResponse(response, key, count);
-                    return false;
-                }
-            }
+            return doAccessLimit(request, response, method);
         }
-
         return true;
     }
 
-    private void accessToLimitedRenderResponse(HttpServletResponse response, String key, int count) throws Exception {
-        log.warn("访问次数已达上限,暂停访问15秒,key:{},count:{}", key, count);
-        ResultBean<Object> result = ResultBean.failed("访问次数已达上限！请稍后再访问");
-        render(response, result);
+    private boolean doAccessLimit(HttpServletRequest request, HttpServletResponse response,
+                                  HandlerMethod method) throws Exception {
+        // 默认1秒的访问最大次数为6次
+        long seconds = 1;
+        int maxCount = 6;
+        // 获取方法中的注解,看是否有该注解
+        AccessLimit accessLimit = method.getMethodAnnotation(AccessLimit.class);
+        if (accessLimit != null) {
+            seconds = accessLimit.seconds();
+            maxCount = accessLimit.maxCount();
+        }
+        // 多缓存5秒
+        seconds = seconds + 5;
+        String key = getKey(request);
+        boolean tried = redisUtil.tryAcquire(key, maxCount, seconds);
+        if (!tried) {
+            log.warn("访问次数已达上限,暂停访问15秒,key:{},count:{}", key, maxCount);
+            ResultBean<Object> result = ResultBean.failed("访问次数已达上限！请稍后再访问");
+            render(response, result);
+            return false;
+        }
+        return true;
     }
 
     private String getKey(HttpServletRequest request) {
@@ -98,11 +72,10 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             sbKey.append(appID);
         } else {
             String origin = request.getHeader("origin");
-            String orgHost = "unknown";
             if (StringUtils.isNotBlank(origin)) {
-                orgHost = origin.substring(origin.indexOf("//") + 2);
+                String orgHost = origin.substring(origin.indexOf("//") + 2);
+                sbKey.append(orgHost).append(":");
             }
-            sbKey.append(orgHost).append(":");
         }
         String token = request.getHeader(TokenConstant.HEADER_AUTHORIZATION_KEY);
         if (StringUtils.isNotEmpty(token)) {
