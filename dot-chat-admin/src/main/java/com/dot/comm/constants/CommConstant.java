@@ -35,8 +35,4 @@ public interface CommConstant {
      */
     String CHAT_MSG_CALLING_KEY = "chat:msg:calling:";
 
-    /**
-     * 用户是否首次登录Redis Key
-     */
-    String CHAT_USER_FIRST_KEY = "chat:user:first";
 }
