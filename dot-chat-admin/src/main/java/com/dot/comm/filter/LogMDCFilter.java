@@ -2,6 +2,7 @@ package com.dot.comm.filter;
 
 import cn.hutool.core.util.IdUtil;
 import com.dot.comm.constants.CommConstant;
+import com.dot.comm.utils.CommUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +27,13 @@ public class LogMDCFilter implements Filter {
             return;
         }
         String traceId = getRequestId(httpServletRequest);
-        log.info("请求开始,traceId:{},url:{}", traceId, requestURI);
+        String clientIp = CommUtil.getClientIp(httpServletRequest);
+        log.info("-{}-{}-{}-请求开始", traceId, clientIp, requestURI);
         MDC.put(CommConstant.TRACE_ID, traceId);
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            log.info("请求结束,traceId:{},url:{}", traceId, requestURI);
+            log.info("-{}-{}-请求结束",  clientIp, requestURI);
             MDC.remove(CommConstant.TRACE_ID);
         }
     }
