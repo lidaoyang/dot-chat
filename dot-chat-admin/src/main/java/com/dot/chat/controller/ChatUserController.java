@@ -8,8 +8,6 @@ import com.dot.chat.response.ChatUserSimResponse;
 import com.dot.chat.service.ChatUserService;
 import com.dot.comm.entity.PageParam;
 import com.dot.comm.entity.ResultBean;
-import com.dot.sys.auth.request.LoginRequest;
-import com.dot.sys.auth.response.LoginResponse;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +17,6 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

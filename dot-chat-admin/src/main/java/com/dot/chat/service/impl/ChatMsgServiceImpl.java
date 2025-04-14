@@ -12,8 +12,6 @@ import com.dot.chat.response.ChatMsgUserResponse;
 import com.dot.chat.response.ChatUserSimResponse;
 import com.dot.chat.service.ChatMsgService;
 import com.dot.chat.service.ChatUserService;
-import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.exception.ApiException;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

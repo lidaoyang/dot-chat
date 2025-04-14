@@ -1,7 +1,7 @@
 package com.dot.sys.upload.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.dot.comm.entity.ResultBean;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.dot.sys.upload.response.UploadProgressBarResponse;
 import com.dot.sys.upload.response.UploadResponse;
 import com.dot.sys.upload.service.UploadService;

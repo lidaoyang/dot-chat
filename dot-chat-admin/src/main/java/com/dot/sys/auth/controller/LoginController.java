@@ -1,25 +1,14 @@
 package com.dot.sys.auth.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.dot.comm.entity.PageParam;
 import com.dot.comm.entity.ResultBean;
 import com.dot.sys.auth.request.LoginRequest;
-import com.dot.sys.auth.request.SysAdminAddRequest;
-import com.dot.sys.auth.request.SysAdminEditRequest;
-import com.dot.sys.auth.request.SysAdminSearchRequest;
 import com.dot.sys.auth.response.LoginResponse;
-import com.dot.sys.auth.response.SysAdminResponse;
 import com.dot.sys.auth.service.LoginService;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

@@ -2,23 +2,17 @@ package com.dot.chat.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dot.chat.request.ChatRoomSearchRequest;
-import com.dot.chat.request.ChatUserSearchRequest;
 import com.dot.chat.response.*;
 import com.dot.chat.service.ChatRoomService;
 import com.dot.comm.entity.PageParam;
 import com.dot.comm.entity.ResultBean;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * IM聊天室 -- 消息管理

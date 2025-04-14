@@ -1,7 +1,6 @@
 package com.dot.sys.auth.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.dot.chat.model.ChatUser;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.entity.LoginUsername;
 import com.dot.comm.entity.TokenModel;
@@ -9,7 +8,6 @@ import com.dot.comm.exception.ApiException;
 import com.dot.comm.manager.TokenManager;
 import com.dot.comm.utils.AESUtil;
 import com.dot.comm.utils.CommUtil;
-import com.dot.comm.utils.RedisUtil;
 import com.dot.sys.auth.model.SysAdmin;
 import com.dot.sys.auth.request.LoginRequest;
 import com.dot.sys.auth.response.LoginResponse;
