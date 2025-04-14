@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.lang.NonNullApi;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -145,7 +146,7 @@ public class RedisUtil {
      */
     public void removePattern(final String pattern) {
         Set<String> keys = redisTemplate.keys(pattern);
-        if (keys != null && keys.size() > 0) {
+        if (!keys.isEmpty()) {
             redisTemplate.delete(keys);
         }
     }
@@ -455,7 +456,8 @@ public class RedisUtil {
                         hashes.put(key, value);
                     }
                     // 批量保存
-                    connection.hMSet(hashName, hashes);
+                    assert hashName != null;
+                    connection.hashCommands().hMSet(hashName, hashes);
                 }
                 return null;
             }
@@ -489,7 +491,8 @@ public class RedisUtil {
                         hashes.put(key, value);
                     }
                     // 批量保存
-                    connection.hMSet(hashName, hashes);
+                    assert hashName != null;
+                    connection.hashCommands().hMSet(hashName, hashes);
                 }
             }
             return null;
