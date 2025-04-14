@@ -7,11 +7,6 @@ package com.dot.comm.constants;
  */
 public interface CommConstant {
 
-    /**
-     * 链路ID
-     */
-    String TRACE_ID = "traceId";
-
     int DEFAULT_PAGE = 0;
 
     int DEFAULT_LIMIT = 20;
