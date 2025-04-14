@@ -1,7 +1,7 @@
 package com.dot.comm.entity;
 
+import com.dot.comm.constants.ComConstant;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.dot.comm.constants.CommConstant;
 import com.dot.comm.em.ExceptionCodeEm;
 import com.dot.comm.exception.ApiException;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -49,7 +49,7 @@ public class ResultBean<T> implements Serializable {
      * 请求链路唯一ID
      */
     @Schema(description = "请求链路唯一ID", example = "5119fe60d0b24b77a56b225e895210ac", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String traceId = MDC.get(CommConstant.TRACE_ID) == null ? null : MDC.get(CommConstant.TRACE_ID).toString();
+    private String traceId = MDC.get(ComConstant.TRACE_ID) == null ? null : MDC.get(ComConstant.TRACE_ID).toString();
 
     /**
      * 响应数据

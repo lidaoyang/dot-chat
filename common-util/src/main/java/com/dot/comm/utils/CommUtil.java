@@ -3,9 +3,6 @@ package com.dot.comm.utils;
 import cn.hutool.core.util.URLUtil;
 import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
-import com.dot.comm.constants.CommConstant;
-import com.dot.comm.em.ExceptionCodeEm;
-import com.dot.comm.exception.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -186,19 +183,6 @@ public class CommUtil {
         }
 
         return ip.split("\\.").length == 4;
-    }
-
-    public static void checkLoAuth(RedisUtil redisUtil) {
-        String authAccount = RequestUtil.getHeader(CommConstant.AUTH_ACCOUNT_KEY);
-        if (StringUtils.isBlank(authAccount)) {
-            log.error("无权限操作,authAccount:{}", authAccount);
-            throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "无权限操作");
-        }
-        Boolean isAuth = redisUtil.isMember(CommConstant.REDIS_AUTH_ACCOUNT_LIST, authAccount);
-        if (!isAuth) {
-            log.error("无权限操作,authAccount:{}", authAccount);
-            throw new ApiException(ExceptionCodeEm.UNAUTHORIZED, "无权限操作");
-        }
     }
 
     /**

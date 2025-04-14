@@ -1,7 +1,7 @@
 package com.dot.comm.filter;
 
 import cn.hutool.core.util.IdUtil;
-import com.dot.comm.constants.CommConstant;
+import com.dot.comm.constants.ComConstant;
 import com.dot.comm.utils.CommUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,19 +29,19 @@ public class LogMDCFilter implements Filter {
         String traceId = getRequestId(httpServletRequest);
         String clientIp = CommUtil.getClientIp(httpServletRequest);
         log.info("-{}-{}-{}-请求开始", traceId, clientIp, requestURI);
-        MDC.put(CommConstant.TRACE_ID, traceId);
+        MDC.put(ComConstant.TRACE_ID, traceId);
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            log.info("-{}-{}-请求结束",  clientIp, requestURI);
-            MDC.remove(CommConstant.TRACE_ID);
+            log.info("-{}-{}-请求结束", clientIp, requestURI);
+            MDC.remove(ComConstant.TRACE_ID);
         }
     }
 
-    public static String getRequestId(HttpServletRequest request) {
+    public String getRequestId(HttpServletRequest request) {
         String traceId;
-        String parameterRequestId = request.getParameter(CommConstant.TRACE_ID);
-        String headerRequestId = request.getHeader(CommConstant.TRACE_ID);
+        String parameterRequestId = request.getParameter(ComConstant.TRACE_ID);
+        String headerRequestId = request.getHeader(ComConstant.TRACE_ID);
         // 根据请求参数或请求头判断是否有“request-id”，有则使用，无则创建
         if (parameterRequestId == null && headerRequestId == null) {
             traceId = IdUtil.simpleUUID();
