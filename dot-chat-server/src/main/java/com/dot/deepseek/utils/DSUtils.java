@@ -10,6 +10,7 @@ import com.dot.deepseek.entity.DSChatRequestBody;
 import com.dot.deepseek.entity.DSChatRequestMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,7 @@ public class DSUtils {
 
     public static String generateChatMessage(List<DSChatRequestMessage> messages) {
         String url = getDSChatUrl();
-        Map<String, String> header = HttpClientUtil.defaultHeader();
-        header.put("Authorization", "Bearer " + getAPIKey());
+        Map<String, String> header = getHeader();
         DSChatRequestBody requestBody = new DSChatRequestBody();
         requestBody.setMessages(messages);
         requestBody.setMax_tokens(128);
@@ -39,16 +39,21 @@ public class DSUtils {
         return "服务器繁忙,请稍后重试";
     }
 
-    public static void generateChatMessageForStream(List<DSChatRequestMessage> messages, Integer userId) {
-        String url = getDSChatUrl();
-        Map<String, String> header = HttpClientUtil.defaultHeader();
-        header.put("Authorization", "Bearer " + getAPIKey());
+    public static String getJsonBody(List<DSChatRequestMessage> messages) {
         DSChatRequestBody requestBody = new DSChatRequestBody();
         requestBody.setMessages(messages);
         requestBody.setMax_tokens(1024);
         requestBody.setStream(true);
-        HttpClientUtil.doPostForStream(url, header, JSONObject.toJSONString(requestBody), userId);
+        return JSONObject.toJSONString(requestBody);
     }
+
+    @NotNull
+    public static Map<String, String> getHeader() {
+        Map<String, String> header = HttpClientUtil.defaultHeader();
+        header.put("Authorization", "Bearer " + getAPIKey());
+        return header;
+    }
+
 
     public static String getDSChatUrl() {
         return DSConstant.BASE_URL + DSConstant.CHAT_COMPLETION;

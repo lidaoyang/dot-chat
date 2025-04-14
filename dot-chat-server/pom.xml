@@ -25,8 +25,16 @@
         <google.version>3.5.3</google.version>
         <javacv.version>1.5.9</javacv.version>
         <ffmpeg.version>6.0-1.5.9</ffmpeg.version>
+        <okhtt3.version>4.12.0</okhtt3.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>com.dot.common</groupId>
+            <artifactId>common-util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- websocket -->
         <dependency>
             <groupId>org.t-io</groupId>
@@ -51,16 +59,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
         </dependency>
-        <!--   Redis     -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!--  spring boot redis 需要commons-pool连接池依赖,默认没有引入  -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
         <!--代码自动生成工具-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -78,29 +76,6 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-        <!--日志处理-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -108,11 +83,6 @@
             <version>${hutool.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.f4b6a3</groupId>
-            <artifactId>ulid-creator</artifactId>
-            <version>${ulid.version}</version>
-        </dependency>
         <!--谷歌二维码-->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -136,6 +106,18 @@
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>3.18.1</version>
+        </dependency>
+
+        <!--  okhttp3 sse -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhtt3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-sse</artifactId>
+            <version>${okhtt3.version}</version>
         </dependency>
 
         <!-- 视频转图片截取封面 -->

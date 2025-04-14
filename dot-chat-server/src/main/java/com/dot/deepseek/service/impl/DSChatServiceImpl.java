@@ -9,7 +9,11 @@ import com.dot.deepseek.request.DSChatRequest;
 import com.dot.deepseek.service.DSChatService;
 import com.dot.deepseek.service.DeepseekReqRecordService;
 import com.dot.deepseek.utils.DSUtils;
-import com.dot.deepseek.utils.SseEmitterUtil;
+import com.dot.sse.MySseEmitter;
+import com.dot.sse.OkHttpSSEClient;
+import com.dot.sse.em.EventSourceKeyEm;
+import com.dot.sse.listener.DeepSeekEventSourceListener;
+import com.dot.sse.util.SseEmitterUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,33 +43,29 @@ public class DSChatServiceImpl implements DSChatService {
     @Override
     public SseEmitter generateChatMessageForStream(DSChatRequest request) {
         final Integer userId = tokenManager.getUserId();
-        // 创建SseEmitter对象
-        SseEmitter sseEmitter = SseEmitterUtil.add(userId, new SseEmitter(60000L * 2));
         // 保存请求记录
         final Integer reqRecordId = saveNewDeepseekReqRecord(request, userId);
+
+        // EventSourceListener
+        DeepSeekEventSourceListener eventSourceListener = new DeepSeekEventSourceListener(userId);
+
         // 调用接口生成回复消息并发送到客户端
-        DSUtils.generateChatMessageForStream(request.getMessages(), userId);
-        sseEmitter.onCompletion(() -> {
-            log.info("SseEmitter completed. uid:{},reqRecordId{}", userId, reqRecordId);
-            // 更新请求记录
-            updateDeepseekReqRecord(reqRecordId, userId);
-            SseEmitterUtil.remove(userId);
+        OkHttpSSEClient.getInstance().startByPost(EventSourceKeyEm.DEEPSEEK, DSUtils.getDSChatUrl(), DSUtils.getHeader(), DSUtils.getJsonBody(request.getMessages()), eventSourceListener);
+
+        // 创建sseEmitter
+        return SseEmitterUtil.connect(userId, 60000L * 2, new MySseEmitter.SseStateListener() {
+            @Override
+            public void onCompletion() {
+                log.info("SSE请求完成, 更新记录. uid:{},reqRecordId:{}", userId, reqRecordId);
+                updateDeepseekReqRecord(reqRecordId, userId, eventSourceListener.getFullContent());
+            }
         });
-        sseEmitter.onTimeout(() -> {
-            log.info("SseEmitter timeout. uid:{},reqRecordId:{}", userId, reqRecordId);
-            SseEmitterUtil.remove(userId);
-        });
-        sseEmitter.onError(t -> {
-            log.error("SseEmitter error. uid:{},reqRecordId:{}", userId, reqRecordId, t);
-            SseEmitterUtil.remove(userId);
-        });
-        return sseEmitter;
     }
 
-    private void updateDeepseekReqRecord(Integer reqRecordId, Integer userId) {
+    private void updateDeepseekReqRecord(Integer reqRecordId, Integer userId, String resMsg) {
         DeepseekReqRecord updateRecord = new DeepseekReqRecord();
         updateRecord.setId(reqRecordId);
-        updateRecord.setResMsg(SseEmitterUtil.getContent(userId));
+        updateRecord.setResMsg(resMsg);
         updateRecord.setResTime(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.NORM_DATETIME_PATTERN));
         deepseekReqRecordService.updateById(updateRecord);
     }
@@ -83,11 +83,7 @@ public class DSChatServiceImpl implements DSChatService {
     @Override
     public boolean closeSse() {
         Integer userId = tokenManager.getUserId();
-        if (SseEmitterUtil.isExist(userId)) {
-            SseEmitterUtil.get(userId).complete();
-        } else {
-            log.info("用户[{}]连接已关闭", userId);
-        }
+        SseEmitterUtil.closeSSE(userId);
         return true;
     }
 }
