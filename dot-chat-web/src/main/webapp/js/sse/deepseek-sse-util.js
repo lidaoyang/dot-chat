@@ -181,13 +181,7 @@ function closeSse() {
  */
 function closeServiceSse() {
     let url = `${DEEPSEEK_URL_PREFIX}/closeSse`;
-    let token = $.cookie(TOKEN_KEY);
-    if (!token) {
-        logger.error("token过期");
-        deleteUserCookie();
-        return;
-    }
-    ajaxRequest(url, "post", null, null, function (res) {
+    ajaxSyncRequest(url, "post", null, null, function (res) {
         if (res.code !== 200) {
             logger.info("关闭SSE失败");
             myAlert('', res.message, "err");
