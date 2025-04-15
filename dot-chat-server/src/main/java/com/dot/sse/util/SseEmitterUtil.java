@@ -27,9 +27,8 @@ public class SseEmitterUtil {
         return sseEmitterMap.get(userId);
     }
 
-    public static MySseEmitter add(Integer userId, MySseEmitter sseEmitter) {
+    private static void add(Integer userId, MySseEmitter sseEmitter) {
         sseEmitterMap.put(userId, sseEmitter);
-        return sseEmitter;
     }
 
     public static void remove(Integer userId) {
