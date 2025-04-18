@@ -14,8 +14,8 @@
 - **群聊功能**：支持创建和加入群聊，进行多人聊天。
 - **AI智能回复**：AI智能回复功能，根据好友的回复内容，自动生成回复信息。
 
-## 聊天室体验地址  https://dot-chat.jrmall.cn
-## 管理后台登录地址  https://dot-admin.jrmall.cn/ 
+## 聊天室体验地址  https://www.dot1.chat
+## 管理后台登录地址  https://admin.dot1.chat 
    `体验账号: 13000000000 密码: 888888`
 
 ## 框架
