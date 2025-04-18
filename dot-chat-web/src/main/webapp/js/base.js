@@ -12,12 +12,12 @@ if (location.host === "dot-chat.jrmall.cn") {
     HOST = "dot-chat.api.jrmall.cn";
 } else if (location.host === "www.dot1.chat") {
     HOST = "api.dot1.chat";
+    BASE_URL = "https://" + HOST + "/";
 } else {
     HOST = "dev.dot.cn";
     ws_port = "9326";
+    BASE_URL = "https://" + HOST + ":8089/";
 }
-BASE_URL = "https://" + HOST + ":8089/";
-
 // 定义常量对象
 const SYS_API_PREFIX = "api/sys"; // 接口前缀
 const MSG_API_PREFIX = "api/msg"; // 接口前缀
