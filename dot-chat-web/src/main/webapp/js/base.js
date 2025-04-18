@@ -1,16 +1,14 @@
 let logger = new Logger('debug');
 
 let env = "dev";// dev:开发环境,test:测试环境,prod:生产环境
-if (location.host !== "dot-chat.jrmall.cn" && location.host !== "www.dot1.chat") {
+if (location.host !== "www.dot1.chat") {
     env = "local"
 }
 let HOST, BASE_URL; // ws 或 wss;
 
 let ws_port = "443";
 let ws_protocol = 'wss';
-if (location.host === "dot-chat.jrmall.cn") {
-    HOST = "dot-chat.api.jrmall.cn";
-} else if (location.host === "www.dot1.chat") {
+if (location.host === "www.dot1.chat") {
     HOST = "api.dot1.chat";
     BASE_URL = "https://" + HOST + "/";
 } else {
