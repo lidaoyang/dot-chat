@@ -148,7 +148,7 @@ knife4j:
     enable-search: true
     enable-footer: true
     enable-footer-custom: true
-    footer-custom-content: Apache License 2.0 | Copyright  2019-[浙江聚如信息技术有限公司](https://www.dot.cn)
+    footer-custom-content: Apache License 2.0 | Copyright  2019-[DaoYang](https://www.dot1.chat)
     enable-dynamic-parameter: true
     enable-debug: true
     enable-open-api: true
@@ -166,9 +166,9 @@ swagger:
     title: '星星点点接口文档'
     description: '主要功能：聊天、消息推送、消息通知'
     version: '1.0.0'
-    terms-of-service: 'https://www.dot.cn'
+    terms-of-service: 'https://www.dot1.chat'
     license-name: 'Apache License 2.0'
-    license-url: 'https://www.dot.cn'
+    license-url: 'https://www.dot1.chat'
 
 tio:
   server:
@@ -188,27 +188,27 @@ tio:
 aliyun:
   oss:
     local: true
-    domain: https://dot-chat.file.jrmall.cn
+    domain: https://file.dot1.chat
 
 mat:
   upload:
     image:
       root-context: media
-      root-path: /www/wwwroot/dot-chat.file.jrmall.cn/dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: image
       ext-str: jpg,jpeg,gif,png,bmp,tif,ico
       size: 10
       compress: false
     video:
       root-context: media
-      root-path: /www/wwwroot/dot-chat.file.jrmall.cn/dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: video
       ext-str: mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm
       size: 50
       compress: false
     file:
       root-context: media
-      root-path: /www/wwwroot/dot-chat.file.jrmall.cn/dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: file
       ext-str: zip,gzip,rar,tar,7z,gz,war,ios,doc,docx,xls,xlsx,ppt,pptx,pdf,xml,html,htm,txt,md,log,css,mp3,wma,wav,amr,mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm,pem,p12,jpg,jpeg,gif,png,bmp,tif,ico
       size: 50
@@ -219,4 +219,4 @@ chat:
   icon: static/ico/dot-logo.jpg
   group:
     max-member-num: 500
-    qrcode-url: https://test-dot.chat.jrmall.cn/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://file.dot1.chat/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}

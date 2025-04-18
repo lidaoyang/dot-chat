@@ -154,7 +154,7 @@ knife4j:
     enable-search: true
     enable-footer: true
     enable-footer-custom: true
-    footer-custom-content: Apache License 2.0 | Copyright  2019-[浙江聚如信息技术有限公司](https://www.dot.cn)
+    footer-custom-content: Apache License 2.0 | Copyright  2019-[DaoYang](https://www.dot1.chat)
     enable-dynamic-parameter: true
     enable-debug: true
     enable-open-api: true
@@ -172,9 +172,9 @@ swagger:
     title: '星星点点接口文档'
     description: '主要功能：聊天、消息推送、消息通知'
     version: '1.0.0'
-    terms-of-service: 'https://www.dot.cn'
+    terms-of-service: 'https://www.dot1.chat'
     license-name: 'Apache License 2.0'
-    license-url: 'https://www.dot.cn'
+    license-url: 'https://www.dot1.chat'
 
 # tio配置
 tio:
@@ -226,4 +226,4 @@ chat:
   icon: static/ico/dot-logo.jpg
   group:
     max-member-num: 500
-    qrcode-url: https://172.16.85.134:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
+    qrcode-url: https://dev.dot.cn:8443/qrcode/inviteJoinGroup.html?groupId={groupId}&inviteUserId={inviteUserId}
