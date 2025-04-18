@@ -3255,6 +3255,7 @@ html, body {
 .call-audio-msg-icon {
     background-image: url("../ico/call_audio_msg.png");
 }
+
 /*视频通话样式end*/
 
 /*AI 智能消息样式 start*/
@@ -3271,7 +3272,8 @@ html, body {
     border-radius: 8px;
     box-shadow: 0 1px 2px -3px rgba(0, 0, 0, .2), 0 1px 5px 2px rgba(0, 0, 0, .14), 0 1px 3px 2px rgba(0, 0, 0, .12);
 }
-.ai-msg-dialog .ai-content{
+
+.ai-msg-dialog .ai-content {
     display: grid;
     place-items: center; /* 水平和垂直居中 */
     height: 60px;
@@ -3280,6 +3282,7 @@ html, body {
     word-break: break-all;
     overflow-y: auto;
 }
+
 .ai-msg-dialog .ai-loading {
     position: absolute;
     top: -1px;
@@ -3290,6 +3293,7 @@ html, body {
     width: 70px;
     height: 95px;
 }
+
 .ai-msg-dialog .ai-content .ai-output {
 
 }
@@ -3315,4 +3319,34 @@ html, body {
     padding: 0 2px;
     cursor: pointer;
 }
+
 /*AI 智能消息样式 ent*/
+
+.bot-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 13px;
+}
+
+.bot-item .company {
+    color: #92aeda;
+    margin-right: 16px;
+}
+
+.bottoms .bot-item .record {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bot-item .record img {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+}
+
+.bot-item .record .num {
+    color: #605f5f;
+}
