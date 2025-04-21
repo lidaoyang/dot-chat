@@ -195,21 +195,21 @@ mat:
   upload:
     image:
       root-context: media
-      root-path: /www/wwwroot/file.dot1.chat//dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: image
       ext-str: jpg,jpeg,gif,png,bmp,tif,ico
       size: 10
       compress: false
     video:
       root-context: media
-      root-path: /www/wwwroot/file.dot1.chat//dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: video
       ext-str: mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm
       size: 50
       compress: false
     file:
       root-context: media
-      root-path: /www/wwwroot/file.dot1.chat//dot/${mat.upload.file.root-context}/
+      root-path: /www/wwwroot/file.dot1.chat/dot/${mat.upload.file.root-context}/
       type: file
       ext-str: zip,gzip,rar,tar,7z,gz,war,ios,doc,docx,xls,xlsx,ppt,pptx,pdf,xml,html,htm,txt,md,log,css,mp3,wma,wav,amr,mp4,mkv,avi,mov,wmv,3gp,rm,rmvb,flv,webm,pem,p12,jpg,jpeg,gif,png,bmp,tif,ico
       size: 50
