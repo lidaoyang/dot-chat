@@ -8,7 +8,7 @@ let HOST, BASE_URL; // ws 或 wss;
 
 let ws_port = "443";
 let ws_protocol = 'wss';
-if (location.host === "www.dot1.chat") {
+if (location.host === "www.dot1.chat" || location.host === "dot1.chat") {
     HOST = "api.dot1.chat";
     BASE_URL = "https://" + HOST + "/";
 } else {
