@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(name = "spring.redis.health-check", havingValue = "true")
+@ConditionalOnProperty(name = "spring.data.redis.health-check", havingValue = "true")
 public class RedisHealthCheck {
 
     @Resource
