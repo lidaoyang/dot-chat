@@ -72,8 +72,8 @@ function ajaxRequestNotAuth(url, method, data, contentType, successFn) {
             successFn(res);
         },
         error: function (err) {
-            console.error(err);
-            // alert("请求错误,请稍后重试,msg:" + err.statusText);
+            console.error("code:", err.status, "msg:", err.statusText);
+            alertError(err.statusText + "(" + err.status + ")");
         }
     });
 }
@@ -115,9 +115,8 @@ function ajaxRequest(url, method, data, contentType, successFn) {
             successFn(res);
         },
         error: function (err) {
-            console.error(err);
-            alertError(err);
-            // alert("请求错误,请稍后重试,msg:" + err.statusText);
+            console.error("code:", err.status, "msg:", err.statusText);
+            alertError(err.statusText + "(" + err.status + ")");
         }
     });
 }
@@ -161,9 +160,8 @@ function ajaxSyncRequest(url, method, data, contentType, successFn) {
             successFn(res);
         },
         error: function (err) {
-            console.error(err);
-            alertError(err);
-            // alert("请求错误,请稍后重试,msg:" + err.statusText);
+            console.error("code:", err.status, "msg:", err.statusText);
+            alertError(err.statusText + "(" + err.status + ")");
         }
     });
 }
