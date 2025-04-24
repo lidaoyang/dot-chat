@@ -334,6 +334,48 @@
             text-align: left;
             vertical-align: top;
         }
+
+        /*ICP备案和公网备案样式*/
+        .bot-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            padding: 20px;
+            background-color: #ffff;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
+        .bot-item .company {
+            color: #666;
+            margin-right: 16px;
+        }
+
+        .bot-item .beian {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .bot-item .beian-img {
+            vertical-align: top;
+            opacity: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bot-item .jgawb {
+            font-family: MicrosoftYaHei;
+            font-size: 12px;
+            color: rgb(116, 154, 227);
+            letter-spacing: 0;
+            line-height: 20px;
+            font-weight: 400;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -356,7 +398,7 @@
             <span>密码</span>
             <input class="password" type="password">
         </label>
-<!--        <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>-->
+        <!--        <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>-->
         <button type="button" class="submit" onclick="login()">登 录</button>
 
     </div>
@@ -406,7 +448,21 @@
     </div>
 </div>
 
-<div style="text-align:center;">
+<div class="bot-item">
+    <div class="company">Copyright © dot1.chat 版权所有</div>
+    <div class="beian" style="width: 16px;">
+        <img src="images/logo-icp.png" class="beian-img" style="object-fit: contain;" alt="">
+    </div>
+    <a class="jgawb" href="https://beian.miit.gov.cn/" target="_blank">
+        &nbsp;豫ICP备2025121229号-1
+    </a>
+    <div class="beian" style="width: 16px; margin-left: 20px;">
+        <img src="images/logo-gongan.png" class="beian-img" style="object-fit: contain;" alt="">
+    </div>
+    <a class="jgawb" href="https://beian.mps.gov.cn/#/query/webSearch?code=33010802013860" rel="noreferrer"
+       target="_blank">
+        &nbsp;浙公网安备33010802013860号
+    </a>
 </div>
 <!-- 引入 jQuery 库 -->
 <script src="js/jquery/jquery-3.7.1.min.js"></script>
