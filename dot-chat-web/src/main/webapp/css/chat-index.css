@@ -3331,22 +3331,27 @@ html, body {
 }
 
 .bot-item .company {
-    color: #92aeda;
+    color: #666;
     margin-right: 16px;
 }
 
-.bottoms .bot-item .record {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.bot-item .record img {
+.bot-item .beian {
+    position: relative;
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    overflow: hidden;
 }
-
-.bot-item .record .num {
-    color: #605f5f;
+.bot-item .beian-img {
+    vertical-align: top;
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+}
+.bot-item .jgawb {
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    color: rgb(116, 154, 227);
+    letter-spacing: 0;
+    line-height: 20px;
+    font-weight: 400;
+    text-decoration: none;
 }
