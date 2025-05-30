@@ -27,13 +27,15 @@ public class LogMDCFilter implements Filter {
             return;
         }
         String traceId = getRequestId(httpServletRequest);
-        String clientIp = CommUtil.getClientIp(httpServletRequest);
-        log.info("-{}-{}-{}-请求开始", traceId, clientIp, requestURI);
         MDC.put(ComConstant.TRACE_ID, traceId);
+
+        String clientIp = CommUtil.getClientIp(httpServletRequest);
+        log.info("{} {}:{} 请求开始", clientIp, httpServletRequest.getMethod(), requestURI);
+
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            log.info("-{}-{}-请求结束", clientIp, requestURI);
+            log.info("{} {}:{} 请求结束", clientIp, httpServletRequest.getMethod(), requestURI);
             MDC.remove(ComConstant.TRACE_ID);
         }
     }
