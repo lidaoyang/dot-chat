@@ -53,216 +53,7 @@
             <div class="ui-widget-overlay ui-front dissolve-mask hide" style="z-index: 100;">群聊已解散</div>
         </div>
     </div>
-    <!-- 聊天信息窗口 -->
-    <div id="chat-msg-info" class="chat-msg-info hide">
-        <div id="chat-group-member" class="group-members">
-            <ul class="group-member">
-                <!--  群成员信息  -->
-            </ul>
-            <div class="group-member-more hide" onclick="moreGroupMember(this)">
-                <label class="text">展开更多</label>
-                <span class="arrow-down"></span>
-            </div>
-        </div>
-        <div id="group-base-info" class="chat-msg-info-set">
-            <div class="group-info" onclick="groupNameDialogOpen('groupName')">
-                <label class="info-title">群聊名称</label>
-                <div class="base-info-right">
-                    <span id="group-name" class="group-base-value"></span>
-                    <span class="right-arrow"></span>
-                </div>
-            </div>
-            <div class="group-info" onclick="groupQrcodeDialogOpen()">
-                <label class="info-title">群二维码</label>
-                <div class="base-info-right">
-                    <span class="right-arrow"></span>
-                    <span class="group-qrcode"></span>
-                </div>
-            </div>
-            <div class="group-info" onclick="groupNoticeTextboxDialogOpen()">
-                <label class="info-title">群公告</label>
-                <div class="base-info-right">
-                    <span id="group-notice" class="group-base-value"></span>
-                    <span class="right-arrow"></span>
-                </div>
-            </div>
-            <div id="group-manage-label" class="group-info" onclick="groupManagersDialogOpen()">
-                <label class="info-title">群管理</label>
-                <div class="base-info-right">
-                    <span class="right-arrow"></span>
-                </div>
-            </div>
-            <div class="group-info" onclick="groupNameDialogOpen('groupNickname')">
-                <label class="info-title">我在群里的昵称</label>
-                <div class="base-info-right">
-                    <span id="group-nickname" class="group-base-value"></span>
-                    <span class="right-arrow"></span>
-                </div>
-            </div>
-        </div>
-        <div class="chat-msg-info-set" onclick="openChatMsgHistoryDialog()">
-            <label class="info-title">查看聊天记录</label>
-            <div class="base-info-right">
-                <span class="right-arrow"></span>
-            </div>
-        </div>
-        <div class="chat-msg-info-set">
-            <div class="group-info">
-                <label class="info-title">消息免打扰</label>
-                <div class="base-info-right">
-                    <span id="no-disturb" class="switch-off" onclick="msgInfoSwitch(this)"></span>
-                </div>
-            </div>
-            <div class="group-info">
-                <label class="info-title">置顶聊天</label>
-                <div class="base-info-right">
-                    <span id="is-top" class="switch-off" onclick="msgInfoSwitch(this)"></span>
-                </div>
-            </div>
-        </div>
-        <div class="chat-msg-info-set" onclick="cleanMsgList()">
-            <label class="info-title">清空聊天记录</label>
-            <div class="base-info-right">
-                <span class="right-arrow"></span>
-            </div>
-        </div>
-        <div class="chat-msg-info-set margin-bottom50" onclick="logoutGroup()">
-            <span class="logout-group">退出群聊</span>
-        </div>
-
-        <!-- 修改群名称对话框 -->
-        <div id="modify-group-name-dialog" class="modify-group-name" style="display: none">
-            <div class="modify-group-desc">修改群名称后，将在群内通知其他成员。</div>
-            <div class="modify-group-name-content">
-                <img id="modify-group-avatar" src="" alt=""/>
-                <input id="modify-group-name-input" class="modify-group-name-input" type="text"
-                       onchange="groupNameInputChange(this)"
-                       onfocusout="groupNameInputChange(this)" onkeyup="groupNameInputChange(this)"/>
-                <span class="clean-input" onclick="clearGroupNameInput()"></span>
-            </div>
-            <div class="modify-group-name-btn">
-                <button class="primarybtn" modify-type="groupName" disabled onclick="modifyGroupName(this)">确定
-                </button>
-            </div>
-        </div>
-        <!-- 群二维码对话框 -->
-        <div id="group-qrcode-dialog" class="group-qrcode-dialog" style="display: none">
-            <img id="group-qrcode-img" class="group-qrcode-img" src="" alt=""/>
-            <div class="group-qrcode-label">该二维码24小时内有效，重新进入将更新</div>
-            <div class="group-qrcode-btn">
-                <button class="primarybtn" onclick="downloadGroupQrcode()">保存</button>
-            </div>
-        </div>
-        <!-- 添加/移除群聊成员对话框 -->
-        <div id="add-remove-group-member-dialog" style="display: none">
-            <div class="add-remove-group-member">
-                <div class="user-search">
-                    <div class="search-content">
-                        <input id="search-u-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
-                    </div>
-                    <button class="primarybtn" onclick="searchUserClick()">查找</button>
-                </div>
-                <div class="search-user-list">
-                    <ul id="groupmember-list" class="groupmember-list-ul">
-                        <!-- 搜索用户列表 -->
-                    </ul>
-                </div>
-                <div class="create-group-bottom">
-                    <button class="create-group-btn" disabled onclick="addRemoveGroupMember()">完成</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 群管理对话框 -->
-        <div id="group-managers-dialog" style="display: none">
-            <div class="chat-msg-info-set">
-                <div class="group-info">
-                    <label class="info-title">群聊邀请确认
-                        <br/>
-                        <span class="group-invite-desc">启用后，群成员需群主或群管理员确认才能邀请朋友进群。</span>
-                    </label>
-                    <div class="base-info-right">
-                        <span id="invite-cfm" class="switch-off" onclick="msgInfoSwitch(this)"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-msg-info-set">
-                <div class="group-info" onclick="openAddSubGroupMemberDialog('transfer')">
-                    <label class="info-title">群主管理权限转让</label>
-                    <div class="base-info-right">
-                        <span class="right-arrow"></span>
-                    </div>
-                </div>
-                <div class="group-info" onclick="groupManagerOperationDialogOpen()">
-                    <label class="info-title">群管理员</label>
-                    <div class="base-info-right">
-                        <div class="group-manager-low">
-                            <ul class="group-managers">
-                                <!-- 群管理员列表 -->
-                            </ul>
-                        </div>
-                        <span class="right-arrow"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-msg-info-set margin-bottom50" onclick="dissolveGroup()">
-                <span class="logout-group">解散该群聊</span>
-            </div>
-        </div>
-
-        <!-- 添加/移除群聊管理员对话框 -->
-        <div id="add-remove-group-manager-dialog" style="display: none">
-            <div class="add-remove-group-member">
-                <div class="group-manager-list">
-                    <ul class="group-manager-desc">
-                        <li class="group-manager-desc-item">1.
-                            管理员可以协助群主管理群聊，拥有发布群公告、移除群成员等能力
-                        </li>
-                        <li class="group-manager-desc-item">2. 只有群主具备设置管理员和解散群聊能力</li>
-                        <li class="group-manager-desc-item">3. 最多可设置3个管理员</li>
-                    </ul>
-                    <ul id="group-managers" class="group-manager-ul">
-                        <!-- 管理员列表 -->
-                    </ul>
-                </div>
-                <div class="user-search">
-                    <div class="search-content">
-                        <input id="search-group-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
-                    </div>
-                    <button class="primarybtn" onclick="searchGroupMemberClick()">查找</button>
-                </div>
-                <div class="search-user-list">
-                    <ul id="group-members">
-                        <!-- 搜索用户列表 -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--   群公告对话框  -->
-        <div id="group-notice-textbox-dialog" style="display: none">
-            <div class="group-notice-textbox">
-                <div class="group-notice-user">
-                    <div class="group-notice-avatar-box">
-                        <img class="group-notice-avatar" src="../ico/user_header_head.png">
-                    </div>
-                    <div class="group-notice-nickname">
-                        <span class="group-notice-nickname-text">daoyang</span>
-                        <span class="group-notice-nickname-time">2024-02-23 09:30</span>
-                    </div>
-                </div>
-                <div class="group-notice-content">
-                    <textarea id="textbox-notice"></textarea>
-                    <span class="no-content hide">暂无内容</span>
-                </div>
-                <div class="group-notice-btn">
-                    <span class="edit-desc hide">仅群主及群管理员可编辑</span>
-                    <button class="primarybtn edit" onclick="editGroupNotice(this)">编辑</button>
-                    <button class="primarybtn cancel hide" onclick="cancelEditGroupNotice(this)">取消</button>
-                    <button class="primarybtn save hide" disabled onclick="saveGroupNotice()">保存</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- 历史信息对话框 -->
     <div id="chat-msg-history-dialog">
         <div class="chat-msg-history-title">
             <div class="user-search">
@@ -335,17 +126,227 @@
             <img onclick="closeVideo()" class="video-close" src="./ico/x-red.png" width="25" height="25" alt="关闭"/>
         </div>
     </div>
+</div>
 
-    <!--  AI智能消息对话框  -->
-    <div class="ai-msg-dialog" style="display: none;">
-        <div class="ai-content">
-            <i class="ai-loading" style="display: none;"></i>
-            <p id="ai-output" class="ai-output"></p>
+<!--  AI智能消息对话框  -->
+<div class="ai-msg-dialog" style="display: none;">
+    <div class="ai-content">
+        <i class="ai-loading" style="display: none;"></i>
+        <p id="ai-output" class="ai-output"></p>
+    </div>
+    <div class="ai-msg-btns">
+        <button class="ai-btn" onclick="editAiMsg()" disabled>编辑</button>
+        <button class="ai-btn margin-left-10" onclick="sendAiMsg()" disabled>发送</button>
+    </div>
+</div>
+
+<!-- 聊天信息窗口 -->
+<div id="chat-msg-info" class="chat-msg-info hide">
+    <div id="chat-group-member" class="group-members">
+        <ul class="group-member">
+            <!--  群成员信息  -->
+        </ul>
+        <div class="group-member-more hide" onclick="moreGroupMember(this)">
+            <label class="text">展开更多</label>
+            <span class="arrow-down"></span>
         </div>
-        <div class="ai-msg-btns">
-            <button class="ai-btn" onclick="editAiMsg()" disabled>编辑</button>
-            <button class="ai-btn margin-left-10" onclick="sendAiMsg()" disabled>发送</button>
+    </div>
+    <div id="group-base-info" class="chat-msg-info-set">
+        <div class="group-info" onclick="groupNameDialogOpen('groupName')">
+            <label class="info-title">群聊名称</label>
+            <div class="base-info-right">
+                <span id="group-name" class="group-base-value"></span>
+                <span class="right-arrow"></span>
+            </div>
+        </div>
+        <div class="group-info" onclick="groupQrcodeDialogOpen()">
+            <label class="info-title">群二维码</label>
+            <div class="base-info-right">
+                <span class="right-arrow"></span>
+                <span class="group-qrcode"></span>
+            </div>
+        </div>
+        <div class="group-info" onclick="groupNoticeTextboxDialogOpen()">
+            <label class="info-title">群公告</label>
+            <div class="base-info-right">
+                <span id="group-notice" class="group-base-value"></span>
+                <span class="right-arrow"></span>
+            </div>
+        </div>
+        <div id="group-manage-label" class="group-info" onclick="groupManagersDialogOpen()">
+            <label class="info-title">群管理</label>
+            <div class="base-info-right">
+                <span class="right-arrow"></span>
+            </div>
+        </div>
+        <div class="group-info" onclick="groupNameDialogOpen('groupNickname')">
+            <label class="info-title">我在群里的昵称</label>
+            <div class="base-info-right">
+                <span id="group-nickname" class="group-base-value"></span>
+                <span class="right-arrow"></span>
+            </div>
+        </div>
+    </div>
+    <div class="chat-msg-info-set" onclick="openChatMsgHistoryDialog()">
+        <label class="info-title">查看聊天记录</label>
+        <div class="base-info-right">
+            <span class="right-arrow"></span>
+        </div>
+    </div>
+    <div class="chat-msg-info-set">
+        <div class="group-info">
+            <label class="info-title">消息免打扰</label>
+            <div class="base-info-right">
+                <span id="no-disturb" class="switch-off" onclick="msgInfoSwitch(this)"></span>
+            </div>
+        </div>
+        <div class="group-info">
+            <label class="info-title">置顶聊天</label>
+            <div class="base-info-right">
+                <span id="is-top" class="switch-off" onclick="msgInfoSwitch(this)"></span>
+            </div>
+        </div>
+    </div>
+    <div class="chat-msg-info-set" onclick="cleanMsgList()">
+        <label class="info-title">清空聊天记录</label>
+        <div class="base-info-right">
+            <span class="right-arrow"></span>
+        </div>
+    </div>
+    <div class="chat-msg-info-set margin-bottom50" onclick="logoutGroup()">
+        <span class="logout-group">退出群聊</span>
+    </div>
+
+    <!-- 修改群名称对话框 -->
+    <div id="modify-group-name-dialog" class="modify-group-name" style="display: none">
+        <div class="modify-group-desc">修改群名称后，将在群内通知其他成员。</div>
+        <div class="modify-group-name-content">
+            <img id="modify-group-avatar" src="" alt=""/>
+            <input id="modify-group-name-input" class="modify-group-name-input" type="text"
+                   onchange="groupNameInputChange(this)"
+                   onfocusout="groupNameInputChange(this)" onkeyup="groupNameInputChange(this)"/>
+            <span class="clean-input" onclick="clearGroupNameInput()"></span>
+        </div>
+        <div class="modify-group-name-btn">
+            <button class="primarybtn" modify-type="groupName" disabled onclick="modifyGroupName(this)">确定
+            </button>
+        </div>
+    </div>
+    <!-- 群二维码对话框 -->
+    <div id="group-qrcode-dialog" class="group-qrcode-dialog" style="display: none">
+        <img id="group-qrcode-img" class="group-qrcode-img" src="" alt=""/>
+        <div class="group-qrcode-label">该二维码24小时内有效，重新进入将更新</div>
+        <div class="group-qrcode-btn">
+            <button class="primarybtn" onclick="downloadGroupQrcode()">保存</button>
+        </div>
+    </div>
+    <!-- 添加/移除群聊成员对话框 -->
+    <div id="add-remove-group-member-dialog" style="display: none">
+        <div class="add-remove-group-member">
+            <div class="user-search">
+                <div class="search-content">
+                    <input id="search-u-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
+                </div>
+                <button class="primarybtn" onclick="searchUserClick()">查找</button>
+            </div>
+            <div class="search-user-list">
+                <ul id="groupmember-list" class="groupmember-list-ul">
+                    <!-- 搜索用户列表 -->
+                </ul>
+            </div>
+            <div class="create-group-bottom">
+                <button class="create-group-btn" disabled onclick="addRemoveGroupMember()">完成</button>
+            </div>
         </div>
     </div>
 
+    <!-- 群管理对话框 -->
+    <div id="group-managers-dialog" style="display: none">
+        <div class="chat-msg-info-set">
+            <div class="group-info">
+                <label class="info-title">群聊邀请确认
+                    <br/>
+                    <span class="group-invite-desc">启用后，群成员需群主或群管理员确认才能邀请朋友进群。</span>
+                </label>
+                <div class="base-info-right">
+                    <span id="invite-cfm" class="switch-off" onclick="msgInfoSwitch(this)"></span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-msg-info-set">
+            <div class="group-info" onclick="openAddSubGroupMemberDialog('transfer')">
+                <label class="info-title">群主管理权限转让</label>
+                <div class="base-info-right">
+                    <span class="right-arrow"></span>
+                </div>
+            </div>
+            <div class="group-info" onclick="groupManagerOperationDialogOpen()">
+                <label class="info-title">群管理员</label>
+                <div class="base-info-right">
+                    <div class="group-manager-low">
+                        <ul class="group-managers">
+                            <!-- 群管理员列表 -->
+                        </ul>
+                    </div>
+                    <span class="right-arrow"></span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-msg-info-set margin-bottom50" onclick="dissolveGroup()">
+            <span class="logout-group">解散该群聊</span>
+        </div>
+    </div>
+
+    <!-- 添加/移除群聊管理员对话框 -->
+    <div id="add-remove-group-manager-dialog" style="display: none">
+        <div class="add-remove-group-member">
+            <div class="group-manager-list">
+                <ul class="group-manager-desc">
+                    <li class="group-manager-desc-item">1.
+                        管理员可以协助群主管理群聊，拥有发布群公告、移除群成员等能力
+                    </li>
+                    <li class="group-manager-desc-item">2. 只有群主具备设置管理员和解散群聊能力</li>
+                    <li class="group-manager-desc-item">3. 最多可设置3个管理员</li>
+                </ul>
+                <ul id="group-managers" class="group-manager-ul">
+                    <!-- 管理员列表 -->
+                </ul>
+            </div>
+            <div class="user-search">
+                <div class="search-content">
+                    <input id="search-group-input" class="search-input" type="text" placeholder="输入手机号或昵称"/>
+                </div>
+                <button class="primarybtn" onclick="searchGroupMemberClick()">查找</button>
+            </div>
+            <div class="search-user-list">
+                <ul id="group-members">
+                    <!-- 搜索用户列表 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--   群公告对话框  -->
+    <div id="group-notice-textbox-dialog" style="display: none">
+        <div class="group-notice-textbox">
+            <div class="group-notice-user">
+                <div class="group-notice-avatar-box">
+                    <img class="group-notice-avatar" src="../ico/user_header_head.png">
+                </div>
+                <div class="group-notice-nickname">
+                    <span class="group-notice-nickname-text">daoyang</span>
+                    <span class="group-notice-nickname-time">2024-02-23 09:30</span>
+                </div>
+            </div>
+            <div class="group-notice-content">
+                <textarea id="textbox-notice"></textarea>
+                <span class="no-content hide">暂无内容</span>
+            </div>
+            <div class="group-notice-btn">
+                <span class="edit-desc hide">仅群主及群管理员可编辑</span>
+                <button class="primarybtn edit" onclick="editGroupNotice(this)">编辑</button>
+                <button class="primarybtn cancel hide" onclick="cancelEditGroupNotice(this)">取消</button>
+                <button class="primarybtn save hide" disabled onclick="saveGroupNotice()">保存</button>
+            </div>
+        </div>
+    </div>
 </div>
