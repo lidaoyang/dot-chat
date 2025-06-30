@@ -1231,7 +1231,7 @@ html, body {
 .friend-apply .friend-apply-list .friend-right {
     float: left;
     height: 40px;
-    width: 177px;
+    width: 170px;
     padding: 12px 2px;
     border-bottom: 1px solid #eaeaea;
 }
@@ -1687,7 +1687,7 @@ html, body {
 
 .friend-info-list .friend-info .friend-right {
     float: left;
-    width: 180px;
+    width: 175px;
 }
 
 .friend-info-list .friend-info .friend-right .friend-title {
