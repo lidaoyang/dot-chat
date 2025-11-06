@@ -4,11 +4,10 @@
 startTime=`date +'%Y-%m-%d %H:%M:%S'`
 echo "开始时间："$startTime
 
-JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 
-cd /home/app || exit
+cd /home/app/chat || exit
 
 echo "当前目录："$PWD
 

@@ -1,5 +1,5 @@
 
-cd /home/app || exit
+cd /home/app/chat || exit
 
 echo "当前目录："$PWD
 
