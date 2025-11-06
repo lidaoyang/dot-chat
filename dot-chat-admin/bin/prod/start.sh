@@ -5,7 +5,6 @@ startTime=`date +'%Y-%m-%d %H:%M:%S'`
 time=`date +'%Y%m%d%H'`
 echo "开始时间："$startTime
 
-JAVA_HOME=/usr/local/java/jdk-17.0.11
 JAVA=$JAVA_HOME/bin/java
 
 cd /home/app/admin || exit
