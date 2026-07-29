@@ -31,6 +31,19 @@
 
 - HTML + CSS + JavaScript + jQuery
 
+## 项目实现
+
+项目采用前后端分离架构，后端由三个子模块组成，前端为独立 Web 应用：
+
+- **`common-util`**：公共工具模块，封装通用工具类、常量定义等，供其他模块复用。
+- **`dot-chat-server`**：核心服务模块，提供 REST API 接口和 WebSocket 长连接服务。基于 **tio** 框架实现 WebSocket 通信，支撑即时消息推送、单聊、群聊、语音视频信令等实时交互场景。集成 **DeepSeek-V3** 大模型实现 AI 智能回复功能，支持流式响应。
+- **`dot-chat-admin`**：管理后台模块，提供用户管理、消息管理、数据统计等运维功能。
+- **`dot-chat-web`**：前端 Web 应用，纯静态页面（HTML + CSS + JavaScript + jQuery），通过 Nginx 反向代理分别访问后端 API 接口和 WebSocket 服务，兼容手机端和 PC 端。
+
+**数据存储**：业务数据使用 MySQL 8.0，缓存与会话管理使用 Redis。
+
+**通信流程**：客户端登录后建立 WebSocket 长连接，实时接收消息推送；API 请求通过 HTTP 转发至 `dot-chat-server`（8089 端口），WebSocket 连接转发至 9326 端口。
+
 ## 部署
 
 ### 1. 配置下列环境变量或在启动参数中添加
